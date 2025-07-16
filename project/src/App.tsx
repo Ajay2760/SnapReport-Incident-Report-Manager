@@ -57,7 +57,7 @@ const mockIncidents: Incident[] = [
     reportedAt: new Date("2024-01-14T18:45:00"),
     tags: ["lighting", "safety", "night"],
     solutions: [],
-    imageUrl: "https://ibb.co/fVxdhc1b",
+    imageUrl: "https://postimg.cc/1gtRQ7ZD",
   },
 ];
 
