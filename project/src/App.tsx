@@ -41,7 +41,7 @@ const mockIncidents: Incident[] = [
       },
     ],
     imageUrl:
-      "https://images.pexels.com/photos/1029604/pexels-photo-1029604.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://i.postimg.cc/52dvv590/download-3.jpg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     id: "2",
