@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Zap, Users, Camera, TrendingUp, AlertCircle, Radio, Newspaper, Map, LayoutList } from "lucide-react";
+import { Plus, Zap, Users, Camera, TrendingUp, AlertCircle, Radio, Newspaper, Map, LayoutList, PhoneCall, ShieldAlert, X } from "lucide-react";
 import {
   Incident,
   Solution,
@@ -30,6 +30,9 @@ const mockIncidents: Incident[] = [
     reportedBy: "John Smith",
     reportedAt: new Date("2024-01-15T10:30:00"),
     coSignersCount: 14,
+    affectsMeCount: 42,
+    eta: "Within 24 Hours",
+    audioUrl: "https://actions.google.com/sounds/v1/ambiences/outdoor_park.ogg",
     isVerified: true,
     tags: ["road", "damage", "urgent"],
     solutions: [
@@ -59,6 +62,8 @@ const mockIncidents: Incident[] = [
     reportedBy: "Sarah Johnson",
     reportedAt: new Date("2024-01-14T18:45:00"),
     coSignersCount: 8,
+    affectsMeCount: 24,
+    eta: "Within 48 Hours",
     isVerified: true,
     tags: ["lighting", "safety", "night"],
     solutions: [
@@ -89,6 +94,8 @@ const mockIncidents: Incident[] = [
     reportedAt: new Date("2024-01-10T09:15:00"),
     resolvedAt: new Date("2024-01-12T16:00:00"),
     coSignersCount: 22,
+    affectsMeCount: 65,
+    eta: "Resolved",
     isVerified: true,
     tags: ["water", "repaired", "utility"],
     solutions: [
@@ -112,6 +119,7 @@ const mockIncidents: Incident[] = [
 function AppContent() {
   const [incidents, setIncidents] = useState<Incident[]>(mockIncidents);
   const [showForm, setShowForm] = useState(false);
+  const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: "",
@@ -132,6 +140,7 @@ function AppContent() {
       status: "open",
       reportedAt: new Date(),
       coSignersCount: 1,
+      affectsMeCount: 1,
       solutions: [],
     };
 
@@ -200,7 +209,12 @@ function AppContent() {
     setIncidents((prev) =>
       prev.map((inc) =>
         inc.id === incidentId
-          ? { ...inc, coSignersCount: (inc.coSignersCount || 1) + 1, isVerified: true }
+          ? {
+              ...inc,
+              coSignersCount: (inc.coSignersCount || 1) + 1,
+              affectsMeCount: (inc.affectsMeCount || 1) + 1,
+              isVerified: true,
+            }
           : inc
       )
     );
@@ -258,6 +272,25 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-obsidian text-champagne font-body selection:bg-gold selection:text-obsidian">
+      
+      {/* Citizen Feature: 🚨 Emergency SOS Quick-Dial Top Banner */}
+      <div className="bg-red-700 text-white text-xs font-mono py-2.5 px-4 border-b border-red-500 shadow-md">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-2 font-bold tracking-widest uppercase">
+            <ShieldAlert className="w-4 h-4 animate-bounce text-yellow-300" />
+            <span>🚨 LIFE-THREATENING EMERGENCY? (GAS LEAKS, FALLEN POWER LINES, FIRE)</span>
+          </div>
+
+          <button
+            onClick={() => setShowEmergencyModal(true)}
+            className="bg-yellow-400 text-black px-3.5 py-1 font-bold uppercase tracking-widest hover:bg-white transition-all flex items-center gap-1.5 shadow"
+          >
+            <PhoneCall className="w-3.5 h-3.5" />
+            CALL EMERGENCY HOTLINE (911 / 311)
+          </button>
+        </div>
+      </div>
+
       {/* Top Edition & Live Ticker Header */}
       <div className="bg-charcoal text-champagne text-xs font-mono py-2 px-4 border-b border-gold/40">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
@@ -521,6 +554,47 @@ function AppContent() {
         />
       )}
 
+      {/* Citizen Feature: Emergency SOS Hotline Modal */}
+      {showEmergencyModal && (
+        <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="bg-charcoal border-2 border-red-500 shadow-gold-glow-lg max-w-md w-full p-6 text-center space-y-4 art-deco-corner-wrapper">
+            <div className="border-2 border-red-500 w-16 h-16 mx-auto flex items-center justify-center bg-red-950 text-red-400 rotate-45">
+              <ShieldAlert className="w-8 h-8 -rotate-45 animate-pulse" />
+            </div>
+            
+            <h3 className="font-serif font-bold text-2xl text-red-400 uppercase tracking-widest mt-4">
+              EMERGENCY SOS HOTLINES
+            </h3>
+            
+            <p className="font-mono text-xs text-champagne leading-relaxed">
+              If an incident presents an immediate danger to human life, call local emergency services immediately:
+            </p>
+
+            <div className="space-y-3 font-mono text-xs font-bold pt-2">
+              <a
+                href="tel:911"
+                className="block bg-red-600 text-white py-3 px-4 uppercase tracking-widest hover:bg-red-500 transition-all border border-red-400"
+              >
+                📞 CALL 911 (POLICE / FIRE / AMBULANCE)
+              </a>
+              <a
+                href="tel:311"
+                className="block bg-gold text-obsidian py-3 px-4 uppercase tracking-widest hover:bg-gold-light transition-all border border-gold"
+              >
+                📞 CALL 311 (CITY HAZARD HOTLINE)
+              </a>
+            </div>
+
+            <button
+              onClick={() => setShowEmergencyModal(false)}
+              className="mt-4 border border-gold/40 text-pewter px-4 py-2 text-xs font-mono uppercase tracking-widest hover:text-gold"
+            >
+              ✕ CLOSE EMERGENCY BANNER
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Gazette Colophon Footer */}
       <footer className="border-t border-gold/40 bg-charcoal text-champagne mt-24 font-mono text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -560,7 +634,7 @@ function AppContent() {
           </div>
 
           <div className="pt-8 text-center text-pewter text-[11px] uppercase tracking-widest">
-            "All the News That's Fit to Print & Resolve" • SnapReport Art Deco Incident Manager
+            "All the News That's Fit to Print & Resolve" • SnapReport Incident Manager
           </div>
         </div>
       </footer>

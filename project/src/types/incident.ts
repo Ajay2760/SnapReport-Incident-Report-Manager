@@ -16,6 +16,12 @@ export interface Incident {
   coSignersCount?: number;
   isVerified?: boolean;
   tags?: string[];
+  // Citizen-focused Feature Additions
+  stepProgress?: 'reported' | 'review' | 'dispatched' | 'resolved';
+  eta?: string;
+  affectsMeCount?: number;
+  audioUrl?: string;
+  audioDuration?: number;
 }
 
 export interface Solution {
@@ -36,6 +42,8 @@ export interface IncidentFormData {
   coordinates?: { lat: number; lng: number };
   reportedBy: string;
   tags?: string[];
+  eta?: string;
+  audioUrl?: string;
 }
 
 export interface SearchFilters {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Calendar, MapPin, Tag, X, RotateCcw } from 'lucide-react';
+import { Search, Filter, Calendar, MapPin, Tag, X, RotateCcw, Compass } from 'lucide-react';
 import { SearchFilters } from '../types/incident';
 
 interface AdvancedSearchProps {
@@ -57,7 +57,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               THE GAZETTE INDEX & CLASSIFIED SEARCH
             </h3>
             <p className="text-xs font-mono text-pewter uppercase tracking-wider mt-1">
-              Filter by Status, Category, Urgency Level & Gazette Tags
+              Filter by Status, Category, Distance Radius & Gazette Tags
             </p>
           </div>
         </div>
@@ -79,6 +79,32 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Citizen Feature: Distance Radius "Near Me" Pills */}
+      <div className="mb-6 pb-4 border-b border-gold/30 flex flex-wrap items-center gap-3 font-mono text-xs">
+        <span className="font-bold text-gold uppercase tracking-widest flex items-center gap-1.5 mr-2">
+          <Compass className="w-4 h-4 text-gold" />
+          📍 NEAR ME DISTANCE:
+        </span>
+        {[
+          { label: 'ALL CITY', value: undefined },
+          { label: 'WITHIN 1 KM', value: 1 },
+          { label: 'WITHIN 5 KM', value: 5 },
+          { label: 'WITHIN 10 KM', value: 10 },
+        ].map((item) => (
+          <button
+            key={item.label}
+            onClick={() => handleFilterChange('locationRadius', item.value)}
+            className={`px-3 py-1 text-[11px] font-bold uppercase tracking-widest border transition-all ${
+              filters.locationRadius === item.value
+                ? 'bg-gold text-obsidian border-gold shadow-gold-glow-sm'
+                : 'border-gold/40 text-pewter hover:border-gold hover:text-gold'
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
       
       {/* Primary Search Controls Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -99,128 +125,111 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           </div>
         </div>
 
-        {/* Status Select */}
+        {/* Status Dropdown */}
         <div>
           <label className="block text-[10px] font-mono font-bold uppercase text-gold/80 tracking-widest mb-1">
-            DISPATCH STATUS
+            STATUS FILTER
           </label>
           <select
             value={filters.statusFilter}
             onChange={(e) => handleFilterChange('statusFilter', e.target.value)}
-            className="w-full px-3 py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none focus:border-gold-light cursor-pointer uppercase tracking-wider"
+            className="w-full py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-wider"
           >
-            <option value="" className="bg-charcoal text-champagne">ALL STATUSES</option>
-            <option value="open" className="bg-charcoal text-champagne">OPEN (UNRESOLVED)</option>
-            <option value="in-progress" className="bg-charcoal text-champagne">IN PROGRESS</option>
-            <option value="resolved" className="bg-charcoal text-champagne">RESOLVED</option>
+            <option value="" className="bg-charcoal text-champagne">✦ ALL STATUSES</option>
+            <option value="open" className="bg-charcoal text-champagne">OPEN DISPATCHES</option>
+            <option value="in-progress" className="bg-charcoal text-champagne">IN REPAIR</option>
+            <option value="resolved" className="bg-charcoal text-champagne">RESOLVED & FIXED</option>
           </select>
         </div>
 
-        {/* Category Select */}
+        {/* Category Dropdown */}
         <div>
           <label className="block text-[10px] font-mono font-bold uppercase text-gold/80 tracking-widest mb-1">
-            HAZARD CATEGORY
+            CATEGORY CLASSIFICATION
           </label>
           <select
             value={filters.categoryFilter}
             onChange={(e) => handleFilterChange('categoryFilter', e.target.value)}
-            className="w-full px-3 py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none focus:border-gold-light cursor-pointer uppercase tracking-wider"
+            className="w-full py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-wider"
           >
-            <option value="" className="bg-charcoal text-champagne">ALL CATEGORIES</option>
-            <option value="safety" className="bg-charcoal text-champagne">SAFETY</option>
+            <option value="" className="bg-charcoal text-champagne">✦ ALL CATEGORIES</option>
+            <option value="safety" className="bg-charcoal text-champagne">SAFETY HAZARD</option>
             <option value="infrastructure" className="bg-charcoal text-champagne">INFRASTRUCTURE</option>
             <option value="environmental" className="bg-charcoal text-champagne">ENVIRONMENTAL</option>
-            <option value="security" className="bg-charcoal text-champagne">SECURITY</option>
+            <option value="security" className="bg-charcoal text-champagne">PUBLIC SECURITY</option>
             <option value="maintenance" className="bg-charcoal text-champagne">MAINTENANCE</option>
-            <option value="other" className="bg-charcoal text-champagne">OTHER</option>
+            <option value="other" className="bg-charcoal text-champagne">OTHER DISPATCH</option>
           </select>
         </div>
 
-        {/* Priority Select */}
+        {/* Priority Dropdown */}
         <div>
           <label className="block text-[10px] font-mono font-bold uppercase text-gold/80 tracking-widest mb-1">
-            URGENCY LEVEL
+            URGENCY PRIORITY
           </label>
           <select
             value={filters.priorityFilter}
             onChange={(e) => handleFilterChange('priorityFilter', e.target.value)}
-            className="w-full px-3 py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none focus:border-gold-light cursor-pointer uppercase tracking-wider"
+            className="w-full py-2 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-wider"
           >
-            <option value="" className="bg-charcoal text-champagne">ALL PRIORITIES</option>
-            <option value="low" className="bg-charcoal text-champagne">LOW</option>
-            <option value="medium" className="bg-charcoal text-champagne">MEDIUM</option>
-            <option value="high" className="bg-charcoal text-champagne">HIGH</option>
-            <option value="critical" className="bg-charcoal text-champagne">CRITICAL</option>
+            <option value="" className="bg-charcoal text-champagne">✦ ALL PRIORITIES</option>
+            <option value="critical" className="bg-charcoal text-champagne">CRITICAL EMERGENCY</option>
+            <option value="high" className="bg-charcoal text-champagne">HIGH URGENCY</option>
+            <option value="medium" className="bg-charcoal text-champagne">MEDIUM PRIORITY</option>
+            <option value="low" className="bg-charcoal text-champagne">ROUTINE NOTICE</option>
           </select>
         </div>
       </div>
 
-      {/* Advanced Drawer */}
+      {/* Expandable Advanced Section */}
       {showAdvanced && (
-        <div className="space-y-6 pt-6 mt-6 border-t border-gold/30">
-          {/* Date Range Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mt-6 pt-6 border-t border-gold/30 space-y-6">
+          
+          {/* Date Range Selection */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
             <div>
-              <label className="block text-[10px] font-mono font-bold uppercase text-gold tracking-widest mb-1 flex items-center gap-1.5">
+              <label className="block text-[10px] font-bold uppercase text-gold/80 tracking-widest mb-1 flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-gold" />
-                REPORTED FROM DATE
+                REPORTED AFTER DATE
               </label>
               <input
                 type="date"
-                value={filters.dateFrom ? filters.dateFrom.toISOString().split('T')[0] : ''}
                 onChange={(e) => handleFilterChange('dateFrom', e.target.value ? new Date(e.target.value) : undefined)}
-                className="w-full px-3 py-2 art-deco-input font-mono text-sm text-champagne"
+                className="w-full px-3 py-2 art-deco-input text-sm text-champagne"
               />
             </div>
             <div>
-              <label className="block text-[10px] font-mono font-bold uppercase text-gold tracking-widest mb-1 flex items-center gap-1.5">
+              <label className="block text-[10px] font-bold uppercase text-gold/80 tracking-widest mb-1 flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-gold" />
-                REPORTED TO DATE
+                REPORTED BEFORE DATE
               </label>
               <input
                 type="date"
-                value={filters.dateTo ? filters.dateTo.toISOString().split('T')[0] : ''}
                 onChange={(e) => handleFilterChange('dateTo', e.target.value ? new Date(e.target.value) : undefined)}
-                className="w-full px-3 py-2 art-deco-input font-mono text-sm text-champagne"
+                className="w-full px-3 py-2 art-deco-input text-sm text-champagne"
               />
             </div>
           </div>
 
-          {/* Location Radius */}
+          {/* Tags Selection & Filter */}
           <div>
-            <label className="block text-[10px] font-mono font-bold uppercase text-gold tracking-widest mb-1 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-gold" />
-              LOCATION RADIUS (KILOMETERS)
-            </label>
-            <input
-              type="number"
-              value={filters.locationRadius || ''}
-              onChange={(e) => handleFilterChange('locationRadius', e.target.value ? parseInt(e.target.value) : undefined)}
-              placeholder="Enter radius in km..."
-              min="1"
-              max="100"
-              className="w-full px-3 py-2 art-deco-input font-mono text-sm text-champagne placeholder:text-pewter"
-            />
-          </div>
-
-          {/* Tags Filter */}
-          <div>
-            <label className="block text-[10px] font-mono font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-1.5">
+            <label className="block text-[10px] font-mono font-bold uppercase text-gold/80 tracking-widest mb-2 flex items-center gap-1">
               <Tag className="w-3.5 h-3.5 text-gold" />
-              ACTIVE SEARCH TAGS
+              FILTER BY GAZETTE INDEX TAGS
             </label>
             
-            {/* Active Tags Pills */}
-            <div className="flex flex-wrap gap-2 mb-4">
+            {/* Active Selected Tags */}
+            <div className="flex flex-wrap gap-2 mb-3">
               {filters.tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-obsidian text-gold border border-gold font-mono text-xs uppercase font-bold tracking-widest shadow-gold-glow-sm"
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-gold text-obsidian font-mono text-xs uppercase font-bold tracking-widest"
                 >
                   #{tag}
                   <button
+                    type="button"
                     onClick={() => removeTag(tag)}
-                    className="hover:text-gold-light transition-colors"
+                    className="hover:text-red-800"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -228,41 +237,28 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               ))}
             </div>
 
-            <div className="flex gap-3">
-              <input
-                type="text"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addTag(newTag)}
-                placeholder="Type tag name..."
-                className="flex-1 px-3 py-2 art-deco-input font-mono text-sm text-champagne placeholder:text-pewter"
-              />
-              <button
-                onClick={() => addTag(newTag)}
-                className="art-deco-btn-gold px-5 py-2 text-xs"
-              >
-                + ADD TAG
-              </button>
+            {/* Available Tags Selection Pills */}
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map((tag) => {
+                const isSelected = filters.tags?.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => (isSelected ? removeTag(tag) : addTag(tag))}
+                    className={`px-3 py-1 font-mono text-xs uppercase tracking-wider border transition-colors ${
+                      isSelected
+                        ? 'bg-gold text-obsidian font-bold border-gold'
+                        : 'border-gold/40 text-champagne hover:border-gold hover:text-gold'
+                    }`}
+                  >
+                    #{tag}
+                  </button>
+                );
+              })}
             </div>
-
-            {/* Popular Tags List */}
-            {availableTags.length > 0 && (
-              <div className="mt-4">
-                <span className="text-[10px] font-mono uppercase text-pewter tracking-widest mr-2">POPULAR INDEX TAGS:</span>
-                <div className="inline-flex flex-wrap gap-2 mt-1">
-                  {availableTags.slice(0, 10).map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => addTag(tag)}
-                      className="px-2.5 py-1 text-xs font-mono border border-gold/30 bg-obsidian text-gold hover:border-gold hover:bg-gold/10 transition-colors tracking-wider"
-                    >
-                      #{tag}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
+
         </div>
       )}
     </div>
