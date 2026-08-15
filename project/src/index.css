@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Marcellus&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,84 +10,176 @@
   }
 
   body {
-    background-color: #F9F9F7;
-    color: #111111;
-    font-family: 'Lora', Georgia, serif;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23111111' fill-opacity='0.04' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: repeat;
+    background-color: #0A0A0A;
+    color: #F2F0E4;
+    font-family: 'Josefin Sans', sans-serif;
+    background-image: 
+      repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.03) 0, rgba(212, 175, 55, 0.03) 1px, transparent 0, transparent 50px),
+      repeating-linear-gradient(-45deg, rgba(212, 175, 55, 0.03) 0, rgba(212, 175, 55, 0.03) 1px, transparent 0, transparent 50px);
+    background-size: 70px 70px;
+    background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Marcellus', 'Italiana', serif;
+    letter-spacing: 0.1em;
   }
 }
 
-/* Custom Utilities for Newsprint Aesthetics */
-.newsprint-texture {
+/* Sunburst Radial Overlay */
+.art-deco-sunburst {
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, rgba(30, 61, 89, 0.08) 45%, transparent 70%);
+}
+
+/* L-Bracket Corner Embellishments */
+.art-deco-corner-wrapper {
   position: relative;
 }
 
-.newsprint-texture::before {
+.art-deco-corner-wrapper::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(0deg, transparent 98%, rgba(17, 17, 17, 0.03) 100%),
-    linear-gradient(90deg, transparent 98%, rgba(17, 17, 17, 0.03) 100%);
-  background-size: 4px 4px;
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid #D4AF37;
+  border-left: 2px solid #D4AF37;
   pointer-events: none;
-  opacity: 0.8;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 0.6;
 }
 
-.drop-cap::first-letter {
-  float: left;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 4.5rem;
-  line-height: 0.85;
-  padding-top: 4px;
-  padding-right: 12px;
-  padding-bottom: 2px;
-  font-weight: 900;
-  color: #111111;
+.art-deco-corner-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  border-bottom: 2px solid #D4AF37;
+  border-right: 2px solid #D4AF37;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 0.6;
 }
 
-.hard-shadow-hover {
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+.art-deco-corner-wrapper:hover::before,
+.art-deco-corner-wrapper:hover::after {
+  opacity: 1;
 }
 
-.hard-shadow-hover:hover {
-  box-shadow: 4px 4px 0px 0px #111111;
-  transform: translate(-2px, -2px);
+/* Art Deco Stepped Card Container */
+.art-deco-card {
+  background-color: #141414;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
+  transition: all 0.3s ease-in-out;
 }
 
-.hard-shadow-hover-red:hover {
-  box-shadow: 4px 4px 0px 0px #CC0000;
-  transform: translate(-2px, -2px);
+.art-deco-card:hover {
+  border-color: #D4AF37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  transform: translateY(-2px);
 }
 
-.halftone-bg {
-  background-image: radial-gradient(#111111 1px, transparent 1px);
-  background-size: 8px 8px;
-  opacity: 0.15;
+/* Art Deco Button */
+.art-deco-btn-gold {
+  background: transparent;
+  border: 2px solid #D4AF37;
+  color: #D4AF37;
+  font-family: 'Marcellus', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  min-height: 44px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Custom Scrollbar for crisp editorial feel */
+.art-deco-btn-gold:hover {
+  background-color: #D4AF37;
+  color: #0A0A0A;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+}
+
+.art-deco-btn-solid {
+  background-color: #D4AF37;
+  border: 2px solid #D4AF37;
+  color: #0A0A0A;
+  font-family: 'Marcellus', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  min-height: 44px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.art-deco-btn-solid:hover {
+  background-color: #F2E8C4;
+  border-color: #F2E8C4;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+}
+
+/* Underlined Art Deco Inputs */
+.art-deco-input {
+  background-color: transparent;
+  border-bottom: 2px solid #D4AF37;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: #F2F0E4;
+  font-family: 'Josefin Sans', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.art-deco-input:focus {
+  outline: none;
+  border-bottom-color: #F2E8C4;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
+
+/* Double Frame for Images */
+.art-deco-frame {
+  position: relative;
+  border: 1px solid #D4AF37;
+  padding: 4px;
+  background-color: #0A0A0A;
+}
+
+.art-deco-frame-inner {
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  overflow: hidden;
+}
+
+.art-deco-frame img {
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.art-deco-frame:hover img {
+  transform: scale(1.03);
+}
+
+/* Custom Scrollbar for Art Deco Gold Theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F9F9F7;
-  border-left: 1px solid #111111;
+  background: #0A0A0A;
+  border-left: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #111111;
+  background: #D4AF37;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #CC0000;
+  background: #F2E8C4;
+  box-shadow: 0 0 10px #D4AF37;
 }

@@ -28,32 +28,34 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ onPhotoSelect, current
 
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-mono font-bold uppercase text-[#111111] flex items-center gap-1.5">
-        <Camera className="w-4 h-4 text-[#CC0000]" />
+      <label className="block text-xs font-mono font-bold uppercase text-gold tracking-widest flex items-center gap-2">
+        <Camera className="w-4 h-4 text-gold" />
         PHOTOGRAPHIC EVIDENCE PLATE (OPTIONAL)
       </label>
       
       {preview ? (
-        <div className="relative border-2 border-[#111111] p-1 bg-[#111111]">
-          <img
-            src={preview}
-            alt="Incident preview"
-            className="w-full h-48 object-cover grayscale hover:grayscale-0 transition-all duration-300"
-          />
-          <button
-            type="button"
-            onClick={handleRemove}
-            className="absolute top-3 right-3 p-1.5 bg-[#CC0000] text-white hover:bg-black transition-colors border border-white font-mono text-xs font-bold"
-            title="Remove Photo"
-          >
-            <X className="w-4 h-4" />
-          </button>
-          <div className="text-[10px] font-mono text-white p-1 text-center uppercase tracking-widest">
-            PHOTO PLATE LOADED • READY FOR GAZETTE PUBLICATION
+        <div className="art-deco-frame">
+          <div className="art-deco-frame-inner relative">
+            <img
+              src={preview}
+              alt="Incident preview"
+              className="w-full h-48 object-cover grayscale hover:grayscale-0 transition-all duration-300"
+            />
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="absolute top-3 right-3 p-1.5 bg-obsidian text-gold border border-gold hover:bg-gold hover:text-obsidian transition-colors font-mono text-xs font-bold shadow-gold-glow-sm"
+              title="Remove Photo"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="text-[10px] font-mono text-gold bg-obsidian p-1.5 text-center uppercase tracking-widest border-t border-gold/40">
+              ✦ PHOTO PLATE LOADED • READY FOR GAZETTE PUBLICATION ✦
+            </div>
           </div>
         </div>
       ) : (
-        <div className="border-2 border-dashed border-[#111111] p-6 text-center hover:bg-[#F9F9F7] transition-colors relative halftone-bg">
+        <div className="border border-dashed border-gold/60 p-6 text-center bg-charcoal/80 hover:border-gold hover:bg-charcoal transition-all relative">
           <input
             type="file"
             accept="image/*"
@@ -65,13 +67,13 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ onPhotoSelect, current
             htmlFor="photo-upload"
             className="cursor-pointer flex flex-col items-center gap-2"
           >
-            <div className="border border-[#111111] p-2 bg-white hard-shadow-sm">
-              <Upload className="w-6 h-6 text-[#111111]" />
+            <div className="border border-gold p-3 bg-obsidian text-gold shadow-gold-glow-sm rotate-45 mb-1">
+              <Upload className="w-5 h-5 -rotate-45" />
             </div>
-            <span className="font-mono text-xs font-bold uppercase text-[#111111] tracking-wider">
+            <span className="font-serif text-xs font-bold uppercase text-gold tracking-widest mt-1">
               CLICK TO ATTACH DISPATCH EVIDENCE PHOTO
             </span>
-            <span className="font-mono text-[10px] uppercase text-neutral-500">
+            <span className="font-mono text-[10px] uppercase text-pewter tracking-wider">
               SUPPORTS JPG, PNG FILE FORMATS UP TO 10MB
             </span>
           </label>

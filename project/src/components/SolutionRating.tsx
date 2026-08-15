@@ -18,10 +18,10 @@ export const SolutionRating: React.FC<SolutionRatingProps> = ({
     <div className="flex items-center gap-2 font-mono text-xs">
       <button
         onClick={() => onRate('helpful')}
-        className={`flex items-center gap-1.5 px-2.5 py-1 border transition-all ${
+        className={`flex items-center gap-1.5 px-3 py-1 border transition-all ${
           userRating === 'helpful'
-            ? 'bg-[#111111] text-white border-[#111111]'
-            : 'border-[#111111] bg-white text-[#111111] hover:bg-neutral-100'
+            ? 'bg-gold text-obsidian border-gold font-bold shadow-gold-glow-sm'
+            : 'border-gold/50 bg-obsidian text-gold hover:border-gold hover:bg-gold/10'
         }`}
         title="Mark Solution as Helpful"
       >
@@ -31,10 +31,10 @@ export const SolutionRating: React.FC<SolutionRatingProps> = ({
       
       <button
         onClick={() => onRate('unhelpful')}
-        className={`flex items-center gap-1.5 px-2.5 py-1 border transition-all ${
+        className={`flex items-center gap-1.5 px-3 py-1 border transition-all ${
           userRating === 'unhelpful'
-            ? 'bg-[#CC0000] text-white border-[#CC0000]'
-            : 'border-[#111111] bg-white text-[#111111] hover:bg-neutral-100'
+            ? 'bg-midnight text-champagne border-gold font-bold'
+            : 'border-gold/50 bg-obsidian text-pewter hover:border-gold hover:text-champagne'
         }`}
         title="Mark Solution as Unhelpful"
       >

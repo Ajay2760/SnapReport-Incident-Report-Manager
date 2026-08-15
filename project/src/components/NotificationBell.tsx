@@ -30,10 +30,10 @@ export const NotificationBell: React.FC = () => {
 
   const getNotificationBadgeStyle = (type: Notification['type']) => {
     switch (type) {
-      case 'new': return 'bg-[#CC0000] text-white';
-      case 'update': return 'bg-[#111111] text-white';
-      case 'resolved': return 'bg-neutral-300 text-[#111111] border border-[#111111]';
-      default: return 'bg-[#111111] text-white';
+      case 'new': return 'bg-gold text-obsidian font-bold';
+      case 'update': return 'bg-midnight text-champagne border border-gold/40';
+      case 'resolved': return 'bg-obsidian text-pewter border border-pewter/40';
+      default: return 'bg-gold text-obsidian';
     }
   };
 
@@ -41,59 +41,59 @@ export const NotificationBell: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setShowNotifications(!showNotifications)}
-        className="p-2 border border-[#111111] bg-white text-[#111111] hover:bg-[#111111] hover:text-white transition-all relative font-mono text-xs hard-shadow-sm flex items-center gap-1.5 font-bold uppercase"
-        title="View Bulletin Notifications"
+        className="p-2.5 border border-gold/60 bg-charcoal text-gold hover:border-gold hover:bg-gold hover:text-obsidian transition-all relative font-mono text-xs shadow-gold-glow-sm flex items-center gap-2 font-bold uppercase tracking-widest"
+        title="View Art Deco Bulletins"
       >
         <Bell className="w-4 h-4" />
         <span className="hidden sm:inline">BULLETINS</span>
         {notifications.length > 0 && (
-          <span className="bg-[#CC0000] text-white text-[10px] font-mono font-bold px-1.5 py-0.5 ml-1">
-            {notifications.length}
+          <span className="w-5 h-5 bg-gold text-obsidian text-[10px] font-mono font-bold flex items-center justify-center rotate-45 ml-1">
+            <span className="-rotate-45">{notifications.length}</span>
           </span>
         )}
       </button>
 
       {showNotifications && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 border-2 border-[#111111] bg-white hard-shadow-lg z-50 newsprint-texture">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 border border-gold bg-charcoal shadow-gold-glow-lg z-50 art-deco-corner-wrapper">
           {/* Popover Header */}
-          <div className="p-3 border-b-2 border-[#111111] bg-[#111111] text-white flex items-center justify-between font-mono text-xs">
+          <div className="p-3 border-b border-gold/40 bg-obsidian text-champagne flex items-center justify-between font-mono text-xs">
             <div className="flex items-center gap-2">
-              <Radio className="w-3.5 h-3.5 text-[#CC0000] animate-pulse" />
-              <span className="font-bold tracking-widest uppercase">DISPATCH BULLETINS</span>
+              <Radio className="w-3.5 h-3.5 text-gold animate-pulse" />
+              <span className="font-serif font-bold tracking-widest text-gold uppercase">DISPATCH BULLETINS</span>
             </div>
             <button
               onClick={() => setShowNotifications(false)}
-              className="text-white hover:text-[#CC0000] transition-colors"
+              className="text-pewter hover:text-gold transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
           
           {/* Notification List */}
-          <div className="max-h-96 overflow-y-auto divide-y divide-[#111111]">
+          <div className="max-h-96 overflow-y-auto divide-y divide-gold/20">
             {notifications.length === 0 ? (
-              <div className="p-6 text-center font-mono text-xs text-neutral-500 uppercase">
+              <div className="p-6 text-center font-mono text-xs text-pewter uppercase">
                 NO RECENT DISPATCH BULLETINS LOGGED
               </div>
             ) : (
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className="p-4 hover:bg-[#F9F9F7] transition-colors"
+                  className="p-4 hover:bg-obsidian/60 transition-colors"
                 >
                   <div className="flex items-start gap-3">
                     <span className={`px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider ${getNotificationBadgeStyle(notification.type)}`}>
                       {notification.type}
                     </span>
                     <div className="flex-1">
-                      <h4 className="font-serif font-bold text-sm uppercase text-[#111111] leading-tight">
+                      <h4 className="font-serif font-bold text-sm uppercase text-gold leading-tight tracking-wider">
                         {notification.title}
                       </h4>
-                      <p className="font-body text-xs text-neutral-800 mt-1">
+                      <p className="font-body text-xs text-champagne mt-1">
                         {notification.message}
                       </p>
-                      <span className="font-mono text-[10px] text-neutral-500 uppercase mt-2 block border-t border-neutral-200 pt-1">
-                        TIMESTAMPE: {notification.time}
+                      <span className="font-mono text-[10px] text-pewter uppercase mt-2 block border-t border-gold/20 pt-1">
+                        TIMESTAMP: {notification.time}
                       </span>
                     </div>
                   </div>
@@ -102,8 +102,8 @@ export const NotificationBell: React.FC = () => {
             )}
           </div>
 
-          <div className="p-2 border-t border-[#111111] bg-[#F9F9F7] text-center font-mono text-[10px] uppercase text-neutral-600">
-            GAZETTE TELEGRAM DISPATCH SERVICE
+          <div className="p-2 border-t border-gold/40 bg-obsidian text-center font-mono text-[10px] uppercase text-pewter tracking-widest">
+            ✦ GAZETTE TELEGRAM DISPATCH SERVICE ✦
           </div>
         </div>
       )}

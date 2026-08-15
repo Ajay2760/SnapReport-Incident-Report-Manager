@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Navigation, AlertTriangle, CheckCircle, Tag, Users, Eye, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { MapPin, Navigation, Tag, Users, Eye, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Incident } from '../types/incident';
 
 interface GazetteMapProps {
@@ -36,7 +36,6 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       return fallbackPositions[idx % fallbackPositions.length];
     }
 
-    // Default bounds (e.g. NYC area bounds ~ lat 40.7 to 40.8, lng -74.05 to -73.9)
     const minLat = 40.70;
     const maxLat = 40.80;
     const minLng = -74.05;
@@ -48,65 +47,65 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
   };
 
   const getMarkerColor = (priority: Incident['priority'], status: Incident['status']) => {
-    if (status === 'resolved') return 'bg-neutral-300 border-[#111111] text-[#111111]';
-    if (priority === 'critical') return 'bg-[#CC0000] border-[#CC0000] text-white animate-pulse';
-    if (priority === 'high') return 'bg-[#111111] border-[#111111] text-white';
-    return 'bg-white border-[#111111] text-[#111111]';
+    if (status === 'resolved') return 'bg-obsidian border-pewter text-pewter';
+    if (priority === 'critical') return 'bg-gold text-obsidian border-gold animate-pulse shadow-gold-glow-lg';
+    if (priority === 'high') return 'bg-midnight text-champagne border-gold/60';
+    return 'bg-obsidian text-gold border-gold';
   };
 
   return (
-    <div className="border-4 border-[#111111] bg-white hard-shadow mb-10 overflow-hidden newsprint-texture">
+    <div className="border border-gold bg-charcoal shadow-gold-glow-lg mb-10 overflow-hidden art-deco-corner-wrapper">
       {/* Map Control Header */}
-      <div className="bg-[#111111] text-white p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 font-mono text-xs border-b-2 border-[#111111]">
+      <div className="bg-obsidian text-champagne p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 font-mono text-xs border-b border-gold/40">
         <div className="flex items-center gap-2">
-          <Navigation className="w-4 h-4 text-[#CC0000]" />
-          <span className="font-bold tracking-widest uppercase">
+          <Navigation className="w-4 h-4 text-gold" />
+          <span className="font-serif font-bold tracking-widest uppercase text-gold">
             MUNICIPAL DISTRICT GAZETTE MAP (SECTOR 40.71° N, 74.00° W)
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Zoom Controls */}
-          <div className="flex items-center border border-neutral-700 bg-black">
+          <div className="flex items-center border border-gold/40 bg-obsidian text-gold">
             <button
               onClick={() => setZoomLevel(Math.min(1.4, zoomLevel + 0.15))}
-              className="p-1.5 hover:text-[#CC0000] border-r border-neutral-700"
+              className="p-1.5 hover:bg-gold/20 border-r border-gold/40 transition-colors"
               title="Zoom In"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setZoomLevel(Math.max(0.8, zoomLevel - 0.15))}
-              className="p-1.5 hover:text-[#CC0000] border-r border-neutral-700"
+              className="p-1.5 hover:bg-gold/20 border-r border-gold/40 transition-colors"
               title="Zoom Out"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setZoomLevel(1)}
-              className="p-1.5 hover:text-[#CC0000]"
+              className="p-1.5 hover:bg-gold/20 transition-colors"
               title="Reset View"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <span className="bg-[#CC0000] text-white px-2 py-1 font-bold uppercase">
+          <span className="bg-gold text-obsidian px-3 py-1 font-serif font-bold uppercase tracking-widest text-[11px] shadow-gold-glow-sm">
             {filteredIncidents.length} DISPATCH PINS PLOTTED
           </span>
         </div>
       </div>
 
       {/* Category Filter Tabs */}
-      <div className="flex flex-wrap border-b border-[#111111] bg-[#F9F9F7] font-mono text-xs">
+      <div className="flex flex-wrap border-b border-gold/30 bg-obsidian font-mono text-xs">
         {['all', 'safety', 'infrastructure', 'environmental', 'security', 'maintenance'].map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 uppercase font-bold border-r border-[#111111] transition-colors ${
+            className={`px-4 py-2 uppercase font-bold tracking-wider border-r border-gold/30 transition-colors ${
               activeCategory === cat
-                ? 'bg-[#111111] text-white'
-                : 'text-[#111111] hover:bg-neutral-200'
+                ? 'bg-gold text-obsidian shadow-gold-glow-sm'
+                : 'text-pewter hover:text-gold hover:bg-gold/10'
             }`}
           >
             {cat === 'all' ? '✦ ALL SECTORS' : cat}
@@ -115,29 +114,29 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       </div>
 
       {/* Interactive Map Canvas Container */}
-      <div className="relative min-h-[420px] sm:min-h-[500px] bg-[#F9F9F7] overflow-hidden select-none">
+      <div className="relative min-h-[420px] sm:min-h-[500px] bg-obsidian overflow-hidden select-none">
         
-        {/* Newsprint Survey Grid Lines Background */}
+        {/* Art Deco Survey Grid Lines Background */}
         <div
           className="absolute inset-0 transition-transform duration-300"
           style={{
             transform: `scale(${zoomLevel})`,
             backgroundImage: `
-              linear-gradient(to right, rgba(17, 17, 17, 0.08) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(17, 17, 17, 0.08) 1px, transparent 1px)
+              linear-gradient(to right, rgba(212, 175, 55, 0.12) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(212, 175, 55, 0.12) 1px, transparent 1px)
             `,
             backgroundSize: '40px 40px',
           }}
         >
           {/* Compass Rose Overlay */}
-          <div className="absolute top-4 right-4 border border-[#111111] bg-white p-2 font-mono text-[10px] uppercase font-bold text-center tracking-widest shadow-sm">
+          <div className="absolute top-4 right-4 border border-gold/40 bg-obsidian/90 p-3 font-mono text-[10px] uppercase font-bold text-center tracking-widest text-gold shadow-gold-glow-sm">
             <div>N ▲</div>
-            <div>W ◄ ✚ ► E</div>
+            <div>W ◄ ✦ ► E</div>
             <div>S ▼</div>
           </div>
 
           {/* District Grid Labels */}
-          <div className="absolute bottom-2 left-4 font-mono text-[10px] text-neutral-500 uppercase tracking-widest">
+          <div className="absolute bottom-2 left-4 font-mono text-[10px] text-pewter uppercase tracking-widest">
             GRID SECTOR 40.71° N, 74.00° W • SCALE 1:5000
           </div>
 
@@ -157,16 +156,16 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               >
                 {/* Pin Box */}
                 <div
-                  className={`border-2 p-1.5 flex items-center justify-center shadow-md font-mono text-xs font-bold ${getMarkerColor(
+                  className={`border p-2 flex items-center justify-center shadow-gold-glow-sm font-mono text-xs font-bold rotate-45 ${getMarkerColor(
                     incident.priority,
                     incident.status
-                  )} ${isSelected ? 'ring-4 ring-[#111111]' : ''}`}
+                  )} ${isSelected ? 'ring-2 ring-gold-light' : ''}`}
                 >
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="w-4 h-4 -rotate-45" />
                 </div>
 
                 {/* Hover Label */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 hidden group-hover:block whitespace-nowrap border border-[#111111] bg-[#111111] text-white font-mono text-[10px] uppercase px-2 py-0.5 z-20 pointer-events-none">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block whitespace-nowrap border border-gold bg-obsidian text-gold font-serif text-[11px] uppercase px-3 py-1 z-20 pointer-events-none tracking-wider shadow-gold-glow-sm">
                   {incident.title}
                 </div>
               </div>
@@ -176,40 +175,38 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
 
         {/* Selected Incident Popover Card Drawer (Bottom Left) */}
         {selectedIncident && (
-          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md border-2 border-[#111111] bg-white p-4 hard-shadow-lg z-40 newsprint-texture">
-            <div className="flex items-start justify-between gap-2 border-b border-[#111111] pb-2 mb-2 font-mono text-xs">
-              <span className="bg-[#CC0000] text-white font-bold px-2 py-0.5 uppercase tracking-widest text-[10px]">
+          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md border border-gold bg-charcoal p-5 shadow-gold-glow-lg z-40 art-deco-corner-wrapper">
+            <div className="flex items-start justify-between gap-2 border-b border-gold/30 pb-2 mb-2 font-mono text-xs">
+              <span className="bg-gold text-obsidian font-bold px-2 py-0.5 uppercase tracking-widest text-[10px]">
                 PIN SELECTED • {selectedIncident.category.toUpperCase()}
               </span>
-              <span className="font-bold text-[#111111] uppercase">
+              <span className="font-bold text-gold uppercase tracking-wider">
                 STATUS: {selectedIncident.status.toUpperCase()}
               </span>
             </div>
 
-            <h4 className="font-serif font-black text-lg text-[#111111] uppercase leading-tight mb-2">
+            <h4 className="font-serif font-bold text-lg text-gold uppercase leading-tight mb-2 tracking-wider">
               {selectedIncident.title}
             </h4>
 
-            <p className="font-body text-xs text-neutral-800 line-clamp-2 mb-3">
+            <p className="font-body text-xs text-champagne line-clamp-2 mb-4">
               {selectedIncident.description}
             </p>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-neutral-200 font-mono text-xs">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => onCoSign(selectedIncident.id)}
-                  className="bg-[#111111] text-white px-2.5 py-1 text-[11px] uppercase font-bold hover:bg-[#CC0000] transition-colors flex items-center gap-1"
-                >
-                  <Users className="w-3.5 h-3.5" />
-                  CO-SIGN ({selectedIncident.coSignersCount || 1})
-                </button>
-              </div>
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gold/30 font-mono text-xs">
+              <button
+                onClick={() => onCoSign(selectedIncident.id)}
+                className="art-deco-btn-solid px-3 py-1 text-[11px] font-bold tracking-widest flex items-center gap-1.5"
+              >
+                <Users className="w-3.5 h-3.5 text-obsidian" />
+                CO-SIGN ({selectedIncident.coSignersCount || 1})
+              </button>
 
               <button
                 onClick={() => onSelectIncident(selectedIncident)}
-                className="border border-[#111111] px-3 py-1 text-[11px] font-bold uppercase hover:bg-neutral-200 transition-colors flex items-center gap-1"
+                className="art-deco-btn-gold px-3 py-1 text-[11px] font-bold tracking-widest flex items-center gap-1.5"
               >
-                <Eye className="w-3.5 h-3.5" />
+                <Eye className="w-3.5 h-3.5 text-gold" />
                 VIEW DISPATCH
               </button>
             </div>
@@ -218,23 +215,23 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       </div>
 
       {/* Map Legend Footer */}
-      <div className="bg-[#F9F9F7] p-3 border-t border-[#111111] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-neutral-700">
-        <div className="flex items-center gap-4">
-          <span className="font-bold uppercase text-[#111111]">MAP LEGEND:</span>
-          <span className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-[#CC0000] inline-block border border-[#111111]"></span>
+      <div className="bg-obsidian p-4 border-t border-gold/40 flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-champagne">
+        <div className="flex items-center gap-4 flex-wrap">
+          <span className="font-serif font-bold uppercase text-gold tracking-widest">MAP LEGEND:</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-gold inline-block border border-gold shadow-gold-glow-sm rotate-45"></span>
             CRITICAL HAZARD
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-[#111111] inline-block border border-[#111111]"></span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-midnight inline-block border border-gold/60 rotate-45"></span>
             HIGH / MEDIUM DISPATCH
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-neutral-300 inline-block border border-[#111111]"></span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-obsidian inline-block border border-pewter rotate-45"></span>
             RESOLVED DISPATCH
           </span>
         </div>
-        <span className="uppercase text-neutral-500">
+        <span className="uppercase text-pewter tracking-wider">
           CLICK ANY PIN TO INSPECT DISPATCH RECORD
         </span>
       </div>
