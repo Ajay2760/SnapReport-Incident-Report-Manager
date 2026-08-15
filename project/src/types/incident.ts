@@ -11,6 +11,10 @@ export interface Incident {
   reportedAt: Date;
   solutions: Solution[];
   imageUrl?: string;
+  resolvedImageUrl?: string;
+  resolvedAt?: Date;
+  coSignersCount?: number;
+  isVerified?: boolean;
   tags?: string[];
 }
 

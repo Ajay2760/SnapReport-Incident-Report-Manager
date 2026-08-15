@@ -8,13 +8,20 @@ export const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-      aria-label="Toggle theme"
+      className="p-2 border border-[#111111] bg-white text-[#111111] hover:bg-[#111111] hover:text-white transition-all font-mono text-xs hard-shadow-sm flex items-center gap-1.5 font-bold uppercase"
+      aria-label="Toggle edition theme"
+      title="Toggle Night Edition"
     >
       {isDark ? (
-        <Sun className="w-5 h-5 text-yellow-500" />
+        <>
+          <Sun className="w-4 h-4 text-yellow-400" />
+          <span className="hidden sm:inline">DAY EDITION</span>
+        </>
       ) : (
-        <Moon className="w-5 h-5 text-gray-600" />
+        <>
+          <Moon className="w-4 h-4 text-[#111111]" />
+          <span className="hidden sm:inline">NIGHT EDITION</span>
+        </>
       )}
     </button>
   );

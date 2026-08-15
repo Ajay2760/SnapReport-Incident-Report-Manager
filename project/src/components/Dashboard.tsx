@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { TrendingUp, AlertTriangle, CheckCircle, Clock, ShieldAlert } from 'lucide-react';
 import { Incident } from '../types/incident';
 
 interface DashboardProps {
@@ -15,60 +15,91 @@ export const Dashboard: React.FC<DashboardProps> = ({ incidents }) => {
 
   const stats = [
     {
-      label: 'Total Incidents',
+      label: 'TOTAL DISPATCHES',
       value: totalIncidents,
       icon: TrendingUp,
-      color: 'bg-blue-500',
-      textColor: 'text-blue-600'
+      accent: 'border-l-4 border-l-[#111111]',
+      badge: 'VOL. ALL'
     },
     {
-      label: 'Open',
+      label: 'OPEN INCIDENTS',
       value: openIncidents,
       icon: AlertTriangle,
-      color: 'bg-red-500',
-      textColor: 'text-red-600'
+      accent: 'border-l-4 border-l-[#CC0000]',
+      badge: 'URGENT'
     },
     {
-      label: 'In Progress',
+      label: 'IN PROGRESS',
       value: inProgressIncidents,
       icon: Clock,
-      color: 'bg-yellow-500',
-      textColor: 'text-yellow-600'
+      accent: 'border-l-4 border-l-[#111111]',
+      badge: 'ACTIVE'
     },
     {
-      label: 'Resolved',
+      label: 'RESOLVED',
       value: resolvedIncidents,
       icon: CheckCircle,
-      color: 'bg-green-500',
-      textColor: 'text-green-600'
+      accent: 'border-l-4 border-l-neutral-400',
+      badge: 'CLOSED'
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat) => (
-        <div key={stat.label} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{stat.label}</p>
-              <p className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</p>
-            </div>
-            <div className={`${stat.color} p-3 rounded-full`}>
-              <stat.icon className="w-6 h-6 text-white" />
-            </div>
-          </div>
-        </div>
-      ))}
-      
-      {criticalIncidents > 0 && (
-        <div className="md:col-span-2 lg:col-span-4">
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-              <span className="font-medium text-red-800 dark:text-red-300">
-                {criticalIncidents} Critical incident{criticalIncidents > 1 ? 's' : ''} requiring immediate attention
+    <div className="mb-10 space-y-4">
+      {/* Section Header */}
+      <div className="flex items-center justify-between border-b border-[#111111] pb-2">
+        <h3 className="font-serif font-black text-xl uppercase tracking-tight text-[#111111] flex items-center gap-2">
+          <span>DISPATCH METRICS & GAZETTE INDEX</span>
+        </h3>
+        <span className="font-mono text-xs text-neutral-500 uppercase tracking-widest">
+          FIG. 2.0 • REALTIME COUNTS
+        </span>
+      </div>
+
+      {/* Grid Collapsed Cells */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className={`border border-[#111111] bg-white p-5 ${stat.accent} hard-shadow-hover transition-all`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-neutral-600">
+                {stat.label}
+              </span>
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 border border-[#111111] bg-[#F9F9F7] text-[#111111]">
+                {stat.badge}
               </span>
             </div>
+            
+            <div className="flex items-baseline justify-between">
+              <span className="text-4xl font-black font-mono tracking-tight text-[#111111]">
+                {stat.value}
+              </span>
+              <stat.icon className="w-5 h-5 text-[#111111] opacity-80" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Critical Incidents Warning Banner */}
+      {criticalIncidents > 0 && (
+        <div className="border-2 border-[#CC0000] bg-[#CC0000] text-white p-4 font-mono text-xs hard-shadow">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <ShieldAlert className="w-5 h-5 text-white animate-pulse" />
+              <div>
+                <span className="font-bold tracking-widest uppercase text-sm block">
+                  CRITICAL DISPATCH WARNING: {criticalIncidents} HIGH-PRIORITY EMERGENCY FILED
+                </span>
+                <span className="text-red-100 text-xs">
+                  Immediate municipal or emergency team intervention requested.
+                </span>
+              </div>
+            </div>
+            <span className="bg-white text-[#CC0000] px-3 py-1 font-bold tracking-widest uppercase hidden sm:inline">
+              PRIORITY LEVEL 1
+            </span>
           </div>
         </div>
       )}

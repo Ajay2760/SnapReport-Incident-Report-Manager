@@ -27,29 +27,33 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ onPhotoSelect, current
   };
 
   return (
-    <div className="space-y-3">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-        <Camera className="w-4 h-4 inline mr-2" />
-        Photo Evidence (Optional)
+    <div className="space-y-2">
+      <label className="block text-xs font-mono font-bold uppercase text-[#111111] flex items-center gap-1.5">
+        <Camera className="w-4 h-4 text-[#CC0000]" />
+        PHOTOGRAPHIC EVIDENCE PLATE (OPTIONAL)
       </label>
       
       {preview ? (
-        <div className="relative">
+        <div className="relative border-2 border-[#111111] p-1 bg-[#111111]">
           <img
             src={preview}
             alt="Incident preview"
-            className="w-full h-48 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+            className="w-full h-48 object-cover grayscale hover:grayscale-0 transition-all duration-300"
           />
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+            className="absolute top-3 right-3 p-1.5 bg-[#CC0000] text-white hover:bg-black transition-colors border border-white font-mono text-xs font-bold"
+            title="Remove Photo"
           >
             <X className="w-4 h-4" />
           </button>
+          <div className="text-[10px] font-mono text-white p-1 text-center uppercase tracking-widest">
+            PHOTO PLATE LOADED • READY FOR GAZETTE PUBLICATION
+          </div>
         </div>
       ) : (
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+        <div className="border-2 border-dashed border-[#111111] p-6 text-center hover:bg-[#F9F9F7] transition-colors relative halftone-bg">
           <input
             type="file"
             accept="image/*"
@@ -61,12 +65,14 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ onPhotoSelect, current
             htmlFor="photo-upload"
             className="cursor-pointer flex flex-col items-center gap-2"
           >
-            <Upload className="w-8 h-8 text-gray-400" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              Click to upload a photo
+            <div className="border border-[#111111] p-2 bg-white hard-shadow-sm">
+              <Upload className="w-6 h-6 text-[#111111]" />
+            </div>
+            <span className="font-mono text-xs font-bold uppercase text-[#111111] tracking-wider">
+              CLICK TO ATTACH DISPATCH EVIDENCE PHOTO
             </span>
-            <span className="text-xs text-gray-500 dark:text-gray-500">
-              PNG, JPG up to 10MB
+            <span className="font-mono text-[10px] uppercase text-neutral-500">
+              SUPPORTS JPG, PNG FILE FORMATS UP TO 10MB
             </span>
           </label>
         </div>

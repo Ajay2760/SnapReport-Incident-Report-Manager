@@ -15,29 +15,31 @@ export const SolutionRating: React.FC<SolutionRatingProps> = ({
   userRating
 }) => {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2 font-mono text-xs">
       <button
         onClick={() => onRate('helpful')}
-        className={`flex items-center gap-1 px-2 py-1 rounded-lg text-sm transition-colors ${
+        className={`flex items-center gap-1.5 px-2.5 py-1 border transition-all ${
           userRating === 'helpful'
-            ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-            : 'text-gray-500 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/20'
+            ? 'bg-[#111111] text-white border-[#111111]'
+            : 'border-[#111111] bg-white text-[#111111] hover:bg-neutral-100'
         }`}
+        title="Mark Solution as Helpful"
       >
-        <ThumbsUp className="w-3 h-3" />
-        <span>{helpful}</span>
+        <ThumbsUp className="w-3.5 h-3.5" />
+        <span className="font-bold">{helpful}</span>
       </button>
       
       <button
         onClick={() => onRate('unhelpful')}
-        className={`flex items-center gap-1 px-2 py-1 rounded-lg text-sm transition-colors ${
+        className={`flex items-center gap-1.5 px-2.5 py-1 border transition-all ${
           userRating === 'unhelpful'
-            ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-            : 'text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/20'
+            ? 'bg-[#CC0000] text-white border-[#CC0000]'
+            : 'border-[#111111] bg-white text-[#111111] hover:bg-neutral-100'
         }`}
+        title="Mark Solution as Unhelpful"
       >
-        <ThumbsDown className="w-3 h-3" />
-        <span>{unhelpful}</span>
+        <ThumbsDown className="w-3.5 h-3.5" />
+        <span className="font-bold">{unhelpful}</span>
       </button>
     </div>
   );
