@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Zap, Users, Camera, TrendingUp, AlertCircle, Radio, Newspaper, Map, LayoutList, PhoneCall, ShieldAlert, X } from "lucide-react";
+import { Plus, Users, Camera, TrendingUp, AlertCircle, Radio, Newspaper, Map, LayoutList, PhoneCall, ShieldAlert, X } from "lucide-react";
 import {
   Incident,
   Solution,
@@ -268,22 +268,22 @@ function AppContent() {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).toUpperCase();
+  });
 
   return (
-    <div className="min-h-screen bg-obsidian text-champagne font-body selection:bg-gold selection:text-obsidian">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       
       {/* Citizen Feature: 🚨 Emergency SOS Quick-Dial Top Banner */}
-      <div className="bg-red-700 text-white text-xs font-mono py-2.5 px-4 border-b border-red-500 shadow-md">
+      <div className="bg-rose-600 dark:bg-rose-700 text-white text-xs font-sans py-2.5 px-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-2 font-bold tracking-widest uppercase">
-            <ShieldAlert className="w-4 h-4 animate-bounce text-yellow-300" />
+          <div className="flex items-center gap-2 font-semibold">
+            <ShieldAlert className="w-4 h-4 animate-bounce text-amber-300" />
             <span>🚨 LIFE-THREATENING EMERGENCY? (GAS LEAKS, FALLEN POWER LINES, FIRE)</span>
           </div>
 
           <button
             onClick={() => setShowEmergencyModal(true)}
-            className="bg-yellow-400 text-black px-3.5 py-1 font-bold uppercase tracking-widest hover:bg-white transition-all flex items-center gap-1.5 shadow"
+            className="bg-amber-400 text-slate-950 px-3.5 py-1 rounded-lg font-bold hover:bg-white transition-all flex items-center gap-1.5 shadow-sm text-xs"
           >
             <PhoneCall className="w-3.5 h-3.5" />
             CALL EMERGENCY HOTLINE (911 / 311)
@@ -291,156 +291,126 @@ function AppContent() {
         </div>
       </div>
 
-      {/* Top Edition & Live Ticker Header */}
-      <div className="bg-charcoal text-champagne text-xs font-mono py-2 px-4 border-b border-gold/40">
+      {/* Live Ticker Header */}
+      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center gap-3">
-            <span className="bg-gold text-obsidian px-2.5 py-0.5 font-bold tracking-widest uppercase flex items-center gap-1.5 shadow-gold-glow-sm">
-              <Radio className="w-3.5 h-3.5 animate-pulse text-obsidian" /> LIVE TELEGRAM
+            <span className="bg-indigo-600 text-white px-2.5 py-0.5 rounded-full font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+              <Radio className="w-3 h-3 animate-pulse" /> LIVE DISPATCH
             </span>
-            <span className="truncate max-w-md hidden sm:inline text-pewter tracking-wider">
+            <span className="truncate max-w-md hidden sm:inline text-slate-300">
               {incidents.length > 0
-                ? `LATEST DISPATCH: ${incidents[0].title} — STATUS: ${incidents[0].status.toUpperCase()}`
-                : "ALL MUNICIPAL SYSTEMS OPERATIONAL"}
+                ? `Latest Issue: ${incidents[0].title} — Status: ${incidents[0].status.toUpperCase()}`
+                : "All Municipal Services Operational"}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-pewter tracking-widest text-[11px]">
-            <span>VOL. XXIV NO. 104</span>
-            <span className="hidden sm:inline text-gold">✦</span>
-            <span>METROPOLITAN EDITION</span>
-            <span className="hidden sm:inline text-gold">✦</span>
-            <span>ATMOSPHERE: CLEAR</span>
+          <div className="flex items-center gap-4 text-slate-400 text-[11px] font-mono">
+            <span>SNAPREPORT CIVIC HUB</span>
+            <span className="hidden sm:inline text-indigo-400">•</span>
+            <span>METROPOLITAN REGION</span>
           </div>
         </div>
       </div>
 
-      {/* Main Art Deco Marquee Header Banner */}
-      <header className="border-b border-gold/40 bg-charcoal art-deco-sunburst relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center border-b border-gold/30 pb-6 mb-4">
-            <div className="flex items-center justify-center gap-3 text-xs font-mono uppercase tracking-[0.3em] text-gold/80 mb-3">
-              <span>EST. MMXXIV</span>
-              <span className="text-gold">✦</span>
-              <span>THE PUBLICATION OF RECORD FOR CIVIC INCIDENT DISPATCHES</span>
-              <span className="text-gold">✦</span>
-              <span>PRICE: PUBLIC RECORD</span>
-            </div>
+      {/* Main Header Marquee */}
+      <header className="bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700/80 shadow-sm backdrop-blur-md sticky top-0 z-30 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-serif font-bold tracking-widest text-gold uppercase leading-none my-2 drop-shadow-[0_2px_15px_rgba(212,175,55,0.3)]">
-              The SnapReport Gazette
-            </h1>
-            
-            <p className="text-sm sm:text-base font-serif italic text-gold-light tracking-widest mt-2">
-              "All the News & Community Dispatches Fit to Print and Resolve"
-            </p>
-          </div>
-
-          {/* Subheader Toolbar */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-3 border-y border-gold/40 font-mono text-xs">
-            <div className="flex items-center gap-3 font-bold tracking-widest text-gold">
-              <Newspaper className="w-4 h-4 text-gold" />
-              <span>{currentDateFormatted}</span>
+            <div className="text-center sm:text-left">
+              <div className="flex items-center gap-2 justify-center sm:justify-start text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">
+                <span>SnapReport</span>
+                <span>•</span>
+                <span>Community Incident Portal</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-0.5">
+                City Incident Manager
+              </h1>
             </div>
 
+            {/* Header Controls: Theme Toggle, Notifications, New Report */}
             <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
               <ThemeToggle />
               <NotificationBell />
 
               <button
                 onClick={() => setShowForm(true)}
-                className="art-deco-btn-solid px-6 py-2.5 text-xs font-bold flex items-center justify-center gap-2 w-full sm:w-auto"
+                className="app-btn-primary px-5 py-2.5 text-xs flex items-center justify-center gap-2 w-full sm:w-auto"
               >
-                <Plus className="w-4 h-4 text-obsidian" />
-                FILE INCIDENT DISPATCH
+                <Plus className="w-4 h-4" />
+                REPORT INCIDENT
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Editorial Feature */}
-      <section className="border-b border-gold/40 py-12 bg-obsidian relative">
+      {/* Hero Community Banner */}
+      <section className="bg-gradient-to-b from-indigo-50/50 to-transparent dark:from-indigo-950/20 dark:to-transparent py-10 border-b border-slate-200/60 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* Main Lead Story (8 Columns) */}
-            <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-gold/40 pb-8 lg:pb-0 lg:pr-10 art-deco-corner-wrapper">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="bg-gold text-obsidian text-[10px] font-mono font-bold px-2.5 py-0.5 uppercase tracking-widest shadow-gold-glow-sm">
-                  EDITORIAL LEAD
-                </span>
-                <span className="text-xs font-mono text-pewter uppercase tracking-widest">
-                  SECTION I • PAGE 1
-                </span>
+            {/* Main Hero Story */}
+            <div className="lg:col-span-8 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-semibold">
+                <Users className="w-3.5 h-3.5" />
+                <span>CITIZEN-POWERED CIVIC RESPONSE</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold leading-tight tracking-wider text-gold mb-5">
-                COMMUNITY VIGILANCE: CITIZENS & OFFICIALS UNITE TO RESTORE LOCAL INFRASTRUCTURE
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                Report Hazards. Upvote Local Issues. Track Municipal Repairs.
               </h2>
 
-              <p className="text-base sm:text-lg leading-relaxed font-body text-champagne mb-6">
-                Reporting municipal hazards instantly, sharing verified solutions collaboratively, and ensuring swift public resolution. The SnapReport Gazette provides an unyielding, high-contrast record of civic issues demanding immediate community action.
+              <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                A simple, transparent platform for citizens to report potholes, outages, and safety hazards, support neighboring issues, and track official repair progress step by step.
               </p>
 
-              <div className="p-4 border border-gold/40 bg-charcoal flex flex-col sm:flex-row items-center justify-between font-mono text-xs gap-2">
-                <span className="font-bold uppercase tracking-widest text-gold">
-                  ✦ GAZETTE METRICS: {incidents.length} TOTAL DISPATCHES FILED TODAY
+              <div className="pt-2 flex flex-wrap items-center gap-6 font-mono text-xs text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                  {incidents.length} Active Reports
                 </span>
-                <span className="text-gold-light font-bold uppercase tracking-wider">
-                  100% PUBLIC VERIFIED
-                </span>
+                <span>•</span>
+                <span>100% Public Record</span>
+                <span>•</span>
+                <span>Verified City Response</span>
               </div>
             </div>
 
-            {/* Feature Pillars (4 Columns) */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="border-b border-gold/40 pb-3">
-                <h3 className="font-serif font-bold text-xl uppercase tracking-widest text-gold flex items-center justify-between">
-                  <span>DISPATCH PILLARS</span>
-                  <span className="text-xs font-mono text-pewter">FIG. I.0</span>
-                </h3>
-              </div>
+            {/* Quick Feature Pillars */}
+            <div className="lg:col-span-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-4">
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider">
+                How It Works
+              </h3>
 
-              <div className="space-y-5">
-                <div className="flex items-start gap-4">
-                  <div className="border border-gold p-2.5 bg-charcoal text-gold shadow-gold-glow-sm shrink-0 rotate-45">
-                    <Camera className="w-4 h-4 -rotate-45" />
+              <div className="space-y-3 font-sans text-xs">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
+                    <Camera className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-sm uppercase text-gold tracking-wider">
-                      I. SNAP & DOCUMENT
-                    </h4>
-                    <p className="text-xs font-body text-champagne/80 leading-relaxed mt-0.5">
-                      Capture photo evidence and catalog coordinates with precise metadata.
-                    </p>
+                    <h4 className="font-bold text-slate-900 dark:text-white">1. Snap & Report</h4>
+                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Upload a photo and details of the hazard in your area.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 border-t border-gold/20 pt-4">
-                  <div className="border border-gold p-2.5 bg-charcoal text-gold shadow-gold-glow-sm shrink-0 rotate-45">
-                    <Users className="w-4 h-4 -rotate-45" />
+                <div className="flex items-start gap-3 border-t border-slate-100 dark:border-slate-700/50 pt-3">
+                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
+                    <Users className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-sm uppercase text-gold tracking-wider">
-                      II. CO-SIGN PETITIONS
-                    </h4>
-                    <p className="text-xs font-body text-champagne/80 leading-relaxed mt-0.5">
-                      Co-sign dispatches to elevate urgency to Official Citizen Verification status.
-                    </p>
+                    <h4 className="font-bold text-slate-900 dark:text-white">2. Support Neighbors</h4>
+                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Click "Affects Me Too" to prioritize urgent issues.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 border-t border-gold/20 pt-4">
-                  <div className="border border-gold p-2.5 bg-charcoal text-gold shadow-gold-glow-sm shrink-0 rotate-45">
-                    <TrendingUp className="w-4 h-4 -rotate-45" />
+                <div className="flex items-start gap-3 border-t border-slate-100 dark:border-slate-700/50 pt-3">
+                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
+                    <TrendingUp className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-sm uppercase text-gold tracking-wider">
-                      III. BEFORE & AFTER PROOF
-                    </h4>
-                    <p className="text-xs font-body text-champagne/80 leading-relaxed mt-0.5">
-                      Inspect interactive repair photo comparisons for full public accountability.
-                    </p>
+                    <h4 className="font-bold text-slate-900 dark:text-white">3. Track Progress</h4>
+                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Follow the 4-step repair status until fixed.</p>
                   </div>
                 </div>
               </div>
@@ -451,55 +421,52 @@ function AppContent() {
       </section>
 
       {/* Main Broadside Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Dashboard Stat Cards */}
         <Dashboard incidents={incidents} />
 
-        {/* Art Deco Ornamental Divider */}
-        <div className="py-6 text-center font-serif text-xl text-gold tracking-[1.5em] select-none opacity-80">
-          ✦ ✦ ✦
+        {/* Advanced Search Desk */}
+        <div className="mt-8">
+          <AdvancedSearch
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableTags={availableTags}
+          />
         </div>
 
-        {/* Advanced Search Desk */}
-        <AdvancedSearch
-          filters={filters}
-          onFiltersChange={setFilters}
-          availableTags={availableTags}
-        />
-
         {/* View Switcher & Feed Header Bar */}
-        <div className="art-deco-card p-5 mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 font-mono text-xs art-deco-corner-wrapper">
+        <div className="app-card p-4 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
-            <h3 className="text-xl font-serif font-bold uppercase tracking-widest text-gold">
-              COMMUNITY DISPATCHES ({filteredIncidents.length})
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Community Reports ({filteredIncidents.length})
             </h3>
           </div>
 
           {/* List View vs. Gazette Map View Switcher */}
-          <div className="flex items-center border border-gold bg-obsidian font-bold">
+          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
             <button
               onClick={() => setViewMode("list")}
-              className={`px-5 py-2.5 uppercase font-serif text-xs tracking-widest flex items-center gap-2 transition-colors border-r border-gold ${
+              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
                 viewMode === "list"
-                  ? "bg-gold text-obsidian shadow-gold-glow-sm"
-                  : "text-gold hover:bg-gold/10"
+                  ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               <LayoutList className="w-4 h-4" />
-              <span>📰 BROADSHEET LIST VIEW</span>
+              <span>List View</span>
             </button>
 
             <button
               onClick={() => setViewMode("map")}
-              className={`px-5 py-2.5 uppercase font-serif text-xs tracking-widest flex items-center gap-2 transition-colors ${
+              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
                 viewMode === "map"
-                  ? "bg-gold text-obsidian shadow-gold-glow-sm"
-                  : "text-gold hover:bg-gold/10"
+                  ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               <Map className="w-4 h-4" />
-              <span>🗺️ GAZETTE MAP VIEW</span>
+              <span>Map View</span>
             </button>
           </div>
         </div>
@@ -512,22 +479,22 @@ function AppContent() {
             onCoSign={handleCoSign}
           />
         ) : (
-          <div className="grid grid-cols-1 gap-10">
+          <div className="grid grid-cols-1 gap-8">
             {filteredIncidents.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-gold/40 p-8 bg-charcoal art-deco-corner-wrapper">
-                <div className="border border-gold w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-obsidian text-gold shadow-gold-glow-sm rotate-45">
-                  <AlertCircle className="w-8 h-8 -rotate-45" />
+              <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 p-8 rounded-2xl bg-white dark:bg-slate-800">
+                <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-700 mx-auto mb-4 flex items-center justify-center text-slate-400">
+                  <AlertCircle className="w-8 h-8 text-indigo-500" />
                 </div>
-                <h4 className="text-2xl font-serif font-bold text-gold uppercase tracking-widest mb-2 mt-4">
-                  NO GAZETTE RECORDS FOUND
+                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  No Incident Records Found
                 </h4>
-                <p className="text-sm font-body text-champagne/80 max-w-md mx-auto">
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                   {filters.searchTerm ||
                   filters.statusFilter ||
                   filters.categoryFilter ||
                   filters.priorityFilter
-                    ? "No incidents match your specific search parameters. Try clearing your filters."
-                    : "No community dispatches have been registered yet. Be the first citizen reporter to file a record."}
+                    ? "No reports match your active search filters. Try resetting your search parameters."
+                    : "No incident reports have been submitted yet. Be the first neighbor to file a report."}
                 </p>
               </div>
             ) : (
@@ -554,87 +521,83 @@ function AppContent() {
         />
       )}
 
-      {/* Citizen Feature: Emergency SOS Hotline Modal */}
+      {/* Emergency Hotline Modal */}
       {showEmergencyModal && (
-        <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
-          <div className="bg-charcoal border-2 border-red-500 shadow-gold-glow-lg max-w-md w-full p-6 text-center space-y-4 art-deco-corner-wrapper">
-            <div className="border-2 border-red-500 w-16 h-16 mx-auto flex items-center justify-center bg-red-950 text-red-400 rotate-45">
-              <ShieldAlert className="w-8 h-8 -rotate-45 animate-pulse" />
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-800 border border-rose-500/50 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-xl">
+            <div className="w-14 h-14 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 mx-auto flex items-center justify-center">
+              <ShieldAlert className="w-8 h-8 animate-pulse" />
             </div>
             
-            <h3 className="font-serif font-bold text-2xl text-red-400 uppercase tracking-widest mt-4">
-              EMERGENCY SOS HOTLINES
+            <h3 className="font-extrabold text-xl text-slate-900 dark:text-white">
+              Emergency Hotlines
             </h3>
             
-            <p className="font-mono text-xs text-champagne leading-relaxed">
-              If an incident presents an immediate danger to human life, call local emergency services immediately:
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              If an incident presents an immediate danger to human life or property, call local emergency services immediately:
             </p>
 
-            <div className="space-y-3 font-mono text-xs font-bold pt-2">
+            <div className="space-y-3 text-xs font-bold pt-2">
               <a
                 href="tel:911"
-                className="block bg-red-600 text-white py-3 px-4 uppercase tracking-widest hover:bg-red-500 transition-all border border-red-400"
+                className="block bg-rose-600 hover:bg-rose-700 text-white py-3 px-4 rounded-xl transition-all shadow-sm"
               >
                 📞 CALL 911 (POLICE / FIRE / AMBULANCE)
               </a>
               <a
                 href="tel:311"
-                className="block bg-gold text-obsidian py-3 px-4 uppercase tracking-widest hover:bg-gold-light transition-all border border-gold"
+                className="block bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-xl transition-all shadow-sm"
               >
-                📞 CALL 311 (CITY HAZARD HOTLINE)
+                📞 CALL 311 (MUNICIPAL HAZARD LINE)
               </a>
             </div>
 
             <button
               onClick={() => setShowEmergencyModal(false)}
-              className="mt-4 border border-gold/40 text-pewter px-4 py-2 text-xs font-mono uppercase tracking-widest hover:text-gold"
+              className="mt-4 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white"
             >
-              ✕ CLOSE EMERGENCY BANNER
+              Close Window
             </button>
           </div>
         </div>
       )}
 
-      {/* Gazette Colophon Footer */}
-      <footer className="border-t border-gold/40 bg-charcoal text-champagne mt-24 font-mono text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-gold/30 pb-12">
-            <div className="md:col-span-6 space-y-4">
-              <h2 className="text-3xl font-serif font-bold tracking-widest text-gold uppercase">
-                THE SNAPREPORT GAZETTE
+      {/* Footer */}
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 mt-20 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-b border-slate-100 dark:border-slate-800 pb-10">
+            <div className="md:col-span-6 space-y-3">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                SnapReport Incident Manager
               </h2>
-              <p className="text-champagne/80 font-body text-sm leading-relaxed max-w-md">
-                An authoritative digital broadsheet dedicated to civic transparency, community safety, and rapid municipal problem resolution.
+              <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-md">
+                A public citizen platform dedicated to neighborhood safety, municipal transparency, and rapid hazard resolution.
               </p>
-              <div className="text-gold font-mono text-xs font-bold uppercase tracking-widest">
-                ✦ PRINTED IN METROPOLIS • DISTRIBUTED GLOBALLY ✦
-              </div>
             </div>
 
-            <div className="md:col-span-3 space-y-3">
-              <h4 className="font-serif font-bold text-gold uppercase tracking-widest border-b border-gold/30 pb-2 mb-3">
-                SECTIONS
+            <div className="md:col-span-3 space-y-2">
+              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
+                Quick Links
               </h4>
-              <ul className="space-y-2 text-champagne/80">
-                <li><a href="#" className="hover:text-gold hover:underline">Front Page Dispatches</a></li>
-                <li><a href="#" className="hover:text-gold hover:underline">Interactive Gazette Map</a></li>
-                <li><a href="#" className="hover:text-gold hover:underline">Verified Citizen Petitions</a></li>
-                <li><a href="#" className="hover:text-gold hover:underline">Before & After Repairs</a></li>
+              <ul className="space-y-1.5">
+                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Incident Feed</a></li>
+                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Gazette Map</a></li>
+                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Citizen Petitions</a></li>
+                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Before & After Repairs</a></li>
               </ul>
             </div>
 
-            <div className="md:col-span-3 space-y-3">
-              <h4 className="font-serif font-bold text-gold uppercase tracking-widest border-b border-gold/30 pb-2 mb-3">
-                PUBLICATION INFO
+            <div className="md:col-span-3 space-y-2">
+              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
+                Portal Information
               </h4>
-              <p className="text-champagne/80">Edition: Vol. XXIV No. 104</p>
-              <p className="text-champagne/80">ISSN: 2026-9041-SRG</p>
-              <p className="text-champagne/80">Copyright © 2026 SnapReport Inc.</p>
+              <p>SnapReport Platform v2.0</p>
+              <p>Copyright © 2026 SnapReport Inc.</p>
             </div>
           </div>
 
-          <div className="pt-8 text-center text-pewter text-[11px] uppercase tracking-widest">
-            "All the News That's Fit to Print & Resolve" • SnapReport Incident Manager
+          <div className="pt-6 text-center text-slate-400 dark:text-slate-500 text-[11px]">
+            SnapReport Community Incident Manager • Built for Citizens
           </div>
         </div>
       </footer>

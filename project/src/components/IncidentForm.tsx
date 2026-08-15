@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { AlertCircle, MapPin, User, FileText, Tag, AlertTriangle, Plus, X, ShieldAlert, Mic, Square, Play, Pause, Clock } from 'lucide-react';
+import { FileText, Tag, AlertTriangle, Plus, X, ShieldAlert, Mic, Square, Play, Pause, Clock, MapPin, User } from 'lucide-react';
 import { IncidentFormData } from '../types/incident';
 import { PhotoUpload } from './PhotoUpload';
 
@@ -68,8 +68,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
         });
       }, 1000);
     } catch (err) {
-      alert('Microphone access unavailable. Simulated voice note recorded.');
-      // Fallback demo audio url
+      alert('Microphone access unavailable. Demo voice note recorded.');
       const fallbackUrl = "https://actions.google.com/sounds/v1/ambiences/outdoor_park.ogg";
       setAudioBlobUrl(fallbackUrl);
       setFormData(prev => ({ ...prev, audioUrl: fallbackUrl }));
@@ -117,10 +116,10 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
     e.preventDefault();
     
     const newErrors: Partial<IncidentFormData> = {};
-    if (!formData.title.trim()) newErrors.title = 'INCIDENT TITLE IS REQUIRED';
-    if (!formData.description.trim()) newErrors.description = 'INCIDENT DESCRIPTION IS REQUIRED';
-    if (!formData.location.trim()) newErrors.location = 'LOCATION IS REQUIRED';
-    if (!formData.reportedBy.trim()) newErrors.reportedBy = 'REPORTER IDENTIFIER IS REQUIRED';
+    if (!formData.title.trim()) newErrors.title = 'Incident title is required';
+    if (!formData.description.trim()) newErrors.description = 'Description is required';
+    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    if (!formData.reportedBy.trim()) newErrors.reportedBy = 'Reporter name is required';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -138,277 +137,272 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   };
 
   return (
-    <div className="fixed inset-0 bg-obsidian/90 backdrop-blur-md flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-charcoal border border-gold shadow-gold-glow-lg max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto art-deco-corner-wrapper">
-        {/* Form Header Banner */}
-        <div className="bg-obsidian text-champagne p-5 border-b border-gold/40 flex items-center justify-between">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="p-5 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="border border-gold p-2 bg-obsidian text-gold shadow-gold-glow-sm rotate-45">
-              <ShieldAlert className="w-5 h-5 -rotate-45" />
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold uppercase tracking-widest text-gold leading-none">
-                OFFICIAL INCIDENT TELEGRAM DISPATCH
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                File New Incident Dispatch
               </h2>
-              <span className="font-mono text-[10px] text-pewter uppercase tracking-widest block mt-1">
-                FORM REF #SRG-2026 • OFFICIAL MUNICIPAL FILING
-              </span>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Official Municipal Report • Public Citizen Record
+              </p>
             </div>
           </div>
 
           <button
             onClick={onCancel}
-            className="border border-gold/50 text-gold px-3 py-1 font-mono text-xs hover:border-gold hover:bg-gold hover:text-obsidian transition-all font-bold uppercase tracking-widest"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
           >
-            ✕ CLOSE
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 font-mono text-xs">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 font-sans text-xs">
           
-          {/* Headline Title Field */}
+          {/* Headline Title */}
           <div>
-            <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-gold" />
-              DISPATCH HEADLINE TITLE *
+            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1.5">
+              <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              Incident Headline Title *
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              className={`w-full px-3 py-2.5 art-deco-input text-sm text-champagne placeholder:text-pewter uppercase ${
-                errors.title ? 'border-red-500' : ''
+              className={`w-full px-3.5 py-2.5 app-input text-xs ${
+                errors.title ? 'border-rose-500' : ''
               }`}
               placeholder="e.g. Hazardous Pothole near Main Street Intersection"
             />
-            {errors.title && <p className="text-red-400 font-bold mt-1 uppercase text-[10px] tracking-wider">{errors.title}</p>}
+            {errors.title && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.title}</p>}
           </div>
 
-          {/* Description Textarea */}
+          {/* Description */}
           <div>
-            <label className="block font-bold uppercase text-gold tracking-widest mb-2">
-              DETAILED DISPATCH DESCRIPTION & INCIDENT SUMMARY *
+            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5">
+              Detailed Description & Summary *
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={3}
-              className={`w-full px-3 py-2.5 art-deco-input text-sm text-champagne placeholder:text-pewter uppercase ${
-                errors.description ? 'border-red-500' : ''
+              className={`w-full px-3.5 py-2.5 app-input text-xs ${
+                errors.description ? 'border-rose-500' : ''
               }`}
-              placeholder="Provide complete details, safety hazards, and impact on local community..."
+              placeholder="Provide complete details, safety hazards, and community impact..."
             />
-            {errors.description && <p className="text-red-400 font-bold mt-1 uppercase text-[10px] tracking-wider">{errors.description}</p>}
+            {errors.description && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.description}</p>}
           </div>
 
-          {/* Citizen Feature: Voice Note Recorder */}
-          <div className="p-4 border border-gold/40 bg-obsidian art-deco-corner-wrapper">
-            <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-2">
-              <Mic className="w-4 h-4 text-gold" />
-              🎙️ CITIZEN VOICE NOTE DESCRIPTION (OPTIONAL)
+          {/* Voice Note Recorder */}
+          <div className="p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 space-y-2">
+            <label className="block font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Mic className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              🎙️ Citizen Voice Note (Optional)
             </label>
-            <p className="text-[11px] text-pewter mb-3">
-              Record up to a 15-second audio note so citizens can listen to your dispatch description.
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Record a 15-second voice description for your incident report.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               {!isRecording ? (
                 <button
                   type="button"
                   onClick={startRecording}
-                  className="art-deco-btn-gold px-4 py-2 text-xs flex items-center gap-2"
+                  className="app-btn-primary px-4 py-2 text-xs flex items-center gap-2"
                 >
-                  <Mic className="w-4 h-4 text-gold" />
-                  START RECORDING VOICE NOTE
+                  <Mic className="w-4 h-4" />
+                  Start Recording Voice Note
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={stopRecording}
-                  className="bg-red-600 text-white border border-red-400 px-4 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 animate-pulse"
+                  className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 animate-pulse"
                 >
                   <Square className="w-4 h-4" />
-                  STOP RECORDING ({15 - recordingSeconds}s LEFT)
+                  Stop Recording ({15 - recordingSeconds}s remaining)
                 </button>
               )}
 
               {audioBlobUrl && !isRecording && (
-                <div className="flex items-center gap-3 border border-gold/40 px-3 py-1.5 bg-charcoal">
+                <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                   <button
                     type="button"
                     onClick={togglePlayAudio}
-                    className="text-gold hover:text-gold-light"
+                    className="text-indigo-600 dark:text-indigo-400"
                   >
                     {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
-                  <span className="text-[11px] text-gold font-bold uppercase">
-                    {isPlayingAudio ? 'PLAYING VOICE NOTE...' : 'VOICE NOTE READY'}
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">
+                    {isPlayingAudio ? 'Playing...' : 'Voice Note Ready'}
                   </span>
                   <button
                     type="button"
                     onClick={() => { setAudioBlobUrl(null); setFormData(prev => ({ ...prev, audioUrl: undefined })); }}
-                    className="text-pewter hover:text-red-400 text-xs ml-2"
+                    className="text-slate-400 hover:text-rose-500 text-xs ml-2"
                   >
-                    ✕ DELETE
+                    ✕ Clear
                   </button>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Category & Priority & ETA Row */}
+          {/* Classification & Urgency & ETA */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-1.5">
-                <Tag className="w-4 h-4 text-gold" />
-                CLASSIFICATION
+              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                Category
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
-                className="w-full px-3 py-2.5 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-widest"
+                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
               >
-                <option value="safety" className="bg-charcoal text-champagne">SAFETY HAZARD</option>
-                <option value="infrastructure" className="bg-charcoal text-champagne">INFRASTRUCTURE DAMAGE</option>
-                <option value="environmental" className="bg-charcoal text-champagne">ENVIRONMENTAL ISSUE</option>
-                <option value="security" className="bg-charcoal text-champagne">PUBLIC SECURITY</option>
-                <option value="maintenance" className="bg-charcoal text-champagne">MUNICIPAL MAINTENANCE</option>
-                <option value="other" className="bg-charcoal text-champagne">OTHER DISPATCH</option>
+                <option value="safety">Safety Hazard</option>
+                <option value="infrastructure">Infrastructure</option>
+                <option value="environmental">Environmental</option>
+                <option value="security">Public Security</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
             <div>
-              <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-gold" />
-                URGENCY
+              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
+                <AlertTriangle className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                Urgency Priority
               </label>
               <select
                 value={formData.priority}
                 onChange={(e) => handleChange('priority', e.target.value)}
-                className="w-full px-3 py-2.5 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-widest"
+                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
               >
-                <option value="low" className="bg-charcoal text-champagne">LOW (ROUTINE)</option>
-                <option value="medium" className="bg-charcoal text-champagne">MEDIUM (ATTENTION)</option>
-                <option value="high" className="bg-charcoal text-champagne">HIGH (URGENT)</option>
-                <option value="critical" className="bg-charcoal text-champagne">CRITICAL (EMERGENCY)</option>
+                <option value="low">Low (Routine)</option>
+                <option value="medium">Medium (Attention)</option>
+                <option value="high">High (Urgent)</option>
+                <option value="critical">Critical (Emergency)</option>
               </select>
             </div>
 
-            {/* Citizen Feature: Expected Fix ETA Dropdown */}
             <div>
-              <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-gold" />
-                ⏱️ TARGET FIX ETA
+              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                Target Fix ETA
               </label>
               <select
                 value={formData.eta || 'Within 48 Hours'}
                 onChange={(e) => handleChange('eta', e.target.value)}
-                className="w-full px-3 py-2.5 bg-obsidian border-b-2 border-gold text-champagne font-mono text-sm focus:outline-none cursor-pointer uppercase font-bold tracking-widest"
+                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
               >
-                <option value="Within 24 Hours" className="bg-charcoal text-champagne">WITHIN 24 HOURS</option>
-                <option value="Within 48 Hours" className="bg-charcoal text-champagne">WITHIN 48 HOURS</option>
-                <option value="Within 3 Days" className="bg-charcoal text-champagne">WITHIN 3 DAYS</option>
-                <option value="Within 1 Week" className="bg-charcoal text-champagne">WITHIN 1 WEEK</option>
+                <option value="Within 24 Hours">Within 24 Hours</option>
+                <option value="Within 48 Hours">Within 48 Hours</option>
+                <option value="Within 3 Days">Within 3 Days</option>
+                <option value="Within 1 Week">Within 1 Week</option>
               </select>
             </div>
           </div>
 
-          {/* Location & Reporter Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Location & Reporter */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-gold" />
-                LOCATION & ADDRESS *
+              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                Address / Location *
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => handleChange('location', e.target.value)}
-                className={`w-full px-3 py-2.5 art-deco-input text-sm text-champagne placeholder:text-pewter uppercase ${
-                  errors.location ? 'border-red-500' : ''
+                className={`w-full px-3.5 py-2.5 app-input text-xs ${
+                  errors.location ? 'border-rose-500' : ''
                 }`}
                 placeholder="Specific street address or landmark"
               />
-              {errors.location && <p className="text-red-400 font-bold mt-1 uppercase text-[10px] tracking-wider">{errors.location}</p>}
+              {errors.location && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.location}</p>}
             </div>
 
             <div>
-              <label className="block font-bold uppercase text-gold tracking-widest mb-2 flex items-center gap-2">
-                <User className="w-4 h-4 text-gold" />
-                CITIZEN REPORTER BYLINE *
+              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
+                <User className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                Reporter Name *
               </label>
               <input
                 type="text"
                 value={formData.reportedBy}
                 onChange={(e) => handleChange('reportedBy', e.target.value)}
-                className={`w-full px-3 py-2.5 art-deco-input text-sm text-champagne placeholder:text-pewter uppercase ${
-                  errors.reportedBy ? 'border-red-500' : ''
+                className={`w-full px-3.5 py-2.5 app-input text-xs ${
+                  errors.reportedBy ? 'border-rose-500' : ''
                 }`}
-                placeholder="Full Name or Reporter Handle"
+                placeholder="Full Name or Handle"
               />
-              {errors.reportedBy && <p className="text-red-400 font-bold mt-1 uppercase text-[10px] tracking-wider">{errors.reportedBy}</p>}
+              {errors.reportedBy && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.reportedBy}</p>}
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block font-bold uppercase text-gold tracking-widest mb-2">
-              INDEX TAGS (OPTIONAL)
+            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5">
+              Tags (Optional)
             </label>
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 mb-2">
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-obsidian text-gold border border-gold font-mono text-xs uppercase font-bold tracking-widest"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 rounded-full text-xs font-semibold"
                 >
                   #{tag}
-                  <button
-                    type="button"
-                    onClick={() => removeTag(tag)}
-                    className="hover:text-gold-light"
-                  >
+                  <button type="button" onClick={() => removeTag(tag)} className="hover:text-rose-500">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </span>
               ))}
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <input
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 px-3 py-2 art-deco-input font-mono text-sm text-champagne placeholder:text-pewter uppercase"
+                className="flex-1 px-3.5 py-2 app-input text-xs"
                 placeholder="Add tag..."
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="art-deco-btn-gold px-5 py-2 text-xs flex items-center gap-1"
+                className="app-btn-secondary px-4 py-2 text-xs flex items-center gap-1"
               >
                 <Plus className="w-4 h-4" />
-                ADD
+                Add
               </button>
             </div>
           </div>
 
-          {/* Photo Evidence Component */}
+          {/* Photo Evidence */}
           <PhotoUpload onPhotoSelect={setSelectedPhoto} />
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gold/40">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/60">
             <button
               type="submit"
-              className="flex-1 art-deco-btn-solid py-3 px-6 text-sm font-bold tracking-widest"
+              className="flex-1 app-btn-primary py-3 px-6 text-xs font-bold"
             >
-              SUBMIT & TRANSMIT TELEGRAM
+              Submit Incident Report
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="art-deco-btn-gold py-3 px-6 text-sm font-bold tracking-widest"
+              className="app-btn-secondary py-3 px-6 text-xs font-bold"
             >
-              CANCEL FILING
+              Cancel
             </button>
           </div>
 

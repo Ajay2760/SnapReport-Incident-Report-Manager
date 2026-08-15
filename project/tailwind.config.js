@@ -5,33 +5,33 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Marcellus', 'Italiana', 'Georgia', 'serif'],
-        heading: ['Marcellus', 'Italiana', 'serif'],
-        body: ['Josefin Sans', 'sans-serif'],
-        sans: ['Josefin Sans', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        heading: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
-        obsidian: '#0A0A0A',
-        champagne: '#F2F0E4',
-        charcoal: '#141414',
-        gold: {
-          DEFAULT: '#D4AF37',
-          light: '#F2E8C4',
-          dark: '#AA820A',
-          muted: 'rgba(212, 175, 55, 0.3)',
+        brand: {
+          50: '#EEF2FF',
+          100: '#E0E7FF',
+          500: '#6366F1',
+          600: '#4F46E5',
+          700: '#4338CA',
+          900: '#312E81',
         },
-        midnight: '#1E3D59',
-        pewter: '#888888',
+        civic: {
+          light: '#F8FAFC',
+          dark: '#0F172A',
+          cardLight: '#FFFFFF',
+          cardDark: '#1E293B',
+        }
       },
       boxShadow: {
-        'gold-glow': '0 0 15px rgba(212, 175, 55, 0.25)',
-        'gold-glow-lg': '0 0 25px rgba(212, 175, 55, 0.45)',
-        'gold-glow-sm': '0 0 8px rgba(212, 175, 55, 0.2)',
-        'hard-gold': '4px 4px 0px 0px #D4AF37',
+        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'soft-lg': '0 10px 30px -4px rgba(0, 0, 0, 0.1)',
+        'brand': '0 4px 14px 0 rgba(79, 70, 229, 0.35)',
       }
     },
   },
   plugins: [],
 };
-

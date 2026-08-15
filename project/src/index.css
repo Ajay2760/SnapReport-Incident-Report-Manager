@@ -1,185 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Marcellus&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * {
-    border-radius: 0px !important;
-  }
-
   body {
-    background-color: #0A0A0A;
-    color: #F2F0E4;
-    font-family: 'Josefin Sans', sans-serif;
-    background-image: 
-      repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.03) 0, rgba(212, 175, 55, 0.03) 1px, transparent 0, transparent 50px),
-      repeating-linear-gradient(-45deg, rgba(212, 175, 55, 0.03) 0, rgba(212, 175, 55, 0.03) 1px, transparent 0, transparent 50px);
-    background-size: 70px 70px;
-    background-attachment: fixed;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Marcellus', 'Italiana', serif;
-    letter-spacing: 0.1em;
+    @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors duration-300;
   }
 }
 
-/* Sunburst Radial Overlay */
-.art-deco-sunburst {
-  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, rgba(30, 61, 89, 0.08) 45%, transparent 70%);
+/* Custom UI Utilities for Seamless Light/Dark Mode */
+.app-card {
+  @apply bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200;
 }
 
-/* L-Bracket Corner Embellishments */
-.art-deco-corner-wrapper {
-  position: relative;
+.app-input {
+  @apply bg-slate-50 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all;
 }
 
-.art-deco-corner-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid #D4AF37;
-  border-left: 2px solid #D4AF37;
-  pointer-events: none;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-  opacity: 0.6;
+.app-btn-primary {
+  @apply bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-brand active:scale-[0.98];
 }
 
-.art-deco-corner-wrapper::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 12px;
-  height: 12px;
-  border-bottom: 2px solid #D4AF37;
-  border-right: 2px solid #D4AF37;
-  pointer-events: none;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-  opacity: 0.6;
+.app-btn-secondary {
+  @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl transition-all active:scale-[0.98];
 }
 
-.art-deco-corner-wrapper:hover::before,
-.art-deco-corner-wrapper:hover::after {
-  opacity: 1;
-}
-
-/* Art Deco Stepped Card Container */
-.art-deco-card {
-  background-color: #141414;
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
-  transition: all 0.3s ease-in-out;
-}
-
-.art-deco-card:hover {
-  border-color: #D4AF37;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Art Deco Button */
-.art-deco-btn-gold {
-  background: transparent;
-  border: 2px solid #D4AF37;
-  color: #D4AF37;
-  font-family: 'Marcellus', serif;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  min-height: 44px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.art-deco-btn-gold:hover {
-  background-color: #D4AF37;
-  color: #0A0A0A;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
-}
-
-.art-deco-btn-solid {
-  background-color: #D4AF37;
-  border: 2px solid #D4AF37;
-  color: #0A0A0A;
-  font-family: 'Marcellus', serif;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  min-height: 44px;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
-
-.art-deco-btn-solid:hover {
-  background-color: #F2E8C4;
-  border-color: #F2E8C4;
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
-}
-
-/* Underlined Art Deco Inputs */
-.art-deco-input {
-  background-color: transparent;
-  border-bottom: 2px solid #D4AF37;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  color: #F2F0E4;
-  font-family: 'Josefin Sans', sans-serif;
-  transition: all 0.3s ease;
-}
-
-.art-deco-input:focus {
-  outline: none;
-  border-bottom-color: #F2E8C4;
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
-}
-
-/* Double Frame for Images */
-.art-deco-frame {
-  position: relative;
-  border: 1px solid #D4AF37;
-  padding: 4px;
-  background-color: #0A0A0A;
-}
-
-.art-deco-frame-inner {
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  overflow: hidden;
-}
-
-.art-deco-frame img {
-  transition: filter 0.5s ease, transform 0.5s ease;
-}
-
-.art-deco-frame:hover img {
-  transform: scale(1.03);
-}
-
-/* Custom Scrollbar for Art Deco Gold Theme */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0A0A0A;
-  border-left: 1px solid rgba(212, 175, 55, 0.2);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #D4AF37;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #F2E8C4;
-  box-shadow: 0 0 10px #D4AF37;
+.app-badge {
+  @apply px-3 py-1 rounded-full text-xs font-semibold tracking-wide inline-flex items-center gap-1.5;
 }

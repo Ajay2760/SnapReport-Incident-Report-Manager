@@ -1,109 +1,100 @@
 import React, { useState } from 'react';
-import { Bell, X, Radio } from 'lucide-react';
+import { Bell, Check, X } from 'lucide-react';
 
 interface Notification {
   id: string;
   title: string;
   message: string;
-  time: string;
-  type: 'new' | 'update' | 'resolved';
+  timestamp: string;
+  isRead: boolean;
 }
 
 export const NotificationBell: React.FC = () => {
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications] = useState<Notification[]>([
+  const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: '1',
-      title: 'CRITICAL DISPATCH FILED',
-      message: 'Hazardous Pothole reported on Main Street & Oak Ave',
-      time: '5 MIN AGO',
-      type: 'new'
+      title: 'Dispatch Resolution Update',
+      message: 'Water Main Repair on Broadway & 4th St has been marked as RESOLVED.',
+      timestamp: '10 mins ago',
+      isRead: false,
     },
     {
       id: '2',
-      title: 'STATUS UPDATE LOGGED',
-      message: 'Streetlight Corridor repair work is currently in progress',
-      time: '1 HOUR AGO',
-      type: 'update'
-    }
+      title: 'New Citizen Co-Signer',
+      message: '12 neighbors co-signed your Main Street Pothole dispatch.',
+      timestamp: '1 hour ago',
+      isRead: false,
+    },
   ]);
 
-  const getNotificationBadgeStyle = (type: Notification['type']) => {
-    switch (type) {
-      case 'new': return 'bg-gold text-obsidian font-bold';
-      case 'update': return 'bg-midnight text-champagne border border-gold/40';
-      case 'resolved': return 'bg-obsidian text-pewter border border-pewter/40';
-      default: return 'bg-gold text-obsidian';
-    }
+  const [isOpen, setIsOpen] = useState(false);
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+  };
+
+  const removeNotification = (id: string) => {
+    setNotifications(notifications.filter(n => n.id !== id));
   };
 
   return (
     <div className="relative">
       <button
-        onClick={() => setShowNotifications(!showNotifications)}
-        className="p-2.5 border border-gold/60 bg-charcoal text-gold hover:border-gold hover:bg-gold hover:text-obsidian transition-all relative font-mono text-xs shadow-gold-glow-sm flex items-center gap-2 font-bold uppercase tracking-widest"
-        title="View Art Deco Bulletins"
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-indigo-500 transition-all relative"
+        title="Notifications"
       >
         <Bell className="w-4 h-4" />
-        <span className="hidden sm:inline">BULLETINS</span>
-        {notifications.length > 0 && (
-          <span className="w-5 h-5 bg-gold text-obsidian text-[10px] font-mono font-bold flex items-center justify-center rotate-45 ml-1">
-            <span className="-rotate-45">{notifications.length}</span>
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+            {unreadCount}
           </span>
         )}
       </button>
 
-      {showNotifications && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 border border-gold bg-charcoal shadow-gold-glow-lg z-50 art-deco-corner-wrapper">
-          {/* Popover Header */}
-          <div className="p-3 border-b border-gold/40 bg-obsidian text-champagne flex items-center justify-between font-mono text-xs">
-            <div className="flex items-center gap-2">
-              <Radio className="w-3.5 h-3.5 text-gold animate-pulse" />
-              <span className="font-serif font-bold tracking-widest text-gold uppercase">DISPATCH BULLETINS</span>
-            </div>
+      {isOpen && (
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl p-4 z-40 space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-700/60 pb-2">
+            <span className="font-bold text-xs text-slate-900 dark:text-white">
+              Notifications ({unreadCount})
+            </span>
             <button
-              onClick={() => setShowNotifications(false)}
-              className="text-pewter hover:text-gold transition-colors"
+              onClick={markAllAsRead}
+              className="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
             >
-              <X className="w-4 h-4" />
+              Mark all read
             </button>
           </div>
-          
-          {/* Notification List */}
-          <div className="max-h-96 overflow-y-auto divide-y divide-gold/20">
+
+          <div className="space-y-2 max-h-64 overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="p-6 text-center font-mono text-xs text-pewter uppercase">
-                NO RECENT DISPATCH BULLETINS LOGGED
-              </div>
+              <p className="text-xs text-slate-400 italic text-center py-4">No notifications</p>
             ) : (
-              notifications.map((notification) => (
+              notifications.map((n) => (
                 <div
-                  key={notification.id}
-                  className="p-4 hover:bg-obsidian/60 transition-colors"
+                  key={n.id}
+                  className={`p-3 rounded-xl text-xs space-y-1 relative ${
+                    n.isRead
+                      ? 'bg-slate-50 dark:bg-slate-900/50 text-slate-500'
+                      : 'bg-indigo-50 dark:bg-indigo-950/40 text-slate-900 dark:text-slate-200 border border-indigo-100 dark:border-indigo-900/50'
+                  }`}
                 >
-                  <div className="flex items-start gap-3">
-                    <span className={`px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider ${getNotificationBadgeStyle(notification.type)}`}>
-                      {notification.type}
-                    </span>
-                    <div className="flex-1">
-                      <h4 className="font-serif font-bold text-sm uppercase text-gold leading-tight tracking-wider">
-                        {notification.title}
-                      </h4>
-                      <p className="font-body text-xs text-champagne mt-1">
-                        {notification.message}
-                      </p>
-                      <span className="font-mono text-[10px] text-pewter uppercase mt-2 block border-t border-gold/20 pt-1">
-                        TIMESTAMP: {notification.time}
-                      </span>
-                    </div>
+                  <div className="flex justify-between items-start">
+                    <span className="font-bold">{n.title}</span>
+                    <button
+                      onClick={() => removeNotification(n.id)}
+                      className="text-slate-400 hover:text-rose-500"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
                   </div>
+                  <p className="text-slate-600 dark:text-slate-300">{n.message}</p>
+                  <span className="text-[10px] text-slate-400 block">{n.timestamp}</span>
                 </div>
               ))
             )}
-          </div>
-
-          <div className="p-2 border-t border-gold/40 bg-obsidian text-center font-mono text-[10px] uppercase text-pewter tracking-widest">
-            ✦ GAZETTE TELEGRAM DISPATCH SERVICE ✦
           </div>
         </div>
       )}
