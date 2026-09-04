@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { MapPin, User, Clock, MessageSquare, Send, Tag, Newspaper, Users, CheckCircle2, ThumbsUp, Mic, Play, Pause, Share2, Copy, Mail, Check } from 'lucide-react';
+import { MapPin, User, Clock, MessageSquare, Send, Tag, Users, CheckCircle2, ThumbsUp, Mic, Play, Pause, Share2, Copy, Mail, Check, X } from 'lucide-react';
 import { Incident, Solution } from '../types/incident';
 import { SolutionRating } from './SolutionRating';
 
@@ -23,18 +23,14 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
   const [authorName, setAuthorName] = useState('');
   const [userRatings, setUserRatings] = useState<Record<string, 'helpful' | 'unhelpful'>>({});
   
-  // Neighbor Support Counter
   const [affectsMeCount, setAffectsMeCount] = useState(incident.affectsMeCount || (incident.coSignersCount || 1) * 3);
   const [hasAffectedMe, setHasAffectedMe] = useState(false);
 
-  // Audio Player
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Photo Tabs
   const [activePhotoTab, setActivePhotoTab] = useState<'after' | 'before'>('after');
 
-  // Social Share Menu
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
@@ -71,13 +67,13 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
   };
 
   const handleWhatsAppShare = () => {
-    const text = encodeURIComponent(`🚨 Incident Alert: ${incident.title} at ${incident.location}.\nStatus: ${incident.status.toUpperCase()}.\nView & Support: ${window.location.href}`);
+    const text = encodeURIComponent(`🚨 Incident: ${incident.title} at ${incident.location}. Status: ${incident.status.toUpperCase()}. View: ${window.location.href}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   const handleEmailShare = () => {
     const subject = encodeURIComponent(`Incident Alert: ${incident.title}`);
-    const body = encodeURIComponent(`Incident Record:\n\nTitle: ${incident.title}\nLocation: ${incident.location}\nStatus: ${incident.status.toUpperCase()}\nDetails: ${incident.description}\n\nView details: ${window.location.href}`);
+    const body = encodeURIComponent(`Title: ${incident.title}\nLocation: ${incident.location}\nStatus: ${incident.status.toUpperCase()}\nDetails: ${incident.description}`);
     window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
   };
 
@@ -90,13 +86,13 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
 
   const currentStepIdx = getStepProgressIndex();
 
-  const getPriorityBadgeStyle = (priority: Incident['priority']) => {
+  const getPriorityStyle = (priority: Incident['priority']) => {
     switch (priority) {
-      case 'critical': return 'bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-700';
-      case 'high': return 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700';
-      case 'medium': return 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700';
-      case 'low': return 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600';
-      default: return 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300';
+      case 'critical': return { bg: 'bg-alert-red/10 dark:bg-alert-red/20 text-alert-red', border: 'border-l-alert-red' };
+      case 'high': return { bg: 'bg-amber-alert/10 dark:bg-amber-alert/20 text-amber-alert', border: 'border-l-amber-alert' };
+      case 'medium': return { bg: 'bg-signal-blue/10 dark:bg-signal-blue/20 text-signal-blue', border: 'border-l-signal-blue' };
+      case 'low': return { bg: 'bg-linen dark:bg-white/[0.06] text-steel', border: 'border-l-silver' };
+      default: return { bg: 'bg-linen dark:bg-white/[0.06] text-steel', border: 'border-l-silver' };
     }
   };
 
@@ -139,71 +135,73 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
     }).format(date);
   };
 
+  const priorityStyle = getPriorityStyle(incident.priority);
+
   return (
-    <article id={`incident-${incident.id}`} className="app-card p-6 sm:p-8 relative transition-all">
+    <article id={`incident-${incident.id}`} className="app-card p-6 sm:p-8 relative animate-in">
       
-      {/* Top Header & Priority */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-700/60 pb-4 mb-5">
+      {/* ─── Header ─── */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-silver/30 dark:border-white/[0.08] pb-4 mb-5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl shrink-0">
+          <div className="w-10 h-10 rounded-card bg-linen dark:bg-white/[0.06] flex items-center justify-center text-xl shrink-0">
             {getCategoryIcon(incident.category)}
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              <span className="text-micro text-signal-blue">
                 {incident.category}
               </span>
 
               {affectsMeCount >= 5 && (
-                <span className="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                <span className="app-badge bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  Verified Petition
+                  Verified
                 </span>
               )}
             </div>
 
-            <span className="text-xs text-slate-500 dark:text-slate-400 block mt-0.5">
-              Reported by {incident.reportedBy} • #{incident.id.padStart(4, '0')}
+            <span className="text-[13px] text-steel block mt-0.5">
+              {incident.reportedBy} • #{incident.id.padStart(4, '0')}
             </span>
           </div>
         </div>
 
-        {/* Priority Badge & Share Button */}
+        {/* Priority + Share */}
         <div className="flex items-center gap-2">
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full uppercase tracking-wider ${getPriorityBadgeStyle(incident.priority)}`}>
-            {incident.priority} Priority
+          <span className={`app-badge ${priorityStyle.bg} text-[11px]`}>
+            {incident.priority}
           </span>
 
-          {/* Social Share Menu */}
           <div className="relative">
             <button
               onClick={() => setShowShareMenu(!showShareMenu)}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all"
-              title="Share Incident"
+              className="app-btn-ghost p-2"
+              title="Share"
             >
-              <Share2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <Share2 className="w-4 h-4" />
             </button>
 
             {showShareMenu && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-2 z-30 font-sans text-xs space-y-1">
+              <div className="absolute right-0 top-full mt-2 w-52 app-card-floating p-2 z-30 space-y-0.5">
                 <button
                   onClick={handleWhatsAppShare}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2"
+                  className="w-full text-left px-3 py-2.5 rounded-input hover:bg-linen dark:hover:bg-white/[0.06] text-[13px] text-carbon dark:text-silver font-medium flex items-center gap-2 transition-all"
                 >
-                  💬 Share on WhatsApp
+                  💬 WhatsApp
                 </button>
                 <button
                   onClick={handleEmailShare}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2"
+                  className="w-full text-left px-3 py-2.5 rounded-input hover:bg-linen dark:hover:bg-white/[0.06] text-[13px] text-carbon dark:text-silver font-medium flex items-center gap-2 transition-all"
                 >
-                  <Mail className="w-4 h-4 text-indigo-500" /> Share via Email
+                  <Mail className="w-4 h-4 text-signal-blue" /> Email
                 </button>
+                <div className="border-t border-silver/30 dark:border-white/[0.08] my-1"></div>
                 <button
                   onClick={handleCopyLink}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2 border-t border-slate-100 dark:border-slate-700/50 pt-2"
+                  className="w-full text-left px-3 py-2.5 rounded-input hover:bg-linen dark:hover:bg-white/[0.06] text-[13px] text-carbon dark:text-silver font-medium flex items-center gap-2 transition-all"
                 >
-                  {copiedLink ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-indigo-500" />}
-                  {copiedLink ? 'Link Copied!' : 'Copy Incident Link'}
+                  {copiedLink ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-signal-blue" />}
+                  {copiedLink ? 'Copied!' : 'Copy Link'}
                 </button>
               </div>
             )}
@@ -211,12 +209,12 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
         </div>
       </div>
 
-      {/* 🚦 4-Step Repair Status Timeline */}
-      <div className="mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-700/60">
-        <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 mb-3">
-          <span className="flex items-center gap-1.5">🚦 Repair Progress Tracker</span>
-          <span className="text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 px-2.5 py-0.5 rounded-full text-[11px] font-bold">
-            Target ETA: {incident.eta || 'Within 48 Hours'}
+      {/* ─── Progress Tracker ─── */}
+      <div className="mb-6 p-4 rounded-card bg-linen dark:bg-white/[0.03] border border-silver/20 dark:border-white/[0.06]">
+        <div className="flex items-center justify-between text-[13px] text-carbon dark:text-silver mb-3">
+          <span className="font-semibold flex items-center gap-1.5">🚦 Repair Progress</span>
+          <span className="app-badge bg-signal-blue/10 text-signal-blue text-[11px]">
+            ETA: {incident.eta || 'Within 48 Hours'}
           </span>
         </div>
 
@@ -232,15 +230,15 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
             return (
               <div key={item.label} className="text-center">
                 <div
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-1.5 rounded-pill transition-all duration-300 ${
                     isCompleted
-                      ? 'bg-indigo-600 dark:bg-indigo-500 shadow-sm'
-                      : 'bg-slate-200 dark:bg-slate-700'
-                  } ${isCurrent ? 'ring-2 ring-indigo-400 animate-pulse' : ''}`}
+                      ? 'bg-signal-blue'
+                      : 'bg-silver/40 dark:bg-white/[0.08]'
+                  } ${isCurrent ? 'ring-2 ring-signal-blue/30' : ''}`}
                 ></div>
                 <span
                   className={`block text-[11px] font-semibold mt-1.5 ${
-                    isCompleted ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'
+                    isCompleted ? 'text-signal-blue' : 'text-steel'
                   }`}
                 >
                   {item.label}
@@ -251,42 +249,42 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
         </div>
       </div>
 
-      {/* Title */}
-      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-3">
+      {/* ─── Title ─── */}
+      <h3 className="text-heading-sm text-black dark:text-white mb-3">
         {incident.title}
       </h3>
 
-      {/* Photo Plate */}
-      <div className="mb-6 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900">
+      {/* ─── Photo ─── */}
+      <div className="mb-6 rounded-card overflow-hidden border border-silver/30 dark:border-white/[0.08] bg-black">
         {incident.resolvedImageUrl && (
-          <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 px-4 py-2 text-xs font-semibold border-b border-slate-200 dark:border-slate-700">
-            <span className="text-slate-600 dark:text-slate-300">Photo Proof Comparison</span>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between bg-linen dark:bg-midnight-ink px-4 py-2 text-[13px] font-semibold border-b border-silver/30 dark:border-white/[0.08]">
+            <span className="text-carbon dark:text-silver">Photo Comparison</span>
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setActivePhotoTab('before')}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1 rounded-pill text-[13px] font-semibold transition-all ${
                   activePhotoTab === 'before'
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-alert-red text-white'
+                    : 'text-steel hover:text-black dark:hover:text-white'
                 }`}
               >
-                🔴 Hazard Photo
+                Before
               </button>
               <button
                 onClick={() => setActivePhotoTab('after')}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1 rounded-pill text-[13px] font-semibold transition-all ${
                   activePhotoTab === 'after'
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-emerald-500 text-white'
+                    : 'text-steel hover:text-black dark:hover:text-white'
                 }`}
               >
-                🟢 Repair Proof
+                After
               </button>
             </div>
           </div>
         )}
 
-        <div className="relative aspect-video bg-slate-950 overflow-hidden group">
+        <div className="relative aspect-video overflow-hidden group">
           <img
             src={
               activePhotoTab === 'after' && incident.resolvedImageUrl
@@ -298,113 +296,113 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
 
-          <div className="absolute bottom-3 right-3 bg-slate-900/90 text-white backdrop-blur-md px-3 py-1 rounded-lg text-[11px] font-semibold">
-            {activePhotoTab === 'after' && incident.resolvedImageUrl ? '🟢 Official Repair Proof' : '🔴 Initial Hazard Report'}
+          <div className="absolute bottom-3 right-3 bg-black/80 text-white backdrop-blur-sm px-3 py-1.5 rounded-pill text-[11px] font-semibold">
+            {activePhotoTab === 'after' && incident.resolvedImageUrl ? '🟢 Repair Proof' : '🔴 Hazard Report'}
           </div>
         </div>
       </div>
 
-      {/* Description */}
-      <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
+      {/* ─── Description ─── */}
+      <p className="text-body-sm text-carbon dark:text-silver mb-6">
         {incident.description}
       </p>
 
-      {/* Voice Note Bar */}
+      {/* ─── Voice Note ─── */}
       {(incident.audioUrl || incident.id === '1') && (
-        <div className="mb-6 p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between text-xs">
+        <div className="mb-6 p-3.5 rounded-card bg-signal-blue/5 dark:bg-signal-blue/10 border border-signal-blue/10 dark:border-signal-blue/20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={toggleAudio}
-              className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 hover:bg-indigo-700 transition-all"
+              className="w-9 h-9 rounded-full bg-signal-blue text-white flex items-center justify-center shrink-0 hover:bg-signal-blue/90 transition-all"
               title="Play Voice Note"
             >
               {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
             </button>
             <div>
-              <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Mic className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                🎙️ Citizen Voice Note (00:15)
+              <span className="font-semibold text-[13px] text-black dark:text-white flex items-center gap-1.5">
+                <Mic className="w-3.5 h-3.5 text-signal-blue" />
+                Voice Note (00:15)
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                {isPlayingAudio ? 'Playing audio recording...' : 'Click play to listen to audio dispatch'}
+              <span className="text-[11px] text-steel">
+                {isPlayingAudio ? 'Playing...' : 'Click to listen'}
               </span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Incident Metadata */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-xs text-slate-600 dark:text-slate-400 mb-6">
+      {/* ─── Metadata ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-card bg-linen dark:bg-white/[0.03] text-[13px] text-steel mb-6">
         <div className="flex items-center gap-2 truncate">
-          <MapPin className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-          <span className="font-semibold text-slate-900 dark:text-slate-200">Location:</span>
+          <MapPin className="w-4 h-4 text-signal-blue shrink-0" />
+          <span className="font-semibold text-black dark:text-white">Location:</span>
           <span className="truncate">{incident.location}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-          <span className="font-semibold text-slate-900 dark:text-slate-200">Filed:</span>
+          <Clock className="w-4 h-4 text-signal-blue shrink-0" />
+          <span className="font-semibold text-black dark:text-white">Filed:</span>
           <span>{formatDate(incident.reportedAt)}</span>
         </div>
       </div>
 
-      {/* Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-xs">
-        <div className="flex items-center gap-3">
+      {/* ─── Actions ─── */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-silver/30 dark:border-white/[0.08]">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={handleAffectsMeClick}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-pill text-[13px] font-semibold transition-all flex items-center gap-2 ${
               hasAffectedMe
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'app-btn-secondary'
+                ? 'bg-signal-blue text-white'
+                : 'app-btn-ghost'
             }`}
           >
             <ThumbsUp className="w-4 h-4" />
-            👍 Affects Me Too ({affectsMeCount})
+            Affects Me ({affectsMeCount})
           </button>
 
           <select
             value={incident.status}
             onChange={(e) => onUpdateStatus(incident.id, e.target.value as Incident['status'])}
-            className="app-input px-3 py-2 text-xs font-semibold cursor-pointer"
+            className="app-input px-3 py-2 text-[13px] font-medium cursor-pointer rounded-pill"
           >
-            <option value="open">Status: Open</option>
-            <option value="in-progress">Status: In Repair</option>
-            <option value="resolved">Status: Resolved</option>
+            <option value="open">Open</option>
+            <option value="in-progress">In Repair</option>
+            <option value="resolved">Resolved</option>
           </select>
         </div>
 
         <button
           onClick={() => setShowSolutions(!showSolutions)}
-          className="app-btn-primary px-4 py-2 text-xs flex items-center gap-2"
+          className="app-btn-primary px-4 py-2 text-[13px] flex items-center gap-2"
         >
           <MessageSquare className="w-4 h-4" />
           Solutions ({incident.solutions.length})
         </button>
       </div>
 
-      {/* Solutions Drawer */}
+      {/* ─── Solutions Drawer ─── */}
       {showSolutions && (
-        <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 space-y-6">
-          <h4 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            Proposed Solutions & Official Updates
+        <div className="mt-6 pt-6 border-t border-silver/30 dark:border-white/[0.08] space-y-5">
+          <h4 className="font-bold text-[17px] text-black dark:text-white flex items-center gap-2 tracking-tight-sm">
+            <MessageSquare className="w-4 h-4 text-signal-blue" />
+            Solutions & Updates
           </h4>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {incident.solutions.length === 0 ? (
-              <p className="text-xs text-slate-500 dark:text-slate-400 italic p-4 rounded-xl bg-slate-50 dark:bg-slate-900">
+              <p className="text-[13px] text-steel italic p-4 rounded-card bg-linen dark:bg-white/[0.03]">
                 No solutions proposed yet. Be the first to suggest a fix!
               </p>
             ) : (
               incident.solutions.map((solution) => (
-                <div key={solution.id} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 space-y-2 border border-slate-200/60 dark:border-slate-800">
-                  <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200/60 dark:border-slate-800 pb-2">
-                    <span className="font-bold text-slate-900 dark:text-white">{solution.author}</span>
-                    <span className="text-[11px]">{formatDate(solution.createdAt)}</span>
+                <div key={solution.id} className="p-4 rounded-card bg-linen dark:bg-white/[0.03] space-y-2.5 border border-silver/20 dark:border-white/[0.06]">
+                  <div className="flex justify-between items-center text-[13px] border-b border-silver/20 dark:border-white/[0.06] pb-2.5">
+                    <span className="font-bold text-black dark:text-white">{solution.author}</span>
+                    <span className="text-[11px] text-steel">{formatDate(solution.createdAt)}</span>
                   </div>
 
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-carbon dark:text-silver">
                     {solution.content}
                   </p>
 
@@ -418,8 +416,9 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
             )}
           </div>
 
-          <form onSubmit={handleSubmitSolution} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-            <h5 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
+          {/* New Solution Form */}
+          <form onSubmit={handleSubmitSolution} className="p-5 rounded-floating bg-linen dark:bg-white/[0.03] border border-silver/20 dark:border-white/[0.06] space-y-3">
+            <h5 className="text-micro text-carbon dark:text-silver">
               Propose a Solution
             </h5>
 
@@ -427,8 +426,8 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
               type="text"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
-              placeholder="Your Name or Department"
-              className="w-full px-3.5 py-2 app-input text-xs"
+              placeholder="Your name or department"
+              className="w-full px-3.5 py-2.5 app-input text-[13px]"
               required
             />
 
@@ -437,16 +436,16 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
               onChange={(e) => setNewSolution(e.target.value)}
               placeholder="Describe repair plan or action steps..."
               rows={3}
-              className="w-full px-3.5 py-2 app-input text-xs"
+              className="w-full px-3.5 py-2.5 app-input text-[13px]"
               required
             />
 
             <button
               type="submit"
-              className="app-btn-primary px-5 py-2 text-xs flex items-center gap-2"
+              className="app-btn-primary px-5 py-2.5 text-[13px] flex items-center gap-2"
             >
               <Send className="w-3.5 h-3.5" />
-              Submit Solution
+              Submit
             </button>
           </form>
         </div>

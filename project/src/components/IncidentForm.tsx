@@ -24,7 +24,6 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
 
-  // Audio Voice Note Recording State
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
@@ -116,10 +115,10 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
     e.preventDefault();
     
     const newErrors: Partial<IncidentFormData> = {};
-    if (!formData.title.trim()) newErrors.title = 'Incident title is required';
+    if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
-    if (!formData.reportedBy.trim()) newErrors.reportedBy = 'Reporter name is required';
+    if (!formData.reportedBy.trim()) newErrors.reportedBy = 'Name is required';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -137,77 +136,77 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-deep-indigo/90 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white dark:bg-midnight-ink border border-silver/30 dark:border-white/[0.08] rounded-floating max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto" style={{ boxShadow: 'var(--shadow-floating)' }}>
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+        <div className="p-5 border-b border-silver/30 dark:border-white/[0.08] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-card bg-signal-blue/10 dark:bg-signal-blue/20 text-signal-blue flex items-center justify-center">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                File New Incident Dispatch
+              <h2 className="text-heading-sm text-black dark:text-white">
+                New Incident Report
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Official Municipal Report • Public Citizen Record
+              <p className="text-[13px] text-steel mt-0.5">
+                Municipal Report • Public Record
               </p>
             </div>
           </div>
 
           <button
             onClick={onCancel}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
+            className="app-btn-ghost p-2"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5 font-sans text-xs">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           
-          {/* Headline Title */}
+          {/* Title */}
           <div>
-            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              Incident Headline Title *
+            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1.5">
+              <FileText className="w-4 h-4 text-signal-blue" />
+              Incident Title *
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              className={`w-full px-3.5 py-2.5 app-input text-xs ${
-                errors.title ? 'border-rose-500' : ''
+              className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
+                errors.title ? 'border-alert-red ring-1 ring-alert-red/30' : ''
               }`}
-              placeholder="e.g. Hazardous Pothole near Main Street Intersection"
+              placeholder="e.g. Hazardous Pothole near Main Street"
             />
-            {errors.title && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.title}</p>}
+            {errors.title && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.title}</p>}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5">
-              Detailed Description & Summary *
+            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5">
+              Description *
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={3}
-              className={`w-full px-3.5 py-2.5 app-input text-xs ${
-                errors.description ? 'border-rose-500' : ''
+              className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
+                errors.description ? 'border-alert-red ring-1 ring-alert-red/30' : ''
               }`}
               placeholder="Provide complete details, safety hazards, and community impact..."
             />
-            {errors.description && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.description}</p>}
+            {errors.description && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.description}</p>}
           </div>
 
-          {/* Voice Note Recorder */}
-          <div className="p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/50 bg-indigo-50/50 dark:bg-indigo-950/30 space-y-2">
-            <label className="block font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <Mic className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              🎙️ Citizen Voice Note (Optional)
+          {/* Voice Note */}
+          <div className="p-4 rounded-card border border-signal-blue/10 dark:border-signal-blue/20 bg-signal-blue/5 dark:bg-signal-blue/10 space-y-2.5">
+            <label className="block font-semibold text-[13px] text-black dark:text-white flex items-center gap-1.5">
+              <Mic className="w-4 h-4 text-signal-blue" />
+              Voice Note (Optional)
             </label>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Record a 15-second voice description for your incident report.
+            <p className="text-[11px] text-steel">
+              Record a 15-second voice description.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -215,57 +214,57 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 <button
                   type="button"
                   onClick={startRecording}
-                  className="app-btn-primary px-4 py-2 text-xs flex items-center gap-2"
+                  className="app-btn-primary px-4 py-2 text-[13px] flex items-center gap-2"
                 >
                   <Mic className="w-4 h-4" />
-                  Start Recording Voice Note
+                  Record
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={stopRecording}
-                  className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 animate-pulse"
+                  className="bg-alert-red hover:bg-alert-red/90 text-white px-4 py-2 rounded-pill text-[13px] font-semibold flex items-center gap-2 animate-pulse"
                 >
                   <Square className="w-4 h-4" />
-                  Stop Recording ({15 - recordingSeconds}s remaining)
+                  Stop ({15 - recordingSeconds}s)
                 </button>
               )}
 
               {audioBlobUrl && !isRecording && (
-                <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-3 px-3.5 py-2 rounded-pill bg-white dark:bg-white/[0.06] border border-silver/30 dark:border-white/[0.08]">
                   <button
                     type="button"
                     onClick={togglePlayAudio}
-                    className="text-indigo-600 dark:text-indigo-400"
+                    className="text-signal-blue"
                   >
                     {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">
-                    {isPlayingAudio ? 'Playing...' : 'Voice Note Ready'}
+                  <span className="text-[13px] font-semibold text-black dark:text-white">
+                    {isPlayingAudio ? 'Playing...' : 'Ready'}
                   </span>
                   <button
                     type="button"
                     onClick={() => { setAudioBlobUrl(null); setFormData(prev => ({ ...prev, audioUrl: undefined })); }}
-                    className="text-slate-400 hover:text-rose-500 text-xs ml-2"
+                    className="text-steel hover:text-alert-red text-[13px] ml-1"
                   >
-                    ✕ Clear
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Classification & Urgency & ETA */}
+          {/* Classification Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
-                <Tag className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5 text-signal-blue" />
                 Category
               </label>
               <select
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
+                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
               >
                 <option value="safety">Safety Hazard</option>
                 <option value="infrastructure">Infrastructure</option>
@@ -277,36 +276,36 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
             </div>
 
             <div>
-              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Urgency Priority
+              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
+                <AlertTriangle className="w-3.5 h-3.5 text-signal-blue" />
+                Priority
               </label>
               <select
                 value={formData.priority}
                 onChange={(e) => handleChange('priority', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
+                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
               >
-                <option value="low">Low (Routine)</option>
-                <option value="medium">Medium (Attention)</option>
-                <option value="high">High (Urgent)</option>
-                <option value="critical">Critical (Emergency)</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
               </select>
             </div>
 
             <div>
-              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Target Fix ETA
+              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-signal-blue" />
+                Target ETA
               </label>
               <select
                 value={formData.eta || 'Within 48 Hours'}
                 onChange={(e) => handleChange('eta', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-xs font-semibold cursor-pointer"
+                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
               >
-                <option value="Within 24 Hours">Within 24 Hours</option>
-                <option value="Within 48 Hours">Within 48 Hours</option>
-                <option value="Within 3 Days">Within 3 Days</option>
-                <option value="Within 1 Week">Within 1 Week</option>
+                <option value="Within 24 Hours">24 Hours</option>
+                <option value="Within 48 Hours">48 Hours</option>
+                <option value="Within 3 Days">3 Days</option>
+                <option value="Within 1 Week">1 Week</option>
               </select>
             </div>
           </div>
@@ -314,71 +313,73 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           {/* Location & Reporter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Address / Location *
+              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-signal-blue" />
+                Location *
               </label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={(e) => handleChange('location', e.target.value)}
-                className={`w-full px-3.5 py-2.5 app-input text-xs ${
-                  errors.location ? 'border-rose-500' : ''
+                className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
+                  errors.location ? 'border-alert-red ring-1 ring-alert-red/30' : ''
                 }`}
-                placeholder="Specific street address or landmark"
+                placeholder="Street address or landmark"
               />
-              {errors.location && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.location}</p>}
+              {errors.location && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.location}</p>}
             </div>
 
             <div>
-              <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5 flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Reporter Name *
+              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
+                <User className="w-3.5 h-3.5 text-signal-blue" />
+                Your Name *
               </label>
               <input
                 type="text"
                 value={formData.reportedBy}
                 onChange={(e) => handleChange('reportedBy', e.target.value)}
-                className={`w-full px-3.5 py-2.5 app-input text-xs ${
-                  errors.reportedBy ? 'border-rose-500' : ''
+                className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
+                  errors.reportedBy ? 'border-alert-red ring-1 ring-alert-red/30' : ''
                 }`}
-                placeholder="Full Name or Handle"
+                placeholder="Full name"
               />
-              {errors.reportedBy && <p className="text-rose-500 font-semibold mt-1 text-[11px]">{errors.reportedBy}</p>}
+              {errors.reportedBy && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.reportedBy}</p>}
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block font-bold text-slate-900 dark:text-slate-200 mb-1.5">
+            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5">
               Tags (Optional)
             </label>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 rounded-full text-xs font-semibold"
-                >
-                  #{tag}
-                  <button type="button" onClick={() => removeTag(tag)} className="hover:text-rose-500">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </span>
-              ))}
-            </div>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2.5">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-signal-blue/10 text-signal-blue rounded-pill text-[13px] font-semibold"
+                  >
+                    #{tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-alert-red">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="flex gap-2">
               <input
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 px-3.5 py-2 app-input text-xs"
+                className="flex-1 px-3.5 py-2 app-input text-[13px]"
                 placeholder="Add tag..."
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="app-btn-secondary px-4 py-2 text-xs flex items-center gap-1"
+                className="app-btn-ghost px-4 py-2 text-[13px] flex items-center gap-1"
               >
                 <Plus className="w-4 h-4" />
                 Add
@@ -386,21 +387,21 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
             </div>
           </div>
 
-          {/* Photo Evidence */}
+          {/* Photo */}
           <PhotoUpload onPhotoSelect={setSelectedPhoto} />
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/60">
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-silver/30 dark:border-white/[0.08]">
             <button
               type="submit"
-              className="flex-1 app-btn-primary py-3 px-6 text-xs font-bold"
+              className="flex-1 app-btn-primary py-3 px-6 text-[15px] font-bold"
             >
-              Submit Incident Report
+              Submit Report
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="app-btn-secondary py-3 px-6 text-xs font-bold"
+              className="app-btn-ghost py-3 px-6 text-[15px] font-bold"
             >
               Cancel
             </button>

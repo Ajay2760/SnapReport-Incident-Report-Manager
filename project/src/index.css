@@ -2,29 +2,257 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════
+   SNAPREPORT — Flighty Design System
+   Control tower at midnight: luminous screens on dark surfaces
+   ═══════════════════════════════════════════════════════════ */
+
 @layer base {
+  :root {
+    /* Signal-Light Color System */
+    --color-signal-blue: #007bff;
+    --color-amber-alert: #f7be00;
+    --color-deep-indigo: #0d0021;
+    --color-midnight-ink: #05010d;
+    --color-pure-white: #ffffff;
+    --color-pure-black: #000000;
+    --color-carbon: #333333;
+    --color-slate: #595959;
+    --color-steel: #737373;
+    --color-fog: #808080;
+    --color-silver: #cfcfcf;
+    --color-linen: #faf8f7;
+    --color-ash: #89898e;
+    --color-alert-red: #d92d20;
+
+    /* Surfaces */
+    --surface-light: #ffffff;
+    --surface-linen: #faf8f7;
+    --surface-divider: #cfcfcf;
+    --surface-dark: #0d0021;
+    --surface-darkest: #05010d;
+
+    /* Shadows — Whisper-thin system */
+    --shadow-card: rgba(0,0,0,0.02) 0px 0px 0px 1px,
+                   rgba(0,0,0,0.02) 0px 1px 1px 0.5px,
+                   rgba(0,0,0,0.02) 0px 3px 3px 1.5px,
+                   rgba(0,0,0,0.02) 0px 6px 6px -3px,
+                   rgba(0,0,0,0.02) 0px 12px 12px -6px,
+                   rgba(0,0,0,0.02) 0px 24px 24px -12px;
+    --shadow-floating: rgba(0,0,0,0.04) 0px 0px 0px 1px,
+                       rgba(0,0,0,0.02) 0px 1px 1px 0.5px,
+                       rgba(0,0,0,0.02) 0px 3px 3px 1.5px,
+                       rgba(0,0,0,0.02) 0px 6px 6px -3px,
+                       rgba(0,0,0,0.02) 0px 12px 12px -6px,
+                       rgba(0,0,0,0.02) 0px 24px 24px -12px;
+    --shadow-nav: 0px 1px 1px 0.5px rgba(0,0,0,0.03),
+                  0px 3px 3px 1.5px rgba(0,0,0,0.03),
+                  0px 6px 6px -3px rgba(0,0,0,0.03),
+                  0px 12px 12px -6px rgba(0,0,0,0.03),
+                  0px 24px 24px -12px rgba(0,0,0,0.03);
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 antialiased font-sans transition-colors duration-300;
+    @apply bg-white text-black font-sans transition-colors duration-300;
+  }
+
+  .dark body,
+  body.dark-body {
+    background-color: var(--color-deep-indigo);
+    color: #ffffff;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-silver);
+    border-radius: 999px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
   }
 }
 
-/* Custom UI Utilities for Seamless Light/Dark Mode */
-.app-card {
-  @apply bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200;
+@layer components {
+  /* ─── Card System ─── */
+  .app-card {
+    @apply bg-white border border-silver/40 rounded-card transition-all duration-200;
+    box-shadow: var(--shadow-card);
+  }
+  .dark .app-card {
+    @apply bg-midnight-ink/80 border-white/[0.08];
+  }
+
+  .app-card-floating {
+    @apply bg-white border border-silver/30 rounded-floating transition-all duration-200;
+    box-shadow: var(--shadow-floating);
+  }
+  .dark .app-card-floating {
+    @apply bg-midnight-ink/80 border-white/[0.08];
+  }
+
+  /* ─── Input System ─── */
+  .app-input {
+    @apply bg-white border border-silver/60 text-black rounded-input
+           focus:outline-none focus:ring-2 focus:ring-signal-blue/40 focus:border-signal-blue
+           transition-all duration-150 placeholder:text-fog;
+  }
+  .dark .app-input {
+    @apply bg-midnight-ink/60 border-white/[0.12] text-white placeholder:text-steel;
+  }
+
+  /* ─── Button System ─── */
+
+  /* Primary: Signal Blue — the ONLY chromatic action button */
+  .app-btn-primary {
+    @apply bg-signal-blue hover:bg-signal-blue/90 text-white font-semibold
+           rounded-pill transition-all duration-150 active:scale-[0.97]
+           shadow-none;
+  }
+
+  /* Amber: Emergency/Download CTA — warm signal against dark surfaces */
+  .app-btn-amber {
+    @apply bg-amber-alert hover:bg-amber-alert/90 text-black font-semibold
+           rounded-pill transition-all duration-150 active:scale-[0.97];
+  }
+
+  /* Ghost: Transparent with hairline border */
+  .app-btn-ghost {
+    @apply bg-transparent text-black border border-black/20
+           hover:border-black/40 hover:bg-black/[0.03]
+           font-medium rounded-pill transition-all duration-150 active:scale-[0.97];
+  }
+  .dark .app-btn-ghost {
+    @apply text-white border-white/20 hover:border-white/40 hover:bg-white/[0.06];
+  }
+
+  /* Secondary: Subtle surface button */
+  .app-btn-secondary {
+    @apply bg-linen hover:bg-silver/30 text-carbon font-semibold
+           rounded-pill transition-all duration-150 active:scale-[0.97];
+  }
+  .dark .app-btn-secondary {
+    @apply bg-white/[0.06] hover:bg-white/[0.10] text-white/80;
+  }
+
+  /* ─── Badge System ─── */
+  .app-badge {
+    @apply px-3 py-1 rounded-pill text-xs font-semibold tracking-wide inline-flex items-center gap-1.5;
+  }
+
+  /* ─── Section Transitions ─── */
+  .section-light {
+    @apply bg-white text-black;
+  }
+  .section-dark {
+    background-color: var(--color-deep-indigo);
+    @apply text-white;
+  }
+  .section-darkest {
+    background-color: var(--color-midnight-ink);
+    @apply text-white;
+  }
+
+  /* ─── Display Typography ─── */
+  .text-display {
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -1.4px;
+    @apply font-bold;
+  }
+  .text-heading-lg {
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    @apply font-bold;
+  }
+  .text-heading-sm {
+    font-size: 22px;
+    line-height: 1.38;
+    letter-spacing: -0.55px;
+    @apply font-bold;
+  }
+  .text-body {
+    font-size: 17px;
+    line-height: 1.5;
+    letter-spacing: -0.17px;
+    @apply font-normal;
+  }
+  .text-body-sm {
+    font-size: 15px;
+    line-height: 1.5;
+    letter-spacing: -0.075px;
+    @apply font-normal;
+  }
+  .text-caption {
+    font-size: 13px;
+    line-height: 1.38;
+    @apply font-medium;
+  }
+  .text-micro {
+    font-size: 11px;
+    line-height: 1.36;
+    @apply font-semibold tracking-wider uppercase;
+  }
+
+  /* ─── Floating Notification Card (Flighty signature) ─── */
+  .notification-card {
+    @apply bg-white rounded-floating p-4 transition-all;
+    box-shadow: var(--shadow-floating);
+  }
+  .notification-card-accent-blue {
+    border-left: 3px solid var(--color-signal-blue);
+  }
+  .notification-card-accent-amber {
+    border-left: 3px solid var(--color-amber-alert);
+  }
+  .notification-card-accent-red {
+    border-left: 3px solid var(--color-alert-red);
+  }
+
+  /* ─── Dark card tiles (press-logo style) ─── */
+  .dark-tile {
+    background-color: var(--color-midnight-ink);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply rounded-card;
+  }
+
+  /* ─── Nav Pill ─── */
+  .nav-pill {
+    @apply bg-white/95 backdrop-blur-md rounded-pill;
+    box-shadow: var(--shadow-nav);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .dark .nav-pill {
+    @apply bg-midnight-ink/90 backdrop-blur-md;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
 
-.app-input {
-  @apply bg-slate-50 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all;
-}
+@layer utilities {
+  /* Animate on scroll */
+  .animate-in {
+    animation: slideUp 0.4s ease-out both;
+  }
+  .animate-in-delay-1 { animation-delay: 0.1s; }
+  .animate-in-delay-2 { animation-delay: 0.2s; }
+  .animate-in-delay-3 { animation-delay: 0.3s; }
 
-.app-btn-primary {
-  @apply bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all shadow-brand active:scale-[0.98];
-}
-
-.app-btn-secondary {
-  @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl transition-all active:scale-[0.98];
-}
-
-.app-badge {
-  @apply px-3 py-1 rounded-full text-xs font-semibold tracking-wide inline-flex items-center gap-1.5;
+  /* Gradient atmospherics for dark sections */
+  .gradient-indigo-pulse {
+    background: linear-gradient(180deg, rgb(18,0,54) 0%, rgb(37,1,96) 51%, rgb(18,0,54) 100%);
+  }
+  .gradient-indigo-wash {
+    background: linear-gradient(171deg, rgba(97,97,112,0.3) -45%, rgba(18,18,140,0.15) 69%);
+  }
 }

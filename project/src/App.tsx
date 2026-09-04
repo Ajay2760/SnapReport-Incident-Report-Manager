@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Users, Camera, TrendingUp, AlertCircle, Radio, Newspaper, Map, LayoutList, PhoneCall, ShieldAlert, X } from "lucide-react";
+import { Plus, Users, Camera, TrendingUp, AlertCircle, Radio, Map, LayoutList, PhoneCall, ShieldAlert, X, Zap } from "lucide-react";
 import {
   Incident,
   Solution,
@@ -263,170 +263,143 @@ function AppContent() {
     );
   });
 
-  const currentDateFormatted = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-deep-indigo text-black dark:text-white font-sans transition-colors duration-300">
       
-      {/* Citizen Feature: 🚨 Emergency SOS Quick-Dial Top Banner */}
-      <div className="bg-rose-600 dark:bg-rose-700 text-white text-xs font-sans py-2.5 px-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-2 font-semibold">
-            <ShieldAlert className="w-4 h-4 animate-bounce text-amber-300" />
-            <span>🚨 LIFE-THREATENING EMERGENCY? (GAS LEAKS, FALLEN POWER LINES, FIRE)</span>
+      {/* ═══ Announcement Bar — Deep Indigo control-room strip ═══ */}
+      <div className="section-darkest py-2.5 px-4">
+        <div className="max-w-page mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-2 text-white text-[13px] font-medium">
+            <ShieldAlert className="w-4 h-4 text-amber-alert animate-pulse" />
+            <span>🚨 Life-threatening emergency? Gas leaks, fallen power lines, fire</span>
           </div>
 
           <button
             onClick={() => setShowEmergencyModal(true)}
-            className="bg-amber-400 text-slate-950 px-3.5 py-1 rounded-lg font-bold hover:bg-white transition-all flex items-center gap-1.5 shadow-sm text-xs"
+            className="app-btn-amber px-4 py-1.5 text-[13px] flex items-center gap-1.5"
           >
             <PhoneCall className="w-3.5 h-3.5" />
-            CALL EMERGENCY HOTLINE (911 / 311)
+            Call Emergency (911 / 311)
           </button>
         </div>
       </div>
 
-      {/* Live Ticker Header */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+      {/* ═══ Live Dispatch Ticker ═══ */}
+      <div className="section-dark py-2 px-4 border-b border-white/[0.06]">
+        <div className="max-w-page mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center gap-3">
-            <span className="bg-indigo-600 text-white px-2.5 py-0.5 rounded-full font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
-              <Radio className="w-3 h-3 animate-pulse" /> LIVE DISPATCH
+            <span className="app-badge bg-signal-blue text-white text-[11px]">
+              <Radio className="w-3 h-3 animate-pulse" /> LIVE
             </span>
-            <span className="truncate max-w-md hidden sm:inline text-slate-300">
+            <span className="truncate max-w-md hidden sm:inline text-silver text-[13px]">
               {incidents.length > 0
-                ? `Latest Issue: ${incidents[0].title} — Status: ${incidents[0].status.toUpperCase()}`
+                ? `Latest: ${incidents[0].title} — ${incidents[0].status.toUpperCase()}`
                 : "All Municipal Services Operational"}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-slate-400 text-[11px] font-mono">
-            <span>SNAPREPORT CIVIC HUB</span>
-            <span className="hidden sm:inline text-indigo-400">•</span>
-            <span>METROPOLITAN REGION</span>
+          <div className="flex items-center gap-4 text-steel text-[11px] font-medium tracking-wider uppercase">
+            <span>SnapReport</span>
+            <span className="text-signal-blue">•</span>
+            <span>Metropolitan Region</span>
           </div>
         </div>
       </div>
 
-      {/* Main Header Marquee */}
-      <header className="bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700/80 shadow-sm backdrop-blur-md sticky top-0 z-30 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            
-            <div className="text-center sm:text-left">
-              <div className="flex items-center gap-2 justify-center sm:justify-start text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">
-                <span>SnapReport</span>
-                <span>•</span>
-                <span>Community Incident Portal</span>
+      {/* ═══ Floating Navigation Pill ═══ */}
+      <header className="sticky top-0 z-30 py-3 px-4">
+        <div className="max-w-page mx-auto">
+          <nav className="nav-pill px-4 py-2.5 flex items-center justify-between gap-4">
+            {/* Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-pill bg-signal-blue flex items-center justify-center">
+                <Zap className="w-4 h-4 text-white" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-0.5">
-                City Incident Manager
-              </h1>
+              <div className="hidden sm:block">
+                <span className="text-[15px] font-bold text-black dark:text-white tracking-tight-sm">SnapReport</span>
+              </div>
             </div>
 
-            {/* Header Controls: Theme Toggle, Notifications, New Report */}
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            {/* Nav Links */}
+            <div className="hidden md:flex items-center gap-1">
+              {['Dashboard', 'Reports', 'Map', 'Community'].map((item) => (
+                <button key={item} className="px-3 py-1.5 text-[15px] font-medium text-carbon dark:text-silver hover:text-black dark:hover:text-white rounded-pill hover:bg-black/[0.03] dark:hover:bg-white/[0.06] transition-all">
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            {/* Right Controls */}
+            <div className="flex items-center gap-2">
               <ThemeToggle />
               <NotificationBell />
-
               <button
                 onClick={() => setShowForm(true)}
-                className="app-btn-primary px-5 py-2.5 text-xs flex items-center justify-center gap-2 w-full sm:w-auto"
+                className="app-btn-primary px-4 py-2 text-[13px] flex items-center gap-1.5"
               >
                 <Plus className="w-4 h-4" />
-                REPORT INCIDENT
+                <span className="hidden sm:inline">Report Incident</span>
               </button>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      {/* Hero Community Banner */}
-      <section className="bg-gradient-to-b from-indigo-50/50 to-transparent dark:from-indigo-950/20 dark:to-transparent py-10 border-b border-slate-200/60 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Main Hero Story */}
-            <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-semibold">
-                <Users className="w-3.5 h-3.5" />
-                <span>CITIZEN-POWERED CIVIC RESPONSE</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                Report Hazards. Upvote Local Issues. Track Municipal Repairs.
-              </h2>
-
-              <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-                A simple, transparent platform for citizens to report potholes, outages, and safety hazards, support neighboring issues, and track official repair progress step by step.
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center gap-6 font-mono text-xs text-slate-500 dark:text-slate-400">
-                <span className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                  {incidents.length} Active Reports
-                </span>
-                <span>•</span>
-                <span>100% Public Record</span>
-                <span>•</span>
-                <span>Verified City Response</span>
-              </div>
+      {/* ═══ Hero Section — White Departure Board ═══ */}
+      <section className="section-light dark:section-dark py-16 sm:py-20">
+        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            {/* Eyebrow */}
+            <div className="inline-flex items-center gap-2 app-badge bg-linen dark:bg-white/[0.06] text-carbon dark:text-silver">
+              <Users className="w-3.5 h-3.5" />
+              <span>Citizen-Powered Civic Response</span>
             </div>
 
-            {/* Quick Feature Pillars */}
-            <div className="lg:col-span-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-4">
-              <h3 className="font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider">
-                How It Works
-              </h3>
+            {/* Display Headline */}
+            <h1 className="text-display text-black dark:text-white">
+              Report. Upvote. Track Repairs.
+            </h1>
 
-              <div className="space-y-3 font-sans text-xs">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
-                    <Camera className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 dark:text-white">1. Snap & Report</h4>
-                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Upload a photo and details of the hazard in your area.</p>
-                  </div>
-                </div>
+            {/* Subtext */}
+            <p className="text-body text-carbon dark:text-silver max-w-xl mx-auto">
+              A transparent platform for citizens to report potholes, outages, and safety hazards — support neighboring issues and track official repair progress.
+            </p>
 
-                <div className="flex items-start gap-3 border-t border-slate-100 dark:border-slate-700/50 pt-3">
-                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
-                    <Users className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 dark:text-white">2. Support Neighbors</h4>
-                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Click "Affects Me Too" to prioritize urgent issues.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 border-t border-slate-100 dark:border-slate-700/50 pt-3">
-                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl shrink-0">
-                    <TrendingUp className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 dark:text-white">3. Track Progress</h4>
-                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">Follow the 4-step repair status until fixed.</p>
-                  </div>
-                </div>
-              </div>
+            {/* Stats Row */}
+            <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-[13px] font-medium text-steel">
+              <span className="flex items-center gap-1.5 text-black dark:text-white font-bold">
+                <span className="w-2 h-2 rounded-full bg-signal-blue inline-block"></span>
+                {incidents.length} Active Reports
+              </span>
+              <span>•</span>
+              <span>100% Public Record</span>
+              <span>•</span>
+              <span>Verified City Response</span>
             </div>
 
+            {/* How It Works — Inline Pills */}
+            <div className="flex flex-wrap justify-center gap-3 pt-4">
+              {[
+                { icon: Camera, label: "1. Snap & Report" },
+                { icon: Users, label: "2. Support Neighbors" },
+                { icon: TrendingUp, label: "3. Track Progress" },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-2 px-4 py-2.5 rounded-pill bg-linen dark:bg-white/[0.04] border border-silver/30 dark:border-white/[0.08] text-[13px] font-medium text-carbon dark:text-silver">
+                  <Icon className="w-4 h-4 text-signal-blue" />
+                  {label}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Main Broadside Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* ═══ Main Content ═══ */}
+      <main className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Dashboard Stat Cards */}
         <Dashboard incidents={incidents} />
 
-        {/* Advanced Search Desk */}
+        {/* Advanced Search */}
         <div className="mt-8">
           <AdvancedSearch
             filters={filters}
@@ -435,43 +408,40 @@ function AppContent() {
           />
         </div>
 
-        {/* View Switcher & Feed Header Bar */}
+        {/* View Switcher */}
         <div className="app-card p-4 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center gap-3">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              Community Reports ({filteredIncidents.length})
-            </h3>
-          </div>
+          <h3 className="text-heading-sm text-black dark:text-white">
+            Community Reports ({filteredIncidents.length})
+          </h3>
 
-          {/* List View vs. Gazette Map View Switcher */}
-          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="flex items-center p-1 bg-linen dark:bg-white/[0.04] rounded-pill border border-silver/30 dark:border-white/[0.08]">
             <button
               onClick={() => setViewMode("list")}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 rounded-pill text-[13px] font-semibold flex items-center gap-2 transition-all ${
                 viewMode === "list"
-                  ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-white dark:bg-white/[0.10] text-black dark:text-white shadow-subtle"
+                  : "text-steel hover:text-black dark:hover:text-white"
               }`}
             >
               <LayoutList className="w-4 h-4" />
-              <span>List View</span>
+              List
             </button>
 
             <button
               onClick={() => setViewMode("map")}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2 rounded-pill text-[13px] font-semibold flex items-center gap-2 transition-all ${
                 viewMode === "map"
-                  ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-white dark:bg-white/[0.10] text-black dark:text-white shadow-subtle"
+                  : "text-steel hover:text-black dark:hover:text-white"
               }`}
             >
               <Map className="w-4 h-4" />
-              <span>Map View</span>
+              Map
             </button>
           </div>
         </div>
 
-        {/* Conditional Rendering: Gazette Map View vs. Broadsheet List Feed */}
+        {/* Feed */}
         {viewMode === "map" ? (
           <GazetteMap
             incidents={filteredIncidents}
@@ -481,14 +451,14 @@ function AppContent() {
         ) : (
           <div className="grid grid-cols-1 gap-8">
             {filteredIncidents.length === 0 ? (
-              <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 p-8 rounded-2xl bg-white dark:bg-slate-800">
-                <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-700 mx-auto mb-4 flex items-center justify-center text-slate-400">
-                  <AlertCircle className="w-8 h-8 text-indigo-500" />
+              <div className="text-center py-16 border-2 border-dashed border-silver/50 dark:border-white/[0.08] p-8 rounded-card bg-linen dark:bg-midnight-ink/40">
+                <div className="w-14 h-14 rounded-full bg-linen dark:bg-white/[0.06] mx-auto mb-4 flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-signal-blue" />
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                <h4 className="text-heading-sm text-black dark:text-white mb-2">
                   No Incident Records Found
                 </h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                <p className="text-body-sm text-steel max-w-md mx-auto">
                   {filters.searchTerm ||
                   filters.statusFilter ||
                   filters.categoryFilter ||
@@ -513,7 +483,7 @@ function AppContent() {
         )}
       </main>
 
-      {/* Modal Form */}
+      {/* ═══ Report Form Modal ═══ */}
       {showForm && (
         <IncidentForm
           onSubmit={handleSubmitIncident}
@@ -521,40 +491,40 @@ function AppContent() {
         />
       )}
 
-      {/* Emergency Hotline Modal */}
+      {/* ═══ Emergency Hotline Modal ═══ */}
       {showEmergencyModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-800 border border-rose-500/50 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-xl">
-            <div className="w-14 h-14 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 mx-auto flex items-center justify-center">
+        <div className="fixed inset-0 bg-deep-indigo/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-midnight-ink border border-silver/30 dark:border-white/[0.08] rounded-floating max-w-md w-full p-6 text-center space-y-5" style={{ boxShadow: 'var(--shadow-floating)' }}>
+            <div className="w-14 h-14 rounded-full bg-alert-red/10 text-alert-red mx-auto flex items-center justify-center">
               <ShieldAlert className="w-8 h-8 animate-pulse" />
             </div>
             
-            <h3 className="font-extrabold text-xl text-slate-900 dark:text-white">
+            <h3 className="text-heading-sm text-black dark:text-white">
               Emergency Hotlines
             </h3>
             
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              If an incident presents an immediate danger to human life or property, call local emergency services immediately:
+            <p className="text-body-sm text-steel">
+              If an incident presents immediate danger to life or property, call emergency services immediately:
             </p>
 
-            <div className="space-y-3 text-xs font-bold pt-2">
+            <div className="space-y-3 pt-1">
               <a
                 href="tel:911"
-                className="block bg-rose-600 hover:bg-rose-700 text-white py-3 px-4 rounded-xl transition-all shadow-sm"
+                className="block app-btn-amber py-3.5 px-4 text-[15px] font-bold text-center"
               >
-                📞 CALL 911 (POLICE / FIRE / AMBULANCE)
+                📞 Call 911 — Police / Fire / Ambulance
               </a>
               <a
                 href="tel:311"
-                className="block bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-xl transition-all shadow-sm"
+                className="block app-btn-primary py-3.5 px-4 text-[15px] font-bold text-center"
               >
-                📞 CALL 311 (MUNICIPAL HAZARD LINE)
+                📞 Call 311 — Municipal Hazard Line
               </a>
             </div>
 
             <button
               onClick={() => setShowEmergencyModal(false)}
-              className="mt-4 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white"
+              className="text-[13px] font-medium text-steel hover:text-black dark:hover:text-white transition-colors"
             >
               Close Window
             </button>
@@ -562,41 +532,45 @@ function AppContent() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 mt-20 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-b border-slate-100 dark:border-slate-800 pb-10">
+      {/* ═══ Footer — Deep Indigo Control Room ═══ */}
+      <footer className="section-dark mt-20">
+        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-white/[0.08] pb-10">
             <div className="md:col-span-6 space-y-3">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                SnapReport Incident Manager
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-md">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-pill bg-signal-blue flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-white" />
+                </div>
+                <h2 className="text-heading-sm text-white">
+                  SnapReport
+                </h2>
+              </div>
+              <p className="text-body-sm text-steel max-w-md">
                 A public citizen platform dedicated to neighborhood safety, municipal transparency, and rapid hazard resolution.
               </p>
             </div>
 
-            <div className="md:col-span-3 space-y-2">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
-                Quick Links
-              </h4>
-              <ul className="space-y-1.5">
-                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Incident Feed</a></li>
-                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Gazette Map</a></li>
-                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Citizen Petitions</a></li>
-                <li><a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Before & After Repairs</a></li>
+            <div className="md:col-span-3 space-y-3">
+              <h4 className="text-micro text-silver">Quick Links</h4>
+              <ul className="space-y-2 text-[13px]">
+                {['Incident Feed', 'City Map', 'Citizen Petitions', 'Before & After'].map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-steel hover:text-white transition-colors">{link}</a>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <div className="md:col-span-3 space-y-2">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
-                Portal Information
-              </h4>
-              <p>SnapReport Platform v2.0</p>
-              <p>Copyright © 2026 SnapReport Inc.</p>
+            <div className="md:col-span-3 space-y-3">
+              <h4 className="text-micro text-silver">Platform</h4>
+              <div className="space-y-2 text-[13px] text-steel">
+                <p>SnapReport v2.0</p>
+                <p>© 2026 SnapReport Inc.</p>
+              </div>
             </div>
           </div>
 
-          <div className="pt-6 text-center text-slate-400 dark:text-slate-500 text-[11px]">
+          <div className="pt-6 text-center text-[11px] text-steel tracking-wider">
             SnapReport Community Incident Manager • Built for Citizens
           </div>
         </div>

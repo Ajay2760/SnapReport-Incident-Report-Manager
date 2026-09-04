@@ -14,55 +14,56 @@ export const Dashboard: React.FC<DashboardProps> = ({ incidents }) => {
 
   const stats = [
     {
-      title: 'TOTAL DISPATCHES',
+      title: 'Total Dispatches',
       count: totalIncidents,
       icon: ShieldAlert,
-      color: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400',
-      border: 'border-indigo-200 dark:border-indigo-800',
+      accentColor: 'text-signal-blue',
+      bgIcon: 'bg-signal-blue/10 dark:bg-signal-blue/20',
     },
     {
-      title: 'OPEN HAZARDS',
+      title: 'Open Hazards',
       count: openIncidents,
       icon: AlertCircle,
-      color: 'bg-amber-50 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400',
-      border: 'border-amber-200 dark:border-amber-800',
+      accentColor: 'text-amber-alert',
+      bgIcon: 'bg-amber-alert/10 dark:bg-amber-alert/20',
     },
     {
-      title: 'IN REPAIR',
+      title: 'In Repair',
       count: inProgressIncidents,
       icon: Clock,
-      color: 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400',
-      border: 'border-blue-200 dark:border-blue-800',
+      accentColor: 'text-signal-blue',
+      bgIcon: 'bg-signal-blue/10 dark:bg-signal-blue/20',
     },
     {
-      title: 'RESOLVED & FIXED',
+      title: 'Resolved',
       count: resolvedIncidents,
       icon: CheckCircle2,
-      color: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400',
-      border: 'border-emerald-200 dark:border-emerald-800',
+      accentColor: 'text-emerald-500',
+      bgIcon: 'bg-emerald-500/10 dark:bg-emerald-500/20',
     },
   ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      {stats.map((stat) => {
+      {stats.map((stat, idx) => {
         const Icon = stat.icon;
         return (
           <div
             key={stat.title}
-            className={`app-card p-5 border ${stat.border} flex items-center justify-between`}
+            className="app-card p-5 flex items-center justify-between animate-in"
+            style={{ animationDelay: `${idx * 0.08}s` }}
           >
             <div>
-              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
+              <span className="text-micro text-steel block mb-1.5">
                 {stat.title}
               </span>
-              <span className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              <span className="text-3xl font-bold text-black dark:text-white tracking-tight">
                 {stat.count}
               </span>
             </div>
 
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${stat.color}`}>
-              <Icon className="w-6 h-6" />
+            <div className={`w-12 h-12 rounded-card flex items-center justify-center ${stat.bgIcon}`}>
+              <Icon className={`w-5 h-5 ${stat.accentColor}`} />
             </div>
           </div>
         );

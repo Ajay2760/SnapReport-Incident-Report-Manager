@@ -45,58 +45,58 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   return (
     <div className="app-card p-6 mb-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 dark:border-slate-700/60 pb-4 mb-5 gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-silver/30 dark:border-white/[0.08] pb-4 mb-5 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-card bg-signal-blue/10 dark:bg-signal-blue/20 text-signal-blue flex items-center justify-center">
             <Filter className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-lg text-slate-900 dark:text-white">
-              Filter & Search Dispatches
+            <h3 className="font-bold text-[17px] text-black dark:text-white tracking-tight-sm">
+              Filter & Search
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Refine by keyword, category, status, urgency, or distance radius
+            <p className="text-[13px] text-steel mt-0.5">
+              Refine by keyword, category, status, or urgency
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-2">
           <button
             onClick={clearAllFilters}
-            className="app-btn-secondary px-3 py-2 text-xs flex items-center gap-1.5"
+            className="app-btn-ghost px-3.5 py-2 text-[13px] flex items-center gap-1.5"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Clear Filters
+            Clear
           </button>
           
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="app-btn-primary px-4 py-2 text-xs flex items-center gap-1"
+            className="app-btn-primary px-4 py-2 text-[13px] flex items-center gap-1.5"
           >
-            {showAdvanced ? 'Hide Filters' : 'Advanced Filters'}
+            {showAdvanced ? 'Hide Filters' : 'Advanced'}
           </button>
         </div>
       </div>
 
-      {/* Near Me Distance Filters */}
-      <div className="mb-5 pb-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-wrap items-center gap-2 text-xs">
-        <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 mr-2">
-          <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-          📍 Distance Radius:
+      {/* Distance Radius Pills */}
+      <div className="mb-5 pb-4 border-b border-silver/20 dark:border-white/[0.06] flex flex-wrap items-center gap-2 text-[13px]">
+        <span className="font-semibold text-carbon dark:text-silver flex items-center gap-1.5 mr-1">
+          <Compass className="w-4 h-4 text-signal-blue" />
+          Radius:
         </span>
         {[
           { label: 'All City', value: undefined },
-          { label: 'Within 1 km', value: 1 },
-          { label: 'Within 5 km', value: 5 },
-          { label: 'Within 10 km', value: 10 },
+          { label: '1 km', value: 1 },
+          { label: '5 km', value: 5 },
+          { label: '10 km', value: 10 },
         ].map((item) => (
           <button
             key={item.label}
             onClick={() => handleFilterChange('locationRadius', item.value)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+            className={`px-3.5 py-1.5 rounded-pill text-[13px] font-semibold transition-all ${
               filters.locationRadius === item.value
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                ? 'bg-signal-blue text-white'
+                : 'bg-linen dark:bg-white/[0.06] text-carbon dark:text-silver hover:bg-silver/30 dark:hover:bg-white/[0.10]'
             }`}
           >
             {item.label}
@@ -106,51 +106,45 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
       
       {/* Primary Controls Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Search Term */}
+        {/* Search */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-            Keyword Search
-          </label>
+          <label className="text-micro text-steel block mb-1.5">Search</label>
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-fog" />
             <input
               type="text"
               value={filters.searchTerm}
               onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-              placeholder="Search by title or street..."
-              className="w-full pl-9 pr-3 py-2 app-input text-xs"
+              placeholder="Title or street..."
+              className="w-full pl-9 pr-3 py-2 app-input text-[13px]"
             />
           </div>
         </div>
 
-        {/* Status Dropdown */}
+        {/* Status */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-            Status
-          </label>
+          <label className="text-micro text-steel block mb-1.5">Status</label>
           <select
             value={filters.statusFilter}
             onChange={(e) => handleFilterChange('statusFilter', e.target.value)}
-            className="w-full py-2 px-3 app-input text-xs font-semibold cursor-pointer"
+            className="w-full py-2 px-3 app-input text-[13px] font-medium cursor-pointer"
           >
-            <option value="">✦ All Statuses</option>
-            <option value="open">Open Reports</option>
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
             <option value="in-progress">In Repair</option>
-            <option value="resolved">Resolved & Fixed</option>
+            <option value="resolved">Resolved</option>
           </select>
         </div>
 
-        {/* Category Dropdown */}
+        {/* Category */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-            Category
-          </label>
+          <label className="text-micro text-steel block mb-1.5">Category</label>
           <select
             value={filters.categoryFilter}
             onChange={(e) => handleFilterChange('categoryFilter', e.target.value)}
-            className="w-full py-2 px-3 app-input text-xs font-semibold cursor-pointer"
+            className="w-full py-2 px-3 app-input text-[13px] font-medium cursor-pointer"
           >
-            <option value="">✦ All Categories</option>
+            <option value="">All Categories</option>
             <option value="safety">Safety Hazard</option>
             <option value="infrastructure">Infrastructure</option>
             <option value="environmental">Environmental</option>
@@ -160,75 +154,76 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           </select>
         </div>
 
-        {/* Priority Dropdown */}
+        {/* Priority */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-            Urgency Priority
-          </label>
+          <label className="text-micro text-steel block mb-1.5">Priority</label>
           <select
             value={filters.priorityFilter}
             onChange={(e) => handleFilterChange('priorityFilter', e.target.value)}
-            className="w-full py-2 px-3 app-input text-xs font-semibold cursor-pointer"
+            className="w-full py-2 px-3 app-input text-[13px] font-medium cursor-pointer"
           >
-            <option value="">✦ All Priorities</option>
-            <option value="critical">Critical Emergency</option>
-            <option value="high">High Urgency</option>
-            <option value="medium">Medium Priority</option>
-            <option value="low">Routine Notice</option>
+            <option value="">All Priorities</option>
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
         </div>
       </div>
 
-      {/* Expandable Advanced Section */}
+      {/* Advanced Filters */}
       {showAdvanced && (
-        <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-700/60 space-y-4">
+        <div className="mt-5 pt-5 border-t border-silver/30 dark:border-white/[0.08] space-y-5">
           
-          {/* Date Range Selection */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          {/* Date Range */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Reported After Date
+              <label className="text-micro text-steel block mb-1.5 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-signal-blue" />
+                After Date
               </label>
               <input
                 type="date"
                 onChange={(e) => handleFilterChange('dateFrom', e.target.value ? new Date(e.target.value) : undefined)}
-                className="w-full px-3 py-2 app-input text-xs"
+                className="w-full px-3 py-2 app-input text-[13px]"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                Reported Before Date
+              <label className="text-micro text-steel block mb-1.5 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-signal-blue" />
+                Before Date
               </label>
               <input
                 type="date"
                 onChange={(e) => handleFilterChange('dateTo', e.target.value ? new Date(e.target.value) : undefined)}
-                className="w-full px-3 py-2 app-input text-xs"
+                className="w-full px-3 py-2 app-input text-[13px]"
               />
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-2 flex items-center gap-1">
-              <Tag className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <label className="text-micro text-steel block mb-2 flex items-center gap-1">
+              <Tag className="w-3.5 h-3.5 text-signal-blue" />
               Filter by Tags
             </label>
             
-            <div className="flex flex-wrap gap-2 mb-2">
-              {filters.tags?.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-600 text-white rounded-full text-xs font-semibold"
-                >
-                  #{tag}
-                  <button type="button" onClick={() => removeTag(tag)} className="hover:text-rose-200">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </span>
-              ))}
-            </div>
+            {/* Active tags */}
+            {filters.tags && filters.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {filters.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-signal-blue text-white rounded-pill text-[13px] font-semibold"
+                  >
+                    #{tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-white/70">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="flex flex-wrap gap-2">
               {availableTags.map((tag) => {
@@ -238,10 +233,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                     key={tag}
                     type="button"
                     onClick={() => (isSelected ? removeTag(tag) : addTag(tag))}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                    className={`px-3 py-1.5 rounded-pill text-[13px] font-semibold transition-all ${
                       isSelected
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        ? 'bg-signal-blue text-white'
+                        : 'bg-linen dark:bg-white/[0.06] text-carbon dark:text-silver hover:bg-silver/30 dark:hover:bg-white/[0.10]'
                     }`}
                   >
                     #{tag}
