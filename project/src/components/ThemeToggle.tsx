@@ -14,12 +14,12 @@ export const ThemeToggle: React.FC = () => {
     >
       {isDark ? (
         <>
-          <Sun className="w-4 h-4 text-amber-alert" />
+          <Sun className="w-4 h-4 text-royal-violet" />
           <span className="hidden sm:inline">Light</span>
         </>
       ) : (
         <>
-          <Moon className="w-4 h-4 text-deep-indigo" />
+          <Moon className="w-4 h-4 text-midnight-wine" />
           <span className="hidden sm:inline">Dark</span>
         </>
       )}

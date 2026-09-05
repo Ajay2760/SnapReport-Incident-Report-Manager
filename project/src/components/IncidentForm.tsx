@@ -20,7 +20,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   });
 
   const [errors, setErrors] = useState<Partial<IncidentFormData>>({});
-  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+  const [, setSelectedPhoto] = useState<File | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
 
@@ -31,7 +31,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  const timerIntervalRef = useRef<any>(null);
+  const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startRecording = async () => {
@@ -66,7 +66,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           return prev + 1;
         });
       }, 1000);
-    } catch (err) {
+    } catch {
       alert('Microphone access unavailable. Demo voice note recorded.');
       const fallbackUrl = "https://actions.google.com/sounds/v1/ambiences/outdoor_park.ogg";
       setAudioBlobUrl(fallbackUrl);
@@ -136,20 +136,20 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   };
 
   return (
-    <div className="fixed inset-0 bg-deep-indigo/90 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white dark:bg-midnight-ink border border-silver/30 dark:border-white/[0.08] rounded-floating max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto" style={{ boxShadow: 'var(--shadow-floating)' }}>
+    <div className="fixed inset-0 bg-ink-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="app-card max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="p-5 border-b border-silver/30 dark:border-white/[0.08] flex items-center justify-between">
+        <div className="p-5 border-b border-soft-mist dark:border-white/[0.12] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-card bg-signal-blue/10 dark:bg-signal-blue/20 text-signal-blue flex items-center justify-center">
-              <ShieldAlert className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-cards bg-lilac-mist flex items-center justify-center">
+              <ShieldAlert className="w-5 h-5 text-royal-violet" />
             </div>
             <div>
-              <h2 className="text-heading-sm text-black dark:text-white">
+              <h2 className="text-heading-sm">
                 New Incident Report
               </h2>
-              <p className="text-[13px] text-steel mt-0.5">
-                Municipal Report • Public Record
+              <p className="text-[13px] text-stone-gray mt-0.5">
+                Municipal Report · Public Record
               </p>
             </div>
           </div>
@@ -157,6 +157,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           <button
             onClick={onCancel}
             className="app-btn-ghost p-2"
+            aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
@@ -166,8 +167,8 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           
           {/* Title */}
           <div>
-            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-signal-blue" />
+            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1.5">
+              <FileText className="w-4 h-4 text-royal-violet" />
               Incident Title *
             </label>
             <input
@@ -175,16 +176,16 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                errors.title ? 'border-alert-red ring-1 ring-alert-red/30' : ''
+                errors.title ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
               }`}
               placeholder="e.g. Hazardous Pothole near Main Street"
             />
-            {errors.title && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.title}</p>}
+            {errors.title && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.title}</p>}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5">
+            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5">
               Description *
             </label>
             <textarea
@@ -192,20 +193,20 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
               onChange={(e) => handleChange('description', e.target.value)}
               rows={3}
               className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                errors.description ? 'border-alert-red ring-1 ring-alert-red/30' : ''
+                errors.description ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
               }`}
               placeholder="Provide complete details, safety hazards, and community impact..."
             />
-            {errors.description && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.description}</p>}
+            {errors.description && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.description}</p>}
           </div>
 
           {/* Voice Note */}
-          <div className="p-4 rounded-card border border-signal-blue/10 dark:border-signal-blue/20 bg-signal-blue/5 dark:bg-signal-blue/10 space-y-2.5">
-            <label className="block font-semibold text-[13px] text-black dark:text-white flex items-center gap-1.5">
-              <Mic className="w-4 h-4 text-signal-blue" />
+          <div className="p-4 rounded-cards border border-lilac-mist/50 dark:border-royal-violet/20 bg-lilac-mist/25 dark:bg-royal-violet/10 space-y-2.5">
+            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light flex items-center gap-1.5">
+              <Mic className="w-4 h-4 text-royal-violet" />
               Voice Note (Optional)
             </label>
-            <p className="text-[11px] text-steel">
+            <p className="text-[11px] text-stone-gray">
               Record a 15-second voice description.
             </p>
 
@@ -223,7 +224,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 <button
                   type="button"
                   onClick={stopRecording}
-                  className="bg-alert-red hover:bg-alert-red/90 text-white px-4 py-2 rounded-pill text-[13px] font-semibold flex items-center gap-2 animate-pulse"
+                  className="bg-midnight-wine hover:bg-midnight-wine/90 text-white px-4 py-2 rounded-pill text-[13px] font-medium flex items-center gap-2 animate-pulse"
                 >
                   <Square className="w-4 h-4" />
                   Stop ({15 - recordingSeconds}s)
@@ -231,21 +232,21 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
               )}
 
               {audioBlobUrl && !isRecording && (
-                <div className="flex items-center gap-3 px-3.5 py-2 rounded-pill bg-white dark:bg-white/[0.06] border border-silver/30 dark:border-white/[0.08]">
+                <div className="flex items-center gap-3 px-3.5 py-2 rounded-pill bg-paper-white dark:bg-white/[0.06] border border-soft-mist dark:border-white/[0.12]">
                   <button
                     type="button"
                     onClick={togglePlayAudio}
-                    className="text-signal-blue"
+                    className="text-royal-violet"
                   >
                     {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
-                  <span className="text-[13px] font-semibold text-black dark:text-white">
+                  <span className="text-[13px] font-semibold text-ink-charcoal dark:text-ink-light">
                     {isPlayingAudio ? 'Playing...' : 'Ready'}
                   </span>
                   <button
                     type="button"
                     onClick={() => { setAudioBlobUrl(null); setFormData(prev => ({ ...prev, audioUrl: undefined })); }}
-                    className="text-steel hover:text-alert-red text-[13px] ml-1"
+                    className="text-stone-gray hover:text-midnight-wine text-[13px] ml-1"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -257,8 +258,8 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           {/* Classification Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
-                <Tag className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5 text-royal-violet" />
                 Category
               </label>
               <select
@@ -276,8 +277,8 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
+                <AlertTriangle className="w-3.5 h-3.5 text-royal-violet" />
                 Priority
               </label>
               <select
@@ -293,8 +294,8 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-royal-violet" />
                 Target ETA
               </label>
               <select
@@ -313,8 +314,8 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           {/* Location & Reporter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-royal-violet" />
                 Location *
               </label>
               <input
@@ -322,16 +323,16 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 value={formData.location}
                 onChange={(e) => handleChange('location', e.target.value)}
                 className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                  errors.location ? 'border-alert-red ring-1 ring-alert-red/30' : ''
+                  errors.location ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
                 }`}
                 placeholder="Street address or landmark"
               />
-              {errors.location && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.location}</p>}
+              {errors.location && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.location}</p>}
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5 flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
+                <User className="w-3.5 h-3.5 text-royal-violet" />
                 Your Name *
               </label>
               <input
@@ -339,17 +340,17 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 value={formData.reportedBy}
                 onChange={(e) => handleChange('reportedBy', e.target.value)}
                 className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                  errors.reportedBy ? 'border-alert-red ring-1 ring-alert-red/30' : ''
+                  errors.reportedBy ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
                 }`}
                 placeholder="Full name"
               />
-              {errors.reportedBy && <p className="text-alert-red font-semibold mt-1.5 text-[11px]">{errors.reportedBy}</p>}
+              {errors.reportedBy && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.reportedBy}</p>}
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block font-semibold text-[13px] text-black dark:text-white mb-1.5">
+            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5">
               Tags (Optional)
             </label>
             {tags.length > 0 && (
@@ -357,10 +358,10 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-signal-blue/10 text-signal-blue rounded-pill text-[13px] font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-lilac-mist text-royal-violet rounded-pill text-[13px] font-semibold"
                   >
                     #{tag}
-                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-alert-red">
+                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-midnight-wine">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </span>
@@ -379,7 +380,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
               <button
                 type="button"
                 onClick={addTag}
-                className="app-btn-ghost px-4 py-2 text-[13px] flex items-center gap-1"
+                className="app-btn-outline px-4 py-2 text-[13px] flex items-center gap-1"
               >
                 <Plus className="w-4 h-4" />
                 Add
@@ -391,17 +392,17 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           <PhotoUpload onPhotoSelect={setSelectedPhoto} />
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-silver/30 dark:border-white/[0.08]">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-soft-mist dark:border-white/[0.12]">
             <button
               type="submit"
-              className="flex-1 app-btn-primary py-3 px-6 text-[15px] font-bold"
+              className="flex-1 app-btn-primary py-3 px-6 text-[15px] font-semibold"
             >
               Submit Report
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="app-btn-ghost py-3 px-6 text-[15px] font-bold"
+              className="app-btn-ghost py-3 px-6 text-[15px] font-semibold"
             >
               Cancel
             </button>

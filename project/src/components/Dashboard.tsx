@@ -17,29 +17,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ incidents }) => {
       title: 'Total Dispatches',
       count: totalIncidents,
       icon: ShieldAlert,
-      accentColor: 'text-signal-blue',
-      bgIcon: 'bg-signal-blue/10 dark:bg-signal-blue/20',
+      accentColor: 'text-royal-violet',
     },
     {
       title: 'Open Hazards',
       count: openIncidents,
       icon: AlertCircle,
-      accentColor: 'text-amber-alert',
-      bgIcon: 'bg-amber-alert/10 dark:bg-amber-alert/20',
+      accentColor: 'text-midnight-wine',
     },
     {
       title: 'In Repair',
       count: inProgressIncidents,
       icon: Clock,
-      accentColor: 'text-signal-blue',
-      bgIcon: 'bg-signal-blue/10 dark:bg-signal-blue/20',
+      accentColor: 'text-royal-violet',
     },
     {
       title: 'Resolved',
       count: resolvedIncidents,
       icon: CheckCircle2,
-      accentColor: 'text-emerald-500',
-      bgIcon: 'bg-emerald-500/10 dark:bg-emerald-500/20',
+      accentColor: 'text-deep-lagoon',
     },
   ];
 
@@ -54,15 +50,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ incidents }) => {
             style={{ animationDelay: `${idx * 0.08}s` }}
           >
             <div>
-              <span className="text-micro text-steel block mb-1.5">
+              <span className="text-caption text-stone-gray block mb-1.5">
                 {stat.title}
               </span>
-              <span className="text-3xl font-bold text-black dark:text-white tracking-tight">
+              <span className="text-4xl font-normal text-ink-charcoal dark:text-ink-light tracking-tight" style={{ fontWeight: 460 }}>
                 {stat.count}
               </span>
             </div>
 
-            <div className={`w-12 h-12 rounded-card flex items-center justify-center ${stat.bgIcon}`}>
+            <div className="w-12 h-12 rounded-cards bg-lilac-mist/50 flex items-center justify-center">
               <Icon className={`w-5 h-5 ${stat.accentColor}`} />
             </div>
           </div>

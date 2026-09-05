@@ -15,7 +15,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (
+    key: keyof SearchFilters,
+    value: SearchFilters[keyof SearchFilters]
+  ) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
@@ -45,16 +48,16 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
   return (
     <div className="app-card p-6 mb-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-silver/30 dark:border-white/[0.08] pb-4 mb-5 gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-soft-mist dark:border-white/[0.12] pb-4 mb-5 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-card bg-signal-blue/10 dark:bg-signal-blue/20 text-signal-blue flex items-center justify-center">
-            <Filter className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-cards bg-lilac-mist flex items-center justify-center">
+            <Filter className="w-5 h-5 text-royal-violet" />
           </div>
           <div>
-            <h3 className="font-bold text-[17px] text-black dark:text-white tracking-tight-sm">
+            <h3 className="font-bold text-[17px] text-ink-charcoal dark:text-ink-light">
               Filter & Search
             </h3>
-            <p className="text-[13px] text-steel mt-0.5">
+            <p className="text-[13px] text-stone-gray mt-0.5">
               Refine by keyword, category, status, or urgency
             </p>
           </div>
@@ -79,9 +82,9 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
       </div>
 
       {/* Distance Radius Pills */}
-      <div className="mb-5 pb-4 border-b border-silver/20 dark:border-white/[0.06] flex flex-wrap items-center gap-2 text-[13px]">
-        <span className="font-semibold text-carbon dark:text-silver flex items-center gap-1.5 mr-1">
-          <Compass className="w-4 h-4 text-signal-blue" />
+      <div className="mb-5 pb-4 border-b border-soft-mist dark:border-white/[0.08] flex flex-wrap items-center gap-2 text-[13px]">
+        <span className="font-semibold text-ink-charcoal dark:text-ink-light flex items-center gap-1.5 mr-1">
+          <Compass className="w-4 h-4 text-royal-violet" />
           Radius:
         </span>
         {[
@@ -93,10 +96,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
           <button
             key={item.label}
             onClick={() => handleFilterChange('locationRadius', item.value)}
-            className={`px-3.5 py-1.5 rounded-pill text-[13px] font-semibold transition-all ${
+            className={`px-3.5 py-1.5 rounded-pill text-[13px] font-medium transition-all ${
               filters.locationRadius === item.value
-                ? 'bg-signal-blue text-white'
-                : 'bg-linen dark:bg-white/[0.06] text-carbon dark:text-silver hover:bg-silver/30 dark:hover:bg-white/[0.10]'
+                ? 'bg-lilac-mist text-ink-charcoal border border-royal-violet/20'
+                : 'bg-warm-parchment dark:bg-white/[0.06] text-ink-charcoal dark:text-ink-light hover:bg-soft-mist dark:hover:bg-white/[0.10] border border-soft-mist dark:border-white/[0.10]'
             }`}
           >
             {item.label}
@@ -108,9 +111,9 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Search */}
         <div>
-          <label className="text-micro text-steel block mb-1.5">Search</label>
+          <label className="text-caption text-stone-gray block mb-1.5">Search</label>
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-fog" />
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-gray" />
             <input
               type="text"
               value={filters.searchTerm}
@@ -123,7 +126,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
         {/* Status */}
         <div>
-          <label className="text-micro text-steel block mb-1.5">Status</label>
+          <label className="text-caption text-stone-gray block mb-1.5">Status</label>
           <select
             value={filters.statusFilter}
             onChange={(e) => handleFilterChange('statusFilter', e.target.value)}
@@ -138,7 +141,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
         {/* Category */}
         <div>
-          <label className="text-micro text-steel block mb-1.5">Category</label>
+          <label className="text-caption text-stone-gray block mb-1.5">Category</label>
           <select
             value={filters.categoryFilter}
             onChange={(e) => handleFilterChange('categoryFilter', e.target.value)}
@@ -156,7 +159,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
         {/* Priority */}
         <div>
-          <label className="text-micro text-steel block mb-1.5">Priority</label>
+          <label className="text-caption text-stone-gray block mb-1.5">Priority</label>
           <select
             value={filters.priorityFilter}
             onChange={(e) => handleFilterChange('priorityFilter', e.target.value)}
@@ -173,13 +176,13 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
       {/* Advanced Filters */}
       {showAdvanced && (
-        <div className="mt-5 pt-5 border-t border-silver/30 dark:border-white/[0.08] space-y-5">
+        <div className="mt-5 pt-5 border-t border-soft-mist dark:border-white/[0.12] space-y-5">
           
           {/* Date Range */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-micro text-steel block mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="text-caption text-stone-gray block mb-1.5 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-royal-violet" />
                 After Date
               </label>
               <input
@@ -189,8 +192,8 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
               />
             </div>
             <div>
-              <label className="text-micro text-steel block mb-1.5 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-signal-blue" />
+              <label className="text-caption text-stone-gray block mb-1.5 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-royal-violet" />
                 Before Date
               </label>
               <input
@@ -203,8 +206,8 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
 
           {/* Tags */}
           <div>
-            <label className="text-micro text-steel block mb-2 flex items-center gap-1">
-              <Tag className="w-3.5 h-3.5 text-signal-blue" />
+            <label className="text-caption text-stone-gray block mb-2 flex items-center gap-1">
+              <Tag className="w-3.5 h-3.5 text-royal-violet" />
               Filter by Tags
             </label>
             
@@ -214,10 +217,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                 {filters.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-signal-blue text-white rounded-pill text-[13px] font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-lilac-mist text-royal-violet rounded-pill text-[13px] font-semibold"
                   >
                     #{tag}
-                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-white/70">
+                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-midnight-wine">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </span>
@@ -233,10 +236,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({
                     key={tag}
                     type="button"
                     onClick={() => (isSelected ? removeTag(tag) : addTag(tag))}
-                    className={`px-3 py-1.5 rounded-pill text-[13px] font-semibold transition-all ${
+                    className={`px-3 py-1.5 rounded-pill text-[13px] font-medium transition-all ${
                       isSelected
-                        ? 'bg-signal-blue text-white'
-                        : 'bg-linen dark:bg-white/[0.06] text-carbon dark:text-silver hover:bg-silver/30 dark:hover:bg-white/[0.10]'
+                        ? 'bg-lilac-mist text-royal-violet border border-royal-violet/20'
+                        : 'bg-warm-parchment dark:bg-white/[0.06] text-ink-charcoal dark:text-ink-light hover:bg-soft-mist dark:hover:bg-white/[0.10] border border-soft-mist dark:border-white/[0.10]'
                     }`}
                   >
                     #{tag}

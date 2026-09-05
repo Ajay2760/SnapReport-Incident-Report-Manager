@@ -3,53 +3,58 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════
-   SNAPREPORT — Flighty Design System
-   Control tower at midnight: luminous screens on dark surfaces
+   SNAPREPORT — Superhuman Editorial Design System
+   Golden hour dashboard · warm parchment · maroon + violet
    ═══════════════════════════════════════════════════════════ */
 
 @layer base {
   :root {
-    /* Signal-Light Color System */
-    --color-signal-blue: #007bff;
-    --color-amber-alert: #f7be00;
-    --color-deep-indigo: #0d0021;
-    --color-midnight-ink: #05010d;
-    --color-pure-white: #ffffff;
-    --color-pure-black: #000000;
-    --color-carbon: #333333;
-    --color-slate: #595959;
-    --color-steel: #737373;
-    --color-fog: #808080;
-    --color-silver: #cfcfcf;
-    --color-linen: #faf8f7;
-    --color-ash: #89898e;
-    --color-alert-red: #d92d20;
+    --color-midnight-wine: #421d24;
+    --color-royal-violet: #714cb6;
+    --color-lilac-mist: #d4c7ff;
+    --color-deep-lagoon: #0c4243;
+    --color-warm-parchment: #f2f0eb;
+    --color-soft-mist: #e3e3e2;
+    --color-ink-charcoal: #292827;
+    --color-stone-gray: #666666;
+    --color-paper-white: #ffffff;
 
-    /* Surfaces */
-    --surface-light: #ffffff;
-    --surface-linen: #faf8f7;
-    --surface-divider: #cfcfcf;
-    --surface-dark: #0d0021;
-    --surface-darkest: #05010d;
+    --font-super-sans-vf: 'Inter', ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    /* Shadows — Whisper-thin system */
-    --shadow-card: rgba(0,0,0,0.02) 0px 0px 0px 1px,
-                   rgba(0,0,0,0.02) 0px 1px 1px 0.5px,
-                   rgba(0,0,0,0.02) 0px 3px 3px 1.5px,
-                   rgba(0,0,0,0.02) 0px 6px 6px -3px,
-                   rgba(0,0,0,0.02) 0px 12px 12px -6px,
-                   rgba(0,0,0,0.02) 0px 24px 24px -12px;
-    --shadow-floating: rgba(0,0,0,0.04) 0px 0px 0px 1px,
-                       rgba(0,0,0,0.02) 0px 1px 1px 0.5px,
-                       rgba(0,0,0,0.02) 0px 3px 3px 1.5px,
-                       rgba(0,0,0,0.02) 0px 6px 6px -3px,
-                       rgba(0,0,0,0.02) 0px 12px 12px -6px,
-                       rgba(0,0,0,0.02) 0px 24px 24px -12px;
-    --shadow-nav: 0px 1px 1px 0.5px rgba(0,0,0,0.03),
-                  0px 3px 3px 1.5px rgba(0,0,0,0.03),
-                  0px 6px 6px -3px rgba(0,0,0,0.03),
-                  0px 12px 12px -6px rgba(0,0,0,0.03),
-                  0px 24px 24px -12px rgba(0,0,0,0.03);
+    --text-caption: 12px;
+    --leading-caption: 1.5;
+    --text-body-sm: 14px;
+    --leading-body-sm: 1.5;
+    --text-body: 16px;
+    --leading-body: 1.2;
+    --text-label-bold: 19px;
+    --leading-label-bold: 1.5;
+    --text-subheading: 26px;
+    --leading-subheading: 1.3;
+    --text-heading-sm: 28px;
+    --leading-heading-sm: 1.14;
+    --text-heading-lg: 49px;
+    --leading-heading-lg: 1.2;
+    --text-display: 64px;
+    --leading-display: 0.96;
+
+    --shadow-subtle: rgb(113, 76, 182) 0px 0px 0px 1px inset;
+
+    --spacing-4: 4px;
+    --spacing-8: 8px;
+    --spacing-12: 12px;
+    --spacing-16: 16px;
+    --spacing-20: 20px;
+    --spacing-24: 24px;
+    --spacing-28: 28px;
+    --spacing-32: 32px;
+    --spacing-36: 36px;
+    --spacing-40: 40px;
+    --spacing-48: 48px;
+    --spacing-64: 64px;
+    --spacing-80: 80px;
+    --spacing-96: 96px;
   }
 
   * {
@@ -57,202 +62,286 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html {
+    background-color: var(--color-warm-parchment);
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-white text-black font-sans transition-colors duration-300;
+    @apply bg-warm-parchment text-ink-charcoal font-sans antialiased;
+    font-feature-settings: 'ss01' on;
   }
 
-  .dark body,
-  body.dark-body {
-    background-color: var(--color-deep-indigo);
-    color: #ffffff;
+  .dark body {
+    @apply bg-canvas-dark text-ink-light;
   }
 
-  /* Scrollbar styling */
+  ::selection {
+    background-color: var(--color-lilac-mist);
+    color: var(--color-ink-charcoal);
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-silver);
+    background: var(--color-soft-mist);
     border-radius: 999px;
   }
   .dark ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.14);
   }
 }
 
 @layer components {
-  /* ─── Card System ─── */
+  /* ─── Surfaces ─── */
+  .surface-parchment {
+    background-color: var(--color-warm-parchment);
+  }
+  .dark .surface-parchment {
+    background-color: var(--dark-canvas, #161514);
+  }
+  .surface-lagoon {
+    background-color: var(--color-deep-lagoon);
+  }
+  .surface-wine {
+    background-color: var(--color-midnight-wine);
+  }
+
+  /* ─── Card System — no drop shadows, depth from layering ─── */
   .app-card {
-    @apply bg-white border border-silver/40 rounded-card transition-all duration-200;
-    box-shadow: var(--shadow-card);
+    @apply bg-paper-white border border-soft-mist rounded-cards transition-colors duration-200;
   }
   .dark .app-card {
-    @apply bg-midnight-ink/80 border-white/[0.08];
+    @apply bg-card-dark border-white/[0.12];
   }
 
   .app-card-floating {
-    @apply bg-white border border-silver/30 rounded-floating transition-all duration-200;
-    box-shadow: var(--shadow-floating);
+    background: rgba(255, 255, 255, 0.86);
+    @apply rounded-floating border border-white/[0.14] transition-colors duration-200;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
   .dark .app-card-floating {
-    @apply bg-midnight-ink/80 border-white/[0.08];
+    background: rgba(35, 32, 32, 0.9);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   /* ─── Input System ─── */
   .app-input {
-    @apply bg-white border border-silver/60 text-black rounded-input
-           focus:outline-none focus:ring-2 focus:ring-signal-blue/40 focus:border-signal-blue
-           transition-all duration-150 placeholder:text-fog;
+    @apply bg-paper-white border border-soft-mist text-ink-charcoal rounded-input
+           focus:outline-none focus:ring-2 focus:ring-lilac-mist focus:border-royal-violet
+           transition-all duration-150 placeholder:text-stone-gray;
   }
   .dark .app-input {
-    @apply bg-midnight-ink/60 border-white/[0.12] text-white placeholder:text-steel;
+    @apply bg-card-dark border-white/[0.14] text-ink-light placeholder:text-stone-gray;
   }
 
   /* ─── Button System ─── */
-
-  /* Primary: Signal Blue — the ONLY chromatic action button */
+  /* Primary: Midnight Wine — the ONLY chromatic button fill */
   .app-btn-primary {
-    @apply bg-signal-blue hover:bg-signal-blue/90 text-white font-semibold
-           rounded-pill transition-all duration-150 active:scale-[0.97]
-           shadow-none;
+    @apply bg-midnight-wine text-white font-medium rounded-buttons
+           transition-all duration-150 active:scale-[0.97]
+           hover:bg-midnight-wine/90;
   }
 
-  /* Amber: Emergency/Download CTA — warm signal against dark surfaces */
-  .app-btn-amber {
-    @apply bg-amber-alert hover:bg-amber-alert/90 text-black font-semibold
-           rounded-pill transition-all duration-150 active:scale-[0.97];
-  }
-
-  /* Ghost: Transparent with hairline border */
+  /* Ghost text button — used for nav + tertiary actions */
   .app-btn-ghost {
-    @apply bg-transparent text-black border border-black/20
-           hover:border-black/40 hover:bg-black/[0.03]
-           font-medium rounded-pill transition-all duration-150 active:scale-[0.97];
+    @apply bg-transparent text-ink-charcoal font-medium no-underline
+           rounded-small transition-all duration-150 hover:bg-warm-parchment
+           active:scale-[0.97];
   }
   .dark .app-btn-ghost {
-    @apply text-white border-white/20 hover:border-white/40 hover:bg-white/[0.06];
+    @apply text-ink-light hover:bg-white/[0.08];
   }
 
-  /* Secondary: Subtle surface button */
-  .app-btn-secondary {
-    @apply bg-linen hover:bg-silver/30 text-carbon font-semibold
-           rounded-pill transition-all duration-150 active:scale-[0.97];
+  /* Outlined light button — lilac fill, ink border, small radius */
+  .app-btn-outline {
+    @apply bg-lilac-mist text-ink-charcoal border border-ink-charcoal font-medium
+           rounded-small transition-all duration-150 hover:bg-lilac-mist/80
+           active:scale-[0.97];
   }
-  .dark .app-btn-secondary {
-    @apply bg-white/[0.06] hover:bg-white/[0.10] text-white/80;
+  .dark .app-btn-outline {
+    @apply bg-white/[0.10] text-ink-light border-white/30;
+  }
+
+  /* White outlined ghost — for dark feature bands */
+  .app-btn-white-ghost {
+    @apply bg-transparent text-white border border-white font-medium
+           rounded-small transition-all duration-150 hover:bg-white/10
+           active:scale-[0.97];
+  }
+
+  /* ─── Pill Announcement Banner ─── */
+  .announcement-pill {
+    background-color: var(--color-midnight-wine);
+    @apply text-white px-4 py-2.5 flex items-center justify-between gap-3
+           rounded-b-pill transition-colors;
+  }
+  .announcement-pill a {
+    @apply text-white border-b border-white/40 no-underline hover:border-white
+           transition-colors;
   }
 
   /* ─── Badge System ─── */
   .app-badge {
-    @apply px-3 py-1 rounded-pill text-xs font-semibold tracking-wide inline-flex items-center gap-1.5;
+    @apply px-3 py-1 rounded-pill text-xs font-medium tracking-wide
+           inline-flex items-center gap-1.5;
   }
 
-  /* ─── Section Transitions ─── */
-  .section-light {
-    @apply bg-white text-black;
-  }
-  .section-dark {
-    background-color: var(--color-deep-indigo);
-    @apply text-white;
-  }
-  .section-darkest {
-    background-color: var(--color-midnight-ink);
-    @apply text-white;
-  }
-
-  /* ─── Display Typography ─── */
+  /* ─── Section Heading (signature 460 voice) ─── */
   .text-display {
-    font-size: 56px;
-    line-height: 1;
-    letter-spacing: -1.4px;
-    @apply font-bold;
+    font-family: var(--font-super-sans-vf);
+    font-size: var(--text-display);
+    line-height: var(--leading-display);
+    letter-spacing: -0.028em;
+    font-weight: 460;
+    @apply text-ink-charcoal;
   }
+  .dark .text-display {
+    @apply text-ink-light;
+  }
+
   .text-heading-lg {
-    font-size: 32px;
-    line-height: 1.1;
-    letter-spacing: -0.8px;
-    @apply font-bold;
+    font-family: var(--font-super-sans-vf);
+    font-size: var(--text-heading-lg);
+    line-height: var(--leading-heading-lg);
+    letter-spacing: -0.027em;
+    font-weight: 460;
+    @apply text-ink-charcoal;
   }
+  .dark .text-heading-lg {
+    @apply text-ink-light;
+  }
+
   .text-heading-sm {
-    font-size: 22px;
-    line-height: 1.38;
-    letter-spacing: -0.55px;
-    @apply font-bold;
+    font-family: var(--font-super-sans-vf);
+    font-size: var(--text-heading-sm);
+    line-height: var(--leading-heading-sm);
+    letter-spacing: -0.022em;
+    font-weight: 500;
+    @apply text-ink-charcoal;
   }
+  .dark .text-heading-sm {
+    @apply text-ink-light;
+  }
+
+  .text-subheading {
+    font-family: var(--font-super-sans-vf);
+    font-size: var(--text-subheading);
+    line-height: var(--leading-subheading);
+    letter-spacing: -0.014em;
+    font-weight: 460;
+    @apply text-ink-charcoal;
+  }
+  .dark .text-subheading {
+    @apply text-ink-light;
+  }
+
   .text-body {
-    font-size: 17px;
-    line-height: 1.5;
-    letter-spacing: -0.17px;
-    @apply font-normal;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    letter-spacing: -0.008em;
+    font-weight: 460;
+    @apply text-ink-charcoal;
   }
+  .dark .text-body {
+    @apply text-ink-light;
+  }
+
   .text-body-sm {
-    font-size: 15px;
-    line-height: 1.5;
-    letter-spacing: -0.075px;
-    @apply font-normal;
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-body-sm);
+    letter-spacing: 0;
+    font-weight: 460;
+    @apply text-ink-charcoal;
   }
+  .dark .text-body-sm {
+    @apply text-ink-light;
+  }
+
   .text-caption {
-    font-size: 13px;
-    line-height: 1.38;
-    @apply font-medium;
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    font-weight: 500;
+    @apply text-stone-gray;
   }
+  .dark .text-caption {
+    @apply text-stone-gray;
+  }
+
+  .text-label-bold {
+    font-size: var(--text-label-bold);
+    line-height: var(--leading-label-bold);
+    font-weight: 700;
+    @apply text-ink-charcoal;
+  }
+  .dark .text-label-bold {
+    @apply text-ink-light;
+  }
+
   .text-micro {
     font-size: 11px;
     line-height: 1.36;
     @apply font-semibold tracking-wider uppercase;
   }
 
-  /* ─── Floating Notification Card (Flighty signature) ─── */
+  /* ─── Link with Underline ─── */
+  .link-learn {
+    @apply text-royal-violet font-medium no-underline transition-colors duration-200;
+  }
+  .link-learn:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ─── Navigation Header ─── */
+  .nav-glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: box-shadow 0.25s ease, background 0.25s ease;
+  }
+  .nav-glass.scrolled {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 1px 0 0 var(--color-soft-mist);
+  }
+  .dark .nav-glass {
+    background: rgba(22, 21, 20, 0.72);
+  }
+  .dark .nav-glass.scrolled {
+    background: rgba(22, 21, 20, 0.88);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  }
+
+  /* ─── Notification card accents ─── */
   .notification-card {
-    @apply bg-white rounded-floating p-4 transition-all;
-    box-shadow: var(--shadow-floating);
+    @apply bg-paper-white rounded-cards p-4 border border-soft-mist transition-all;
   }
-  .notification-card-accent-blue {
-    border-left: 3px solid var(--color-signal-blue);
+  .dark .notification-card {
+    @apply bg-card-dark border-white/[0.12];
   }
-  .notification-card-accent-amber {
-    border-left: 3px solid var(--color-amber-alert);
+  .notification-card-accent-violet {
+    border-left: 3px solid var(--color-royal-violet);
   }
-  .notification-card-accent-red {
-    border-left: 3px solid var(--color-alert-red);
+  .notification-card-accent-wine {
+    border-left: 3px solid var(--color-midnight-wine);
   }
-
-  /* ─── Dark card tiles (press-logo style) ─── */
-  .dark-tile {
-    background-color: var(--color-midnight-ink);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    @apply rounded-card;
+  .notification-card-accent-lagoon {
+    border-left: 3px solid var(--color-deep-lagoon);
   }
 
-  /* ─── Nav Pill ─── */
-  .nav-pill {
-    @apply bg-white/95 backdrop-blur-md rounded-pill;
-    box-shadow: var(--shadow-nav);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-  }
-  .dark .nav-pill {
-    @apply bg-midnight-ink/90 backdrop-blur-md;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-}
-
-@layer utilities {
-  /* Animate on scroll */
-  .animate-in {
-    animation: slideUp 0.4s ease-out both;
-  }
-  .animate-in-delay-1 { animation-delay: 0.1s; }
-  .animate-in-delay-2 { animation-delay: 0.2s; }
-  .animate-in-delay-3 { animation-delay: 0.3s; }
-
-  /* Gradient atmospherics for dark sections */
-  .gradient-indigo-pulse {
-    background: linear-gradient(180deg, rgb(18,0,54) 0%, rgb(37,1,96) 51%, rgb(18,0,54) 100%);
-  }
-  .gradient-indigo-wash {
-    background: linear-gradient(171deg, rgba(97,97,112,0.3) -45%, rgba(18,18,140,0.15) 69%);
+  /* ─── Gradient atmospheric banner ─── */
+  .gradient-banner {
+    background:
+      radial-gradient(ellipse 40% 35% at 68% 50%, rgba(113, 76, 182, 0.42) 0%, transparent 70%),
+      radial-gradient(ellipse 32% 30% at 93% 50%, rgba(12, 66, 67, 0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 38% 34% at 50% 98%, rgba(212, 199, 255, 0.9) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 26% at 50% 75%, rgba(66, 29, 36, 0.10) 0%, transparent 70%),
+      var(--color-warm-parchment);
   }
 }
