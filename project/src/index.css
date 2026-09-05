@@ -103,7 +103,7 @@
     background-color: var(--color-warm-parchment);
   }
   .dark .surface-parchment {
-    background-color: var(--dark-canvas, #161514);
+    background-color: #161514;
   }
   .surface-lagoon {
     background-color: var(--color-deep-lagoon);
@@ -144,16 +144,12 @@
   /* ─── Button System ─── */
   /* Primary: Midnight Wine — the ONLY chromatic button fill */
   .app-btn-primary {
-    @apply bg-midnight-wine text-white font-medium rounded-buttons
-           transition-all duration-150 active:scale-[0.97]
-           hover:bg-midnight-wine/90;
+    @apply bg-midnight-wine text-white font-medium rounded-xl min-h-[44px] min-w-[160px] transition-all duration-150 active:scale-[0.97] hover:bg-midnight-wine/90;
   }
 
   /* Ghost text button — used for nav + tertiary actions */
   .app-btn-ghost {
-    @apply bg-transparent text-ink-charcoal font-medium no-underline
-           rounded-small transition-all duration-150 hover:bg-warm-parchment
-           active:scale-[0.97];
+    @apply bg-transparent text-ink-charcoal font-medium no-underline rounded-xl min-h-[44px] min-w-[160px] transition-all duration-150 hover:bg-warm-parchment active:scale-[0.97];
   }
   .dark .app-btn-ghost {
     @apply text-ink-light hover:bg-white/[0.08];
@@ -161,9 +157,7 @@
 
   /* Outlined light button — lilac fill, ink border, small radius */
   .app-btn-outline {
-    @apply bg-lilac-mist text-ink-charcoal border border-ink-charcoal font-medium
-           rounded-small transition-all duration-150 hover:bg-lilac-mist/80
-           active:scale-[0.97];
+    @apply bg-lilac-mist text-ink-charcoal border border-ink-charcoal font-medium rounded-xl min-h-[44px] min-w-[160px] transition-all duration-150 hover:bg-lilac-mist/80 active:scale-[0.97];
   }
   .dark .app-btn-outline {
     @apply bg-white/[0.10] text-ink-light border-white/30;
@@ -171,9 +165,7 @@
 
   /* White outlined ghost — for dark feature bands */
   .app-btn-white-ghost {
-    @apply bg-transparent text-white border border-white font-medium
-           rounded-small transition-all duration-150 hover:bg-white/10
-           active:scale-[0.97];
+    @apply bg-transparent text-white border border-white font-medium rounded-xl min-h-[44px] min-w-[160px] transition-all duration-150 hover:bg-white/10 active:scale-[0.97];
   }
 
   /* ─── Pill Announcement Banner ─── */

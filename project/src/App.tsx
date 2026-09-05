@@ -475,48 +475,49 @@ function AppContent() {
         </div>
 
         {/* Floating glass product cards over the photograph */}
-        <div className="app-card-floating animate-float hidden lg:block absolute right-[6%] top-28 w-72 p-5 space-y-3 z-10">
+        {/* Always visible - stack on mobile, sit side-by-side on larger screens */}
+        <div className="app-card-floating animate-float pointer-events-auto w-full md:w-1/2 md:w-auto mt-6 mb-6 mx-auto left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center justify-between">
             <span className="text-caption text-stone-gray">Live Dispatch</span>
             <Radio className="w-4 h-4 text-royal-violet animate-pulse" />
           </div>
-          <div className="flex -space-x-2.5">
+          <div className="flex -space-x-2">
             {["JD", "SM", "MV", "+"].map((initials, idx) => (
               <div
                 key={`${initials}-${idx}`}
-                className="w-9 h-9 rounded-full bg-midnight-wine text-white text-[11px] font-semibold flex items-center justify-center border-2 border-white"
+                className="w-8 h-8 rounded-full bg-midnight-wine text-white text-[10px] font-semibold flex items-center justify-center border-2 border-white"
               >
                 {initials}
               </div>
             ))}
           </div>
-          <p className="text-body-sm font-medium">
+          <p className="text-body-sm font-medium mt-2">
             {inProgressCount} crews in the field responding to open reports.
           </p>
           <button
             onClick={() => navigate("map", "map")}
-            className="text-[13px] font-medium text-royal-violet flex items-center gap-1.5 link-learn"
+            className="mt-3 text-[13px] font-medium text-royal-violet flex items-center gap-1.5 link-learn"
           >
             Track dispatches <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="app-card-floating animate-float hidden lg:block absolute left-[5%] bottom-24 w-72 p-5 space-y-3 z-10">
+        <div className="app-card-floating animate-float pointer-events-auto w-full md:w-1/2 md:w-auto mt-6 mb-6 mx-auto left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center justify-between">
             <span className="text-caption text-stone-gray">Neighbor Petition</span>
             <Compass className="w-4 h-4 text-royal-violet" />
           </div>
-          <p className="text-heading-sm leading-tight">
+          <p className="text-heading-sm leading-tight mt-1">
             {totalCoSigns.toLocaleString()}
           </p>
-          <p className="text-body-sm text-stone-gray">
+          <p className="text-body-sm text-stone-gray mt-1">
             co-signatures gathered across the district this month.
           </p>
           <button
             onClick={() => {
               if (incidents.length > 0) handleCoSign(incidents[0].id);
             }}
-            className="app-btn-outline w-full justify-center py-2 text-[13px] flex items-center gap-1.5"
+            className="mt-3 app-btn-outline w-full py-2.5 text-[13px] flex items-center gap-1.5"
           >
             <Users className="w-3.5 h-3.5" />
             Co-sign the top report

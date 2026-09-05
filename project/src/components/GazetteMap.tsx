@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
+﻿import React, { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
   MapPin,
   Plus,
@@ -197,8 +197,8 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
   const metersPerPixel = 111320 / scale;
   const scaleLabel =
     metersPerPixel >= 1000
-      ? `${(metersPerPixel / 1000).toFixed(1)} km`
-      : `${Math.round(metersPerPixel / 10) * 10} m`;
+      ? (metersPerPixel / 1000).toFixed(1) + ' km'
+      : (Math.round(metersPerPixel / 10) * 10) + ' m';
 
   return (
     <div className="app-card overflow-hidden mb-8">
@@ -211,8 +211,12 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
           <div>
             <h3 className="text-heading-sm">City Incident Map</h3>
             <p className="text-caption">
-              {visibleIncidents.length} pins in view · drag to pan · scroll to
-              zoom
+              {visibleIncidents.length} pins in view Â· drag to pan Â· scroll to
+              zoom {visibleIncidents.length === 0 && (
+                <span className="text-stone-gray/60 text-xs">
+                  No pins match current filters. Adjust status/range.
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -227,28 +231,44 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               <button
                 key={status}
                 onClick={() => toggleStatus(status)}
-                title={`Toggle ${meta.label} layer`}
-                className={`px-3 py-1.5 rounded-pill text-[12px] font-medium flex items-center gap-1.5 transition-all border ${
+                title={"Toggle " + meta.label + " layer"}
+                className={`px-4 py-2 rounded-xl text-[13px] font-medium flex items-center gap-2 transition-all border ${
                   active
-                    ? 'bg-warm-parchment dark:bg-white/[0.08] border-soft-mist dark:border-white/[0.12] text-ink-charcoal dark:text-ink-light'
-                    : 'bg-transparent border-transparent text-stone-gray opacity-50'
-                }`}
+                    ? 'bg-lilac-mist text-ink-charcoal border-soft-mist dark:border-white/[0.12]'
+                    : 'bg-transparent border-transparent text-stone-gray opacity-50'}
+                  style={{
+                    minHeight: '44px',
+                    minWidth: '120px'
+                  }}
+                }
               >
-                <span className={`w-2.5 h-2.5 rounded-full ${meta.dot} inline-block`} />
-                {meta.label} · {count}
+                <span
+                  style={{
+                    width: '1.5rem',
+                    height: '1.5rem',
+                    borderRadius: '999px',
+                    backgroundColor:
+                      meta.dot === 'bg-midnight-wine'
+                        ? '#421d24'
+                        : meta.dot === 'bg-royal-violet'
+                        ? '#714cb6'
+                        : '#0c4243',
+                }}
+                />
+                {meta.label} Â· {count}
               </button>
             );
           })}
           <button
             onClick={() => setShowDecor((v) => !v)}
             title="Toggle streets & labels"
-            className={`px-3 py-1.5 rounded-pill text-[12px] font-medium flex items-center gap-1.5 transition-all border ${
-              showDecor
-                ? 'bg-warm-parchment dark:bg-white/[0.08] border-soft-mist dark:border-white/[0.12] text-ink-charcoal dark:text-ink-light'
-                : 'bg-transparent border-transparent text-stone-gray opacity-50'
-            }`}
+            className="px-4 py-2 rounded-xl text-[13px] font-medium flex items-center gap-2 transition-all border " + (showDecor ? "bg-lilac-mist text-ink-charcoal border-soft-mist dark:border-white/[0.12]" : "bg-transparent border-transparent text-stone-gray opacity-50")
+                style={{
+                  minHeight: '44px',
+                  minWidth: '100px'
+                }}
           >
-            <Layers className="w-3.5 h-3.5" />
+            <Layers className="w-4 h-4" />
             Streets
           </button>
         </div>
@@ -257,7 +277,7 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       {/* Map Canvas */}
       <div
         ref={containerRef}
-        className="relative h-[380px] sm:h-[440px] lg:h-[500px] bg-warm-parchment dark:bg-canvas-dark overflow-hidden select-none touch-none cursor-grab active:cursor-grabbing"
+        className="relative h-[360px] sm:h-[400px] lg:h-[480px] bg-warm-parchment dark:bg-canvas-dark overflow-hidden cursor-grab active:cursor-grabbing"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
@@ -273,10 +293,10 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
             <div className="absolute left-[28%] top-[8%] bottom-[10%] w-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[7deg]" />
             <div className="absolute left-[58%] top-[6%] bottom-[14%] w-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[-6deg]" />
             <div className="absolute top-4 left-4 text-caption text-stone-gray uppercase tracking-widest">
-              Metropolitan Grid · Sector 04-A
+              Metropolitan Grid Â· Sector 04-A
             </div>
             <div className="absolute top-4 right-44 text-caption text-stone-gray font-mono">
-              {center.lat.toFixed(4)}°, {center.lng.toFixed(4)}°
+              {center.lat.toFixed(4)}Â°, {center.lng.toFixed(4)}Â°
             </div>
           </div>
         )}
@@ -302,9 +322,7 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setSelected(incident)}
                 title={incident.title}
-                className={`relative p-2.5 rounded-pill ${meta.pin} shadow-subtle flex items-center justify-center transition-transform duration-200 hover:scale-110 ${
-                  isSelected ? 'scale-110 ring-2 ring-lilac-mist' : ''
-                }`}
+                className="relative p-2.5 rounded-pill " + meta.pin + " shadow-subtle flex items-center justify-center transition-transform duration-200 hover:scale-110 " + (isSelected ? "scale-110 ring-2 ring-lilac-mist" : "")
               >
                 <MapPin className="w-5 h-5" />
               </button>
@@ -320,9 +338,9 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
           <div className="absolute bottom-4 right-4 left-4 sm:left-auto sm:w-[340px] app-card-floating p-5 z-30 space-y-3">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-2">
-                <span className={`w-2.5 h-2.5 rounded-full ${STATUS_META[selected.status].dot} inline-block`} />
+                <span className="w-2.5 h-2.5 rounded-full inline-block " + STATUS_META[selected.status].dot />
                 <span className="text-caption text-stone-gray uppercase tracking-wide">
-                  {STATUS_META[selected.status].label} · {selected.category}
+                  {STATUS_META[selected.status].label} Â· {selected.category}
                 </span>
               </div>
               <button
@@ -370,21 +388,21 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
           <button
             onClick={() => zoomBy(1.5)}
             title="Zoom in"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-tabs text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
           >
             <Plus className="w-4 h-4" />
           </button>
           <button
             onClick={() => zoomBy(0.67)}
             title="Zoom out"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-tabs text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
           >
             <Minus className="w-4 h-4" />
           </button>
           <button
             onClick={fitBounds}
             title="Fit to reports"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-tabs text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
           >
             <Focus className="w-4 h-4" />
           </button>
@@ -395,7 +413,7 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               setScale(5200);
             }}
             title="My city"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-tabs text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
           >
             <LocateFixed className="w-4 h-4" />
           </button>
@@ -405,7 +423,7 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
         <div className="absolute bottom-4 left-4 flex items-center gap-2 text-[11px] font-medium text-stone-gray">
           <span className="w-10 h-[3px] bg-royal-violet/70 rounded-pill inline-block" />
           {scaleLabel}
-          <span>· {Math.round((scale / MAX_SCALE) * 100)}% zoom</span>
+          <span>Â· {Math.round((scale / MAX_SCALE) * 100)}% zoom</span>
         </div>
       </div>
     </div>

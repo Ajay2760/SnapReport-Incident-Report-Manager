@@ -201,7 +201,7 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           </div>
 
           {/* Voice Note */}
-          <div className="p-4 rounded-cards border border-lilac-mist/50 dark:border-royal-violet/20 bg-lilac-mist/25 dark:bg-royal-violet/10 space-y-2.5">
+<div className="p-4 rounded-cards border border-lilac-mist/50 dark:border-royal-violet/20 bg-lilac-mist/25 dark:bg-royal-violet/10 space-y-2.5">
             <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light flex items-center gap-1.5">
               <Mic className="w-4 h-4 text-royal-violet" />
               Voice Note (Optional)
@@ -221,14 +221,19 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                   Record
                 </button>
               ) : (
-                <button
-                  type="button"
-                  onClick={stopRecording}
-                  className="bg-midnight-wine hover:bg-midnight-wine/90 text-white px-4 py-2 rounded-pill text-[13px] font-medium flex items-center gap-2 animate-pulse"
-                >
-                  <Square className="w-4 h-4" />
-                  Stop ({15 - recordingSeconds}s)
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={stopRecording}
+                    className="bg-midnight-wine hover:bg-midnight-wine/90 text-white px-4 py-2 rounded-pill text-[13px] font-medium flex items-center gap-2 animate-pulse"
+                  >
+                    <Square className="w-4 h-4" />
+                    Stop ({15 - recordingSeconds}s)
+                  </button>
+                  <span className="text-[12px] text-stone-gray/70">
+                    {recordingSeconds}s
+                  </span>
+                </div>
               )}
 
               {audioBlobUrl && !isRecording && (
@@ -358,11 +363,15 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-lilac-mist text-royal-violet rounded-pill text-[13px] font-semibold"
+                    className="relative inline-flex items-center gap-1.5 px-3 py-1 bg-lilac-mist text-royal-violet rounded-pill text-[13px] font-semibold"
                   >
                     #{tag}
-                    <button type="button" onClick={() => removeTag(tag)} className="hover:text-midnight-wine">
-                      <X className="w-3.5 h-3.5" />
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[11px] hover:text-midnight-wine"
+                    >
+                      <X className="w-3 h-3" />
                     </button>
                   </span>
                 ))}
@@ -374,15 +383,15 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 px-3.5 py-2 app-input text-[13px]"
+                className="flex-1 rounded-xl px-3.5 py-2 app-input text-[13x] placeholder:text-stone-gray placeholder"
                 placeholder="Add tag..."
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="app-btn-outline px-4 py-2 text-[13px] flex items-center gap-1"
+                className="app-btn-primary px-4 py-2 text-[13px] font-medium rounded-xl"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" />
                 Add
               </button>
             </div>
