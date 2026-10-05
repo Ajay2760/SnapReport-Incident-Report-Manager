@@ -4,25 +4,17 @@ import { useTheme } from '../contexts/ThemeContext';
 
 export const ThemeToggle: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
-
   return (
     <button
       onClick={toggleTheme}
-      className="app-btn-ghost px-3 py-2 text-[13px] flex items-center gap-2"
-      aria-label="Toggle Light or Dark Theme"
-      title="Switch Theme"
+      className="btn btn-ghost !min-h-[40px] !gap-2 !px-3.5 text-[13px]"
+      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      title="Switch theme"
     >
-      {isDark ? (
-        <>
-          <Sun className="w-4 h-4 text-royal-violet" />
-          <span className="hidden sm:inline">Light</span>
-        </>
-      ) : (
-        <>
-          <Moon className="w-4 h-4 text-midnight-wine" />
-          <span className="hidden sm:inline">Dark</span>
-        </>
-      )}
+      <span className="relative flex h-4 w-4 items-center justify-center">
+        {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </span>
+      <span className="hidden font-bold lg:inline">{isDark ? 'Light' : 'Dark'}</span>
     </button>
   );
 };

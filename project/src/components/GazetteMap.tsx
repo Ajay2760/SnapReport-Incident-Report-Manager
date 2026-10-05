@@ -1,4 +1,4 @@
-﻿import React, { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
   MapPin,
   Plus,
@@ -24,22 +24,25 @@ const MAX_SCALE = 60000;
 
 const STATUS_META: Record<
   Incident['status'],
-  { label: string; dot: string; pin: string }
+  { label: string; dotClass: string; pinClass: string; pinStyle?: React.CSSProperties }
 > = {
   open: {
     label: 'Open',
-    dot: 'bg-midnight-wine',
-    pin: 'bg-midnight-wine text-white',
+    dotClass: 'bg-accent',
+    pinClass: 'text-white',
+    pinStyle: { background: '#f59e0b' },
   },
   'in-progress': {
     label: 'In Repair',
-    dot: 'bg-royal-violet',
-    pin: 'bg-royal-violet text-white',
+    dotClass: 'bg-foreground-muted',
+    pinClass: 'text-white',
+    pinStyle: { background: 'var(--accent)' },
   },
   resolved: {
     label: 'Resolved',
-    dot: 'bg-deep-lagoon',
-    pin: 'bg-deep-lagoon text-white',
+    dotClass: 'bg-surface-hover',
+    pinClass: 'text-white',
+    pinStyle: { background: '#10b981' },
   },
 };
 
@@ -81,8 +84,7 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const update = () =>
-      setSize({ w: el.clientWidth, h: el.clientHeight });
+    const update = () => setSize({ w: el.clientWidth, h: el.clientHeight });
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
@@ -201,19 +203,20 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       : (Math.round(metersPerPixel / 10) * 10) + ' m';
 
   return (
-    <div className="app-card overflow-hidden mb-8">
+    <div className="bezel">
+      <div className="bezel-inner overflow-hidden">
       {/* Control Bar */}
-      <div className="p-4 sm:p-5 border-b border-soft-mist dark:border-white/[0.12] flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+      <div className="p-4 sm:p-5 border-b flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3" style={{ borderColor: 'var(--border-default)' }}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-cards bg-lilac-mist flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-royal-violet" />
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'var(--accent-glow)', color: 'var(--accent-bright)' }}>
+            <MapPin className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-heading-sm">City Incident Map</h3>
+            <h3 className="text-heading-3">City Incident Map</h3>
             <p className="text-caption">
-              {visibleIncidents.length} pins in view Â· drag to pan Â· scroll to
+              {visibleIncidents.length} pins in view · drag to pan · scroll to
               zoom {visibleIncidents.length === 0 && (
-                <span className="text-stone-gray/60 text-xs">
+                <span className="text-foreground-subtle text-xs">
                   No pins match current filters. Adjust status/range.
                 </span>
               )}
@@ -231,16 +234,16 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               <button
                 key={status}
                 onClick={() => toggleStatus(status)}
-                title={"Toggle " + meta.label + " layer"}
-                className={`px-4 py-2 rounded-xl text-[13px] font-medium flex items-center gap-2 transition-all border ${
+                title={`Toggle ${meta.label} layer`}
+                className={`btn px-4 py-2 rounded-button text-label transition-colors border ${
                   active
-                    ? 'bg-lilac-mist text-ink-charcoal border-soft-mist dark:border-white/[0.12]'
-                    : 'bg-transparent border-transparent text-stone-gray opacity-50'}
-                  style={{
-                    minHeight: '44px',
-                    minWidth: '120px'
-                  }}
-                }
+                    ? 'btn-secondary border-border-default'
+                    : 'btn-ghost border-transparent opacity-50'
+                }`}
+                style={{
+                  minHeight: '44px',
+                  minWidth: '120px',
+                }}
               >
                 <span
                   style={{
@@ -248,25 +251,29 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
                     height: '1.5rem',
                     borderRadius: '999px',
                     backgroundColor:
-                      meta.dot === 'bg-midnight-wine'
-                        ? '#421d24'
-                        : meta.dot === 'bg-royal-violet'
-                        ? '#714cb6'
-                        : '#0c4243',
-                }}
+                      meta.dotClass === 'bg-accent'
+                        ? '#5E6AD2'
+                        : meta.dotClass === 'bg-foreground-muted'
+                        ? '#8A8F98'
+                        : '#3a3a3f',
+                  }}
                 />
-                {meta.label} Â· {count}
+                {meta.label} · {count}
               </button>
             );
           })}
           <button
             onClick={() => setShowDecor((v) => !v)}
             title="Toggle streets & labels"
-            className="px-4 py-2 rounded-xl text-[13px] font-medium flex items-center gap-2 transition-all border " + (showDecor ? "bg-lilac-mist text-ink-charcoal border-soft-mist dark:border-white/[0.12]" : "bg-transparent border-transparent text-stone-gray opacity-50")
-                style={{
-                  minHeight: '44px',
-                  minWidth: '100px'
-                }}
+            className={`btn px-4 py-2 rounded-button text-label transition-colors ${
+              showDecor
+                ? 'btn-secondary border-border-default'
+                : 'btn-ghost border-transparent opacity-50'
+            }`}
+            style={{
+              minHeight: '44px',
+              minWidth: '100px',
+            }}
           >
             <Layers className="w-4 h-4" />
             Streets
@@ -277,7 +284,8 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
       {/* Map Canvas */}
       <div
         ref={containerRef}
-        className="relative h-[360px] sm:h-[400px] lg:h-[480px] bg-warm-parchment dark:bg-canvas-dark overflow-hidden cursor-grab active:cursor-grabbing"
+        className="relative h-[320px] sm:h-[400px] lg:h-[480px] overflow-hidden cursor-grab active:cursor-grabbing map-grid-bg"
+        style={{ background: 'var(--background-elevated)' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
@@ -287,16 +295,22 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
         {/* Decor layer */}
         {showDecor && (
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#e3e3e2_1px,transparent_1px),linear-gradient(to_bottom,#e3e3e2_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-            <div className="absolute left-[12%] right-[8%] top-[36%] h-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[-5deg]" />
-            <div className="absolute left-[6%] right-[16%] top-[64%] h-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[3deg]" />
-            <div className="absolute left-[28%] top-[8%] bottom-[10%] w-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[7deg]" />
-            <div className="absolute left-[58%] top-[6%] bottom-[14%] w-[2px] bg-soft-mist dark:bg-white/[0.05] rotate-[-6deg]" />
-            <div className="absolute top-4 left-4 text-caption text-stone-gray uppercase tracking-widest">
-              Metropolitan Grid Â· Sector 04-A
+            <div
+              className="absolute inset-0 opacity-40"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
+                backgroundSize: '4rem 4rem',
+              }}
+            />
+            <div className="absolute left-[12%] right-[8%] top-[36%] h-[2px] bg-border-default rotate-[-5deg]" />
+            <div className="absolute left-[6%] right-[16%] top-[64%] h-[2px] bg-border-default rotate-[3deg]" />
+            <div className="absolute left-[28%] top-[8%] bottom-[10%] w-[2px] bg-border-default rotate-[7deg]" />
+            <div className="absolute left-[58%] top-[6%] bottom-[14%] w-[2px] bg-border-default rotate-[-6deg]" />
+            <div className="absolute top-4 left-4 text-caption uppercase tracking-widest">
+              Metropolitan Grid · Sector 04-A
             </div>
-            <div className="absolute top-4 right-44 text-caption text-stone-gray font-mono">
-              {center.lat.toFixed(4)}Â°, {center.lng.toFixed(4)}Â°
+            <div className="absolute top-4 right-4 text-caption font-mono">
+              {center.lat.toFixed(4)}°, {center.lng.toFixed(4)}°
             </div>
           </div>
         )}
@@ -316,17 +330,20 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               style={{ left: pos.x, top: pos.y }}
             >
               {incident.status === 'open' && (
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-midnight-wine/60 animate-ping" />
+                <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-accent/60 animate-pulse" />
               )}
               <button
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => setSelected(incident)}
                 title={incident.title}
-                className="relative p-2.5 rounded-pill " + meta.pin + " shadow-subtle flex items-center justify-center transition-transform duration-200 hover:scale-110 " + (isSelected ? "scale-110 ring-2 ring-lilac-mist" : "")
+                style={meta.pinStyle}
+                className={`relative p-2.5 rounded-full ${meta.pinClass} flex items-center justify-center transition-transform duration-500 hover:scale-110 active:scale-95 ${
+                  isSelected ? 'scale-110 ring-2 ring-offset-2 ring-[var(--accent)]' : ''
+                }`}
               >
                 <MapPin className="w-5 h-5" />
               </button>
-              <span className="absolute left-1/2 top-full -translate-x-1/2 mt-1 hidden group-hover:block bg-ink-charcoal dark:bg-white text-white dark:text-ink-charcoal text-[11px] font-semibold py-1.5 px-3 rounded-pill whitespace-nowrap z-20 shadow-subtle">
+              <span className="absolute left-1/2 top-full -translate-x-1/2 mt-1 hidden group-hover:block bg-background-elevated text-foreground text-[11px] font-semibold py-1.5 px-3 rounded-full whitespace-nowrap z-20 shadow-inner-highlight">
                 {incident.title}
               </span>
             </div>
@@ -335,46 +352,46 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
 
         {/* Selected Popover */}
         {selected && (
-          <div className="absolute bottom-4 right-4 left-4 sm:left-auto sm:w-[340px] app-card-floating p-5 z-30 space-y-3">
+          <div className="absolute bottom-4 right-4 left-4 md:left-auto md:w-[340px] surface-glass p-5 z-30 space-y-3">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full inline-block " + STATUS_META[selected.status].dot />
-                <span className="text-caption text-stone-gray uppercase tracking-wide">
-                  {STATUS_META[selected.status].label} Â· {selected.category}
+                <span className={`w-2.5 h-2.5 rounded-full inline-block ${STATUS_META[selected.status].dotClass}`} />
+                <span className="text-caption uppercase tracking-wide">
+                  {STATUS_META[selected.status].label} · {selected.category}
                 </span>
               </div>
               <button
                 onClick={() => setSelected(null)}
-                className="text-stone-gray hover:text-ink-charcoal dark:hover:text-white transition-colors"
+                className="text-foreground-muted hover:text-foreground transition-colors"
                 aria-label="Close details"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <h4 className="text-heading-sm leading-snug">{selected.title}</h4>
-            <p className="text-body-sm text-stone-gray line-clamp-2">
+            <h4 className="text-heading-3 leading-snug">{selected.title}</h4>
+            <p className="text-body-sm text-foreground-muted line-clamp-2">
               {selected.description}
             </p>
 
-            <div className="flex items-center gap-1.5 text-[13px] text-stone-gray">
-              <MapPin className="w-3.5 h-3.5 text-royal-violet shrink-0" />
+            <div className="flex items-center gap-1.5 text-body-sm text-foreground-muted">
+              <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
               <span className="truncate">{selected.location}</span>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-soft-mist dark:border-white/[0.12] gap-2">
+            <div className="flex items-center justify-between pt-3 border-t border-border-default gap-2">
               <button
                 onClick={() => {
                   if (onCoSign) onCoSign(selected.id);
                 }}
-                className="app-btn-outline px-3.5 py-2 text-[13px] flex items-center gap-1.5"
+                className="btn btn-secondary px-3.5 py-2 text-body-sm"
               >
                 <ThumbsUp className="w-3.5 h-3.5" />
                 Co-sign ({selected.coSignersCount || 0})
               </button>
               <button
                 onClick={() => onSelectIncident(selected)}
-                className="app-btn-primary px-3.5 py-2 text-[13px] flex items-center gap-1.5"
+                className="btn btn-primary px-3.5 py-2 text-body-sm"
               >
                 View report
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -388,21 +405,21 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
           <button
             onClick={() => zoomBy(1.5)}
             title="Zoom in"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-surface border border-border-default rounded-button text-foreground flex items-center justify-center hover:btn-secondary"
           >
             <Plus className="w-4 h-4" />
           </button>
           <button
             onClick={() => zoomBy(0.67)}
             title="Zoom out"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-surface border border-border-default rounded-button text-foreground flex items-center justify-center hover:btn-secondary"
           >
             <Minus className="w-4 h-4" />
           </button>
           <button
             onClick={fitBounds}
             title="Fit to reports"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-surface border border-border-default rounded-button text-foreground flex items-center justify-center hover:btn-secondary"
           >
             <Focus className="w-4 h-4" />
           </button>
@@ -413,18 +430,19 @@ export const GazetteMap: React.FC<GazetteMapProps> = ({
               setScale(5200);
             }}
             title="My city"
-            className="w-9 h-9 bg-paper-white dark:bg-card-dark border border-soft-mist dark:border-white/[0.14] rounded-xl text-ink-charcoal dark:text-ink-light flex items-center justify-center hover:bg-warm-parchment dark:hover:bg-white/10 transition-colors"
+            className="w-9 h-9 bg-surface border border-border-default rounded-button text-foreground flex items-center justify-center hover:btn-secondary"
           >
             <LocateFixed className="w-4 h-4" />
           </button>
         </div>
 
         {/* Scale bar */}
-        <div className="absolute bottom-4 left-4 flex items-center gap-2 text-[11px] font-medium text-stone-gray">
-          <span className="w-10 h-[3px] bg-royal-violet/70 rounded-pill inline-block" />
+        <div className="absolute bottom-4 left-4 flex items-center gap-2 text-[11px] font-bold" style={{ color: 'var(--foreground-muted)' }}>
+          <span className="w-10 h-[3px] rounded-full inline-block" style={{ background: 'var(--accent)' }} />
           {scaleLabel}
-          <span>Â· {Math.round((scale / MAX_SCALE) * 100)}% zoom</span>
+          <span>· {Math.round((scale / MAX_SCALE) * 100)}% zoom</span>
         </div>
+      </div>
       </div>
     </div>
   );

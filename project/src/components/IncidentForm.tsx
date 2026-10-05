@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FileText, Tag, AlertTriangle, Plus, X, ShieldAlert, Mic, Square, Play, Pause, Clock, MapPin, User } from 'lucide-react';
+import { FileText, Tag, AlertTriangle, Plus, X, ShieldAlert, Mic, Square, Play, Pause, Clock, MapPin, User, Send, ArrowUpRight } from 'lucide-react';
 import { IncidentFormData } from '../types/incident';
 import { PhotoUpload } from './PhotoUpload';
 
@@ -136,19 +136,21 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
   };
 
   return (
-    <div className="fixed inset-0 bg-ink-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="app-card max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onCancel} />
+      <div className="bezel relative max-w-2xl w-full my-8 max-h-[90vh] overflow-y-auto">
+        <div className="bezel-inner p-6 sm:p-7">
         {/* Header */}
-        <div className="p-5 border-b border-soft-mist dark:border-white/[0.12] flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-border-default pb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-cards bg-lilac-mist flex items-center justify-center">
-              <ShieldAlert className="w-5 h-5 text-royal-violet" />
+            <div className="w-10 h-10 rounded-card bg-surface flex items-center justify-center">
+              <ShieldAlert className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <h2 className="text-heading-sm">
+              <h2 className="text-base font-semibold">
                 New Incident Report
               </h2>
-              <p className="text-[13px] text-stone-gray mt-0.5">
+              <p className="text-body-sm mt-0.5">
                 Municipal Report · Public Record
               </p>
             </div>
@@ -156,66 +158,60 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
 
           <button
             onClick={onCancel}
-            className="app-btn-ghost p-2"
+            className="btn btn-ghost p-2"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5 pt-6">
           
           {/* Title */}
-          <div>
-            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-royal-violet" />
-              Incident Title *
+          <div className="field">
+            <label className="flex items-center gap-1.5">
+              <FileText className="w-4 h-4 text-accent" />
+              <span className="text-caption">Incident Title</span>
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                errors.title ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
-              }`}
+              className={`field-input text-sm ${errors.title ? 'border-accent' : ''}`}
               placeholder="e.g. Hazardous Pothole near Main Street"
             />
-            {errors.title && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.title}</p>}
+            {errors.title && <p className="field-error">{errors.title}</p>}
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5">
-              Description *
+          <div className="field">
+            <label className="flex items-center gap-1.5">
+              <span className="text-caption">Description</span>
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={3}
-              className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                errors.description ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
-              }`}
+              className={`field-input text-sm resize-none ${errors.description ? 'border-accent' : ''}`}
               placeholder="Provide complete details, safety hazards, and community impact..."
             />
-            {errors.description && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.description}</p>}
+            {errors.description && <p className="field-error">{errors.description}</p>}
           </div>
 
           {/* Voice Note */}
-<div className="p-4 rounded-cards border border-lilac-mist/50 dark:border-royal-violet/20 bg-lilac-mist/25 dark:bg-royal-violet/10 space-y-2.5">
-            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light flex items-center gap-1.5">
-              <Mic className="w-4 h-4 text-royal-violet" />
-              Voice Note (Optional)
+<div className="rounded-card border border-border-default bg-surface p-4 space-y-2.5">
+            <label className="flex items-center gap-1.5">
+              <Mic className="w-4 h-4 text-accent" />
+              <span className="text-caption">Voice Note (Optional)</span>
             </label>
-            <p className="text-[11px] text-stone-gray">
-              Record a 15-second voice description.
-            </p>
+            <p className="text-body-sm">Record a 15-second voice description.</p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {!isRecording ? (
                 <button
                   type="button"
                   onClick={startRecording}
-                  className="app-btn-primary px-4 py-2 text-[13px] flex items-center gap-2"
+                  className="btn btn-primary px-4 py-2 text-sm flex items-center gap-2"
                 >
                   <Mic className="w-4 h-4" />
                   Record
@@ -225,33 +221,33 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                   <button
                     type="button"
                     onClick={stopRecording}
-                    className="bg-midnight-wine hover:bg-midnight-wine/90 text-white px-4 py-2 rounded-pill text-[13px] font-medium flex items-center gap-2 animate-pulse"
+                    className="btn btn-primary px-4 py-2 text-sm flex items-center gap-2 animate-pulse"
                   >
                     <Square className="w-4 h-4" />
                     Stop ({15 - recordingSeconds}s)
                   </button>
-                  <span className="text-[12px] text-stone-gray/70">
+                  <span className="text-body-sm">
                     {recordingSeconds}s
                   </span>
                 </div>
               )}
 
               {audioBlobUrl && !isRecording && (
-                <div className="flex items-center gap-3 px-3.5 py-2 rounded-pill bg-paper-white dark:bg-white/[0.06] border border-soft-mist dark:border-white/[0.12]">
+                <div className="flex items-center gap-3 rounded-pill border border-border-default bg-surface px-3.5 py-2">
                   <button
                     type="button"
                     onClick={togglePlayAudio}
-                    className="text-royal-violet"
+                    className="text-accent"
                   >
                     {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
-                  <span className="text-[13px] font-semibold text-ink-charcoal dark:text-ink-light">
+                  <span className="text-sm font-semibold">
                     {isPlayingAudio ? 'Playing...' : 'Ready'}
                   </span>
                   <button
                     type="button"
                     onClick={() => { setAudioBlobUrl(null); setFormData(prev => ({ ...prev, audioUrl: undefined })); }}
-                    className="text-stone-gray hover:text-midnight-wine text-[13px] ml-1"
+                    className="text-foreground-muted text-sm ml-1 hover:text-foreground"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -263,113 +259,117 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           {/* Classification Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
-                <Tag className="w-3.5 h-3.5 text-royal-violet" />
-                Category
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => handleChange('category', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
-              >
-                <option value="safety">Safety Hazard</option>
-                <option value="infrastructure">Infrastructure</option>
-                <option value="environmental">Environmental</option>
-                <option value="security">Public Security</option>
-                <option value="maintenance">Maintenance</option>
-                <option value="other">Other</option>
-              </select>
+              <div className="field">
+                <label className="flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-caption">Category</span>
+                </label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => handleChange('category', e.target.value)}
+                  className="field-input field-select text-sm font-medium cursor-pointer"
+                >
+                  <option value="safety">Safety Hazard</option>
+                  <option value="infrastructure">Infrastructure</option>
+                  <option value="environmental">Environmental</option>
+                  <option value="security">Public Security</option>
+                  <option value="maintenance">Maintenance</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-royal-violet" />
-                Priority
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) => handleChange('priority', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
-              </select>
+              <div className="field">
+                <label className="flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-caption">Priority</span>
+                </label>
+                <select
+                  value={formData.priority}
+                  onChange={(e) => handleChange('priority', e.target.value)}
+                  className="field-input field-select text-sm font-medium cursor-pointer"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </div>
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-royal-violet" />
-                Target ETA
-              </label>
-              <select
-                value={formData.eta || 'Within 48 Hours'}
-                onChange={(e) => handleChange('eta', e.target.value)}
-                className="w-full px-3 py-2.5 app-input text-[13px] font-medium cursor-pointer"
-              >
-                <option value="Within 24 Hours">24 Hours</option>
-                <option value="Within 48 Hours">48 Hours</option>
-                <option value="Within 3 Days">3 Days</option>
-                <option value="Within 1 Week">1 Week</option>
-              </select>
+              <div className="field">
+                <label className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-caption">Target ETA</span>
+                </label>
+                <select
+                  value={formData.eta || 'Within 48 Hours'}
+                  onChange={(e) => handleChange('eta', e.target.value)}
+                  className="field-input field-select text-sm font-medium cursor-pointer"
+                >
+                  <option value="Within 24 Hours">24 Hours</option>
+                  <option value="Within 48 Hours">48 Hours</option>
+                  <option value="Within 3 Days">3 Days</option>
+                  <option value="Within 1 Week">1 Week</option>
+                </select>
+              </div>
             </div>
           </div>
 
           {/* Location & Reporter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-royal-violet" />
-                Location *
-              </label>
-              <input
-                type="text"
-                value={formData.location}
-                onChange={(e) => handleChange('location', e.target.value)}
-                className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                  errors.location ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
-                }`}
-                placeholder="Street address or landmark"
-              />
-              {errors.location && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.location}</p>}
+              <div className="field">
+                <label className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-caption">Location</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.location}
+                  onChange={(e) => handleChange('location', e.target.value)}
+                  className={`field-input text-sm ${errors.location ? 'border-accent' : ''}`}
+                  placeholder="Street address or landmark"
+                />
+                {errors.location && <p className="field-error">{errors.location}</p>}
+              </div>
             </div>
 
             <div>
-              <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5 flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-royal-violet" />
-                Your Name *
-              </label>
-              <input
-                type="text"
-                value={formData.reportedBy}
-                onChange={(e) => handleChange('reportedBy', e.target.value)}
-                className={`w-full px-3.5 py-2.5 app-input text-[13px] ${
-                  errors.reportedBy ? 'border-royal-violet ring-1 ring-lilac-mist' : ''
-                }`}
-                placeholder="Full name"
-              />
-              {errors.reportedBy && <p className="text-royal-violet font-semibold mt-1.5 text-[11px]">{errors.reportedBy}</p>}
+              <div className="field">
+                <label className="flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-caption">Your Name</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.reportedBy}
+                  onChange={(e) => handleChange('reportedBy', e.target.value)}
+                  className={`field-input text-sm ${errors.reportedBy ? 'border-accent' : ''}`}
+                  placeholder="Full name"
+                />
+                {errors.reportedBy && <p className="field-error">{errors.reportedBy}</p>}
+              </div>
             </div>
           </div>
 
           {/* Tags */}
-          <div>
-            <label className="block font-semibold text-[13px] text-ink-charcoal dark:text-ink-light mb-1.5">
-              Tags (Optional)
-            </label>
+          <div className="field">
+            <span className="text-caption">Tags (Optional)</span>
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-2.5">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="relative inline-flex items-center gap-1.5 px-3 py-1 bg-lilac-mist text-royal-violet rounded-pill text-[13px] font-semibold"
+                    className="relative inline-flex items-center gap-1.5 rounded-pill bg-accent-glow border border-border-accent px-3 py-1 text-sm font-semibold"
                   >
                     #{tag}
                     <button
                       type="button"
                       onClick={() => removeTag(tag)}
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[11px] hover:text-midnight-wine"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[11px] hover:text-accent"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -383,13 +383,13 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 rounded-xl px-3.5 py-2 app-input text-[13x] placeholder:text-stone-gray placeholder"
+                className="field-input flex-1 rounded-xl px-3.5 py-2 text-sm placeholder:text-foreground-subtle"
                 placeholder="Add tag..."
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="app-btn-primary px-4 py-2 text-[13px] font-medium rounded-xl"
+                className="btn btn-primary px-4 py-2 text-sm font-medium rounded-xl"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add
@@ -401,23 +401,25 @@ export const IncidentForm: React.FC<IncidentFormProps> = ({ onSubmit, onCancel }
           <PhotoUpload onPhotoSelect={setSelectedPhoto} />
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-soft-mist dark:border-white/[0.12]">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t" style={{ borderColor: 'var(--border-default)' }}>
             <button
               type="submit"
-              className="flex-1 app-btn-primary py-3 px-6 text-[15px] font-semibold"
+              className="btn btn-primary group flex-1 py-3 px-6 text-sm font-bold"
             >
-              Submit Report
+              Submit report
+              <span className="btn-icon-circle"><Send className="h-4 w-4" /></span>
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="app-btn-ghost py-3 px-6 text-[15px] font-semibold"
+              className="btn btn-ghost py-3 px-6 text-sm font-semibold"
             >
               Cancel
             </button>
           </div>
 
         </form>
+        </div>
       </div>
     </div>
   );

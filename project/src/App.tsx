@@ -7,10 +7,9 @@ import {
   LayoutList,
   PhoneCall,
   ShieldAlert,
-  Zap,
+  ArrowUpRight,
   ArrowRight,
   MapPin,
-  Compass,
   Landmark,
   Building2,
   Home,
@@ -18,6 +17,8 @@ import {
   Warehouse,
   Waves,
   AlertCircle,
+  Zap,
+  Siren,
 } from "lucide-react";
 import {
   Incident,
@@ -33,6 +34,7 @@ import { GazetteMap } from "./components/GazetteMap";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { NotificationBell } from "./components/NotificationBell";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { useReveal } from "./hooks/useReveal";
 
 // Realistic Mock Incidents with Coordinates & Before/After Proof Photos
 const mockIncidents: Incident[] = [
@@ -150,6 +152,7 @@ function AppContent() {
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: "",
     statusFilter: "",
@@ -157,6 +160,8 @@ function AppContent() {
     priorityFilter: "",
     tags: [],
   });
+
+  useReveal(incidents.length + viewMode);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -180,6 +185,7 @@ function AppContent() {
 
   const navigate = (mode: "list" | "map" | null, target: string) => {
     if (mode) setViewMode(mode);
+    setMenuOpen(false);
     setTimeout(() => {
       document
         .getElementById(target)
@@ -319,578 +325,435 @@ function AppContent() {
   });
 
   return (
-    <div className="min-h-screen bg-warm-parchment dark:bg-canvas-dark text-ink-charcoal dark:text-ink-light font-sans transition-colors duration-300">
-      {/* ═══ Pill Announcement Banner — filled at the very top ═══ */}
-      <div className="px-4 sm:px-6">
-        <div className="announcement-pill mt-3 rounded-full max-w-page mx-auto">
-          <div className="flex items-center gap-2.5 text-[13px] font-medium">
-            <ShieldAlert className="w-4 h-4 text-lilac-mist shrink-0" />
-            <span className="truncate">
-              Life-threatening emergency? Gas leaks, fallen power lines, fire
-            </span>
-          </div>
-          <button
-            onClick={() => setShowEmergencyModal(true)}
-            className="flex items-center gap-1.5 text-[13px] font-medium border border-white/40 rounded-small px-3 py-1.5 hover:bg-white/10 transition-colors shrink-0"
-          >
-            <PhoneCall className="w-3.5 h-3.5" />
+    <div className="bg-canvas grain min-h-screen font-sans" style={{ color: "var(--foreground)" }}>
+      {/* ═══ Emergency strip ═══ */}
+      <div className="container-inline pt-5">
+        <div className="reveal mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-2.5 rounded-full border px-4 py-2 text-[13px]"
+          style={{ background: "var(--surface)", borderColor: "var(--border-default)" }}>
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#f43f5e]/15 text-[#f43f5e]">
+            <Siren className="h-3.5 w-3.5" />
+          </span>
+          <span className="font-medium" style={{ color: "var(--foreground-muted)" }}>
+            Life-threatening emergency? Gas leaks, fallen power lines, fire
+          </span>
+          <button onClick={() => setShowEmergencyModal(true)} className="font-bold underline decoration-[#f43f5e]/50 underline-offset-4 hover:decoration-[#f43f5e]">
             Call 911 / 311
           </button>
         </div>
       </div>
 
-      {/* ═══ Live Dispatch Ticker ═══ */}
-      <div className="mt-3">
-        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-3 py-2">
-          <div className="flex items-center gap-3">
-            <span className="app-badge bg-royal-violet text-white text-[11px]">
-              <Radio className="w-3 h-3 animate-pulse" /> LIVE
+      {/* ═══ Live ticker ═══ */}
+      <div className="container-inline mt-4">
+        <div className="reveal flex flex-col items-center justify-between gap-2 py-1 sm:flex-row">
+          <div className="flex items-center gap-3 text-[13px]">
+            <span className="badge-live badge">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              LIVE
             </span>
-            <span className="truncate max-w-md text-body-sm text-stone-gray">
+            <span className="truncate font-medium" style={{ color: "var(--foreground-muted)" }}>
               {incidents.length > 0
                 ? `Latest: ${incidents[0].title} — ${incidents[0].status}`
                 : "All Municipal Services Operational"}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-caption text-stone-gray uppercase tracking-widest">
-            <span className="text-ink-charcoal dark:text-ink-light font-semibold">
-              SnapReport
-            </span>
-            <span className="text-royal-violet">-</span>
+          <div className="hidden items-center gap-2 text-[13px] font-semibold sm:flex" style={{ color: "var(--foreground-muted)" }}>
+            <span style={{ color: "var(--foreground)" }}>SnapReport</span>
+            <span aria-hidden>·</span>
             <span>Metropolitan Region</span>
           </div>
         </div>
       </div>
 
-      {/* ═══ Navigation Header — sticky, frosted glass ═══ */}
-      <header
-        className={`sticky top-0 z-40 nav-glass ${scrolled ? "scrolled" : ""}`}
-      >
-        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <button
-            onClick={() => navigate(null, "top")}
-            className="flex items-center gap-2.5"
-            aria-label="SnapReport home"
-          >
-            <div className="w-9 h-9 rounded-cards bg-midnight-wine flex items-center justify-center">
-              <Zap className="w-4.5 h-4.5 text-white" />
-            </div>
-            <span className="h-[1px] w-8 bg-ink-charcoal/20 dark:bg-white/20 hidden sm:block" />
-            <span className="text-label-bold tracking-tight text-ink-charcoal dark:text-ink-light hidden sm:block">
+      {/* ═══ Floating island nav ═══ */}
+      <div className="sticky top-3.5 z-40 px-4">
+        <header className={`nav-island ${scrolled ? "scrolled" : ""}`}>
+          <button onClick={() => navigate(null, "top")} className="group flex items-center gap-2.5 rounded-full py-1 pl-1 pr-3" aria-label="SnapReport home">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full text-white" style={{ background: "var(--accent)", boxShadow: "0 8px 20px -6px var(--accent-glow)" }}>
+              <Zap className="h-4 w-4" />
+            </span>
+            <span className="hidden text-[15px] font-800 font-extrabold tracking-tight sm:inline" style={{ color: "var(--foreground)" }}>
               SnapReport
             </span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {[
               { label: "Dashboard", id: "dashboard", mode: null },
               { label: "Reports", id: "feed", mode: "list" as const },
               { label: "Map", id: "map", mode: "map" as const },
               { label: "Community", id: "community", mode: null },
             ].map((item) => (
-              <button
-                key={item.label}
-                onClick={() => navigate(item.mode, item.id)}
-                className="px-3.5 py-2 text-[15px] font-medium text-ink-charcoal dark:text-ink-light rounded-small hover:bg-lilac-mist/40 hover:text-ink-charcoal transition-colors"
-              >
+              <button key={item.label} onClick={() => navigate(item.mode, item.id)} className="nav-link">
                 {item.label}
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <ThemeToggle />
             <NotificationBell />
-            <button
-              onClick={() => setShowForm(true)}
-              className="app-btn-primary px-4 py-2.5 text-[13px] flex items-center gap-1.5"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Report Incident</span>
+            <button onClick={() => setShowForm(true)} className="btn btn-primary group ml-1 !min-h-[40px] !py-2 text-[13.5px]">
+              <Plus className="h-4 w-4 transition-transform duration-500 group-hover:rotate-90" style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }} />
+              <span className="hidden sm:inline">Report incident</span>
+              <span className="btn-icon-circle hidden sm:inline-flex"><ArrowUpRight className="h-4 w-4" /></span>
+            </button>
+            <button onClick={() => setMenuOpen((v) => !v)} className="btn btn-ghost !min-h-[40px] !px-3 md:hidden" aria-label="Menu">
+              <span className="relative block h-4 w-5">
+                <span className={`absolute left-0 top-0 h-[2px] w-full rounded transition-all duration-500 ${menuOpen ? "top-[7px] rotate-45" : ""}`} style={{ background: "var(--foreground)" }} />
+                <span className={`absolute left-0 top-[7px] h-[2px] w-full rounded transition-all duration-500 ${menuOpen ? "opacity-0" : ""}`} style={{ background: "var(--foreground)" }} />
+                <span className={`absolute left-0 top-[14px] h-[2px] w-full rounded transition-all duration-500 ${menuOpen ? "top-[7px] -rotate-45" : ""}`} style={{ background: "var(--foreground)" }} />
+              </span>
             </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* ═══ Hero — full-bleed golden-hour photography ═══ */}
-      <section id="top" className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1920&q=80')",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-warm-parchment" />
-
-        <div className="relative max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 app-badge bg-white/70 backdrop-blur-sm border border-soft-mist text-ink-charcoal text-[13px]">
-              <Users className="w-3.5 h-3.5 text-royal-violet" />
-              Citizen-Powered Civic Response
-            </div>
-
-            <h1 className="text-display mt-6 text-ink-charcoal">
-              Report. Upvote. Track Repairs.
-            </h1>
-
-            <p className="text-subheading mt-6 max-w-xl text-ink-charcoal/90">
-              A transparent platform for citizens to report potholes, outages,
-              and safety hazards. Support neighboring issues, follow repairs on
-              the live map, and hold the city accountable.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              <button
-                onClick={() => setShowForm(true)}
-                className="app-btn-primary px-6 py-3.5 text-[15px] flex items-center gap-2"
-              >
-                Report an Incident
-                <ArrowRight className="w-4 h-4" />
+        {menuOpen && (
+          <div className="surface-glass mx-auto mt-2 w-fit max-w-full rounded-3xl p-2 md:hidden">
+            {[
+              { label: "Dashboard", id: "dashboard", mode: null },
+              { label: "Reports", id: "feed", mode: "list" as const },
+              { label: "Map", id: "map", mode: "map" as const },
+              { label: "Community", id: "community", mode: null },
+            ].map((item, i) => (
+              <button key={item.label} onClick={() => navigate(item.mode, item.id)}
+                className="reveal is-visible flex w-56 items-center justify-between rounded-2xl px-5 py-3.5 text-[15px] font-semibold hover:bg-[var(--surface)]"
+                style={{ transitionDelay: `${i * 60}ms`, color: "var(--foreground)" }}>
+                {item.label}
+                <ArrowRight className="h-4 w-4 opacity-50" />
               </button>
-              <button
-                onClick={() => navigate("map", "map")}
-                className="app-btn-outline px-6 py-3.5 text-[15px] flex items-center gap-2"
-              >
-                <Map className="w-4 h-4" />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ═══ Hero — editorial split ═══ */}
+      <section id="top" className="container-inline pt-12 sm:pt-16 lg:pt-20">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+          <div className="reveal">
+            <span className="eyebrow"><span className="dot" /> Citizen-powered civic response</span>
+            <h1 className="text-display mt-6 text-balance">
+              Report. Rally.
+              <br />
+              <span className="text-display-serif font-normal">Track repairs</span>{" "}
+              <span className="text-gradient">to done.</span>
+            </h1>
+            <p className="text-lead mt-6 max-w-xl">
+              A transparent operations console for potholes, outages and safety
+              hazards. Co-sign your neighbor's issue, follow crews on the live
+              map, and close the loop with photo proof.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <button onClick={() => setShowForm(true)} className="btn btn-primary group px-6 py-3.5 text-[15px]">
+                Report an incident
+                <span className="btn-icon-circle"><ArrowUpRight className="h-4 w-4" /></span>
+              </button>
+              <button onClick={() => navigate("map", "map")} className="btn btn-secondary group px-6 py-3.5 text-[15px]">
+                <Map className="h-4 w-4" />
                 Explore the map
               </button>
             </div>
+            <dl className="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t pt-7" style={{ borderColor: "var(--border-default)" }}>
+              {[
+                { v: incidents.length, l: "Active reports" },
+                { v: totalCoSigns, l: "Neighbor co-signs" },
+                { v: resolvedCount, l: "Resolved by city" },
+              ].map((s) => (
+                <div key={s.l}>
+                  <dt className="order-2 mt-1.5 block text-[12.5px] font-medium" style={{ color: "var(--foreground-muted)" }}>{s.l}</dt>
+                  <dd className="stat-num tabular">{s.v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
 
-            <div className="hidden sm:flex flex-wrap items-center gap-6 mt-10 text-body-sm text-ink-charcoal/80">
-              <span className="flex items-center gap-2 font-semibold">
-                <span className="w-2 h-2 rounded-full bg-midnight-wine inline-block" />
-                {incidents.length} Active Reports
-              </span>
-              <span className="flex items-center gap-2 font-semibold">
-                <span className="w-2 h-2 rounded-full bg-royal-violet inline-block" />
-                {totalCoSigns} Neighbor Co-Signs
-              </span>
-              <span className="flex items-center gap-2 font-semibold">
-                <span className="w-2 h-2 rounded-full bg-deep-lagoon inline-block" />
-                {resolvedCount} Resolved by City
-              </span>
+          {/* Bento visual */}
+          <div className="reveal grid gap-3 sm:grid-cols-2" style={{ transitionDelay: "120ms" }}>
+            <div className="bezel sm:col-span-2">
+              <div className="bezel-inner relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1400&q=80"
+                  alt="City at golden hour" className="h-60 w-full object-cover sm:h-72" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 30%, rgba(2,2,4,0.72) 100%)" }} />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/70">Live dispatch</p>
+                    <p className="mt-1 text-lg font-bold text-white">{inProgressCount} crews in the field right now</p>
+                  </div>
+                  <button onClick={() => navigate("map", "map")} className="btn group bg-white/12 !min-h-[40px] text-[13px] text-white backdrop-blur-xl hover:bg-white/20" style={{ background: "rgba(255,255,255,0.14)" }}>
+                    Track <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </button>
+                </div>
+                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-[12px] font-bold text-white backdrop-blur-xl">
+                  <Radio className="h-3.5 w-3.5" /> SECTOR 04-A · LIVE
+                </div>
+              </div>
+            </div>
+
+            <div className="bezel">
+              <div className="bezel-inner p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-caption">Neighbor petition</span>
+                  <Users className="h-4 w-4" style={{ color: "var(--accent-bright)" }} />
+                </div>
+                <p className="stat-num tabular mt-3">{totalCoSigns.toLocaleString()}</p>
+                <p className="text-body-sm mt-1">co-signatures this month across the district.</p>
+                <div className="mt-3 flex -space-x-2">
+                  {["JD", "SM", "MV", "+"].map((t, i) => (
+                    <span key={i} className="flex h-8 w-8 items-center justify-center rounded-full border-2 text-[10px] font-bold text-white"
+                      style={{ background: "var(--accent)", borderColor: "var(--background-elevated)" }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="bezel">
+              <div className="bezel-inner flex h-full flex-col justify-between p-5" style={{ background: "var(--accent)", borderColor: "transparent" }}>
+                <div className="flex items-center justify-between text-white">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">Resolution rate</span>
+                  <ShieldAlert className="h-4 w-4" />
+                </div>
+                <p className="mt-4 text-5xl font-extrabold tracking-tight text-white tabular">94%</p>
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/25">
+                  <div className="h-full w-[94%] rounded-full bg-white" />
+                </div>
+                <button onClick={() => { if (incidents.length) handleCoSign(incidents[0].id); }}
+                  className="btn mt-4 w-full bg-white !min-h-[42px] text-[13.5px] font-bold text-[#2b2f9e] hover:bg-white/90">
+                  Co-sign top report
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Floating glass product cards over the photograph */}
-        {/* Always visible - stack on mobile, sit side-by-side on larger screens */}
-        <div className="app-card-floating animate-float pointer-events-auto w-full md:w-1/2 md:w-auto mt-6 mb-6 mx-auto left-1/2 -translate-x-1/2 z-10">
-          <div className="flex items-center justify-between">
-            <span className="text-caption text-stone-gray">Live Dispatch</span>
-            <Radio className="w-4 h-4 text-royal-violet animate-pulse" />
-          </div>
-          <div className="flex -space-x-2">
-            {["JD", "SM", "MV", "+"].map((initials, idx) => (
-              <div
-                key={`${initials}-${idx}`}
-                className="w-8 h-8 rounded-full bg-midnight-wine text-white text-[10px] font-semibold flex items-center justify-center border-2 border-white"
-              >
-                {initials}
-              </div>
+        {/* Trust strip */}
+        <div className="reveal mt-14 flex flex-col items-center gap-5 border-y py-7" style={{ borderColor: "var(--border-default)" }}>
+          <p className="text-caption">Helping neighborhoods get fixed — together</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-9 gap-y-3 opacity-70">
+            {trustLogos.map(({ name, icon: Icon }) => (
+              <span key={name} className="flex items-center gap-2 text-[14.5px] font-bold tracking-tight" style={{ color: "var(--foreground-muted)" }}>
+                <Icon className="h-[18px] w-[18px]" /> {name}
+              </span>
             ))}
           </div>
-          <p className="text-body-sm font-medium mt-2">
-            {inProgressCount} crews in the field responding to open reports.
-          </p>
-          <button
-            onClick={() => navigate("map", "map")}
-            className="mt-3 text-[13px] font-medium text-royal-violet flex items-center gap-1.5 link-learn"
-          >
-            Track dispatches <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="app-card-floating animate-float pointer-events-auto w-full md:w-1/2 md:w-auto mt-6 mb-6 mx-auto left-1/2 -translate-x-1/2 z-10">
-          <div className="flex items-center justify-between">
-            <span className="text-caption text-stone-gray">Neighbor Petition</span>
-            <Compass className="w-4 h-4 text-royal-violet" />
-          </div>
-          <p className="text-heading-sm leading-tight mt-1">
-            {totalCoSigns.toLocaleString()}
-          </p>
-          <p className="text-body-sm text-stone-gray mt-1">
-            co-signatures gathered across the district this month.
-          </p>
-          <button
-            onClick={() => {
-              if (incidents.length > 0) handleCoSign(incidents[0].id);
-            }}
-            className="mt-3 app-btn-outline w-full py-2.5 text-[13px] flex items-center gap-1.5"
-          >
-            <Users className="w-3.5 h-3.5" />
-            Co-sign the top report
-          </button>
         </div>
       </section>
 
-      {/* ═══ Trust Logo Band — single row of six white cells ═══ */}
-      <section className="max-w-page mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center text-caption text-stone-gray mb-4">
-          Helping neighborhoods get fixed, together
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 border border-soft-mist bg-paper-white divide-x divide-soft-mist rounded-cards overflow-hidden">
-          {trustLogos.map(({ name, icon: Icon }) => (
-            <div
-              key={name}
-              className="flex flex-col items-center justify-center gap-2.5 py-7 px-4 text-center"
-            >
-              <Icon className="w-5 h-5 text-ink-charcoal/70" />
-              <span className="text-[15px] font-semibold text-ink-charcoal tracking-tight">
-                {name}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══ Main editorial content on parchment ═══ */}
-      <main id="dashboard" className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      {/* ═══ Operations ═══ */}
+      <main id="dashboard" className="container-inline section-pad scroll-mt-24 !pb-8">
+        <div className="reveal flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <span className="text-caption text-royal-violet uppercase tracking-widest">
-              The District, At a Glance
-            </span>
-            <h2 className="text-heading-lg mt-3">Your neighborhood, live.</h2>
+            <span className="eyebrow"><span className="dot" /> The district, at a glance</span>
+            <h2 className="text-heading-1 mt-4">Your neighborhood, <span className="text-display-serif font-normal">live.</span></h2>
           </div>
-          <p className="text-body-sm text-stone-gray max-w-sm sm:text-right">
-            Every report below is public record. Follow repairs end-to-end, then
-            confirm the fix with photo proof.
+          <p className="text-body-sm max-w-sm sm:text-right">
+            Every report is public record. Follow repairs end-to-end, then confirm the fix with photo proof.
           </p>
         </div>
 
-        <Dashboard incidents={incidents} />
+        <div className="reveal mt-8"><Dashboard incidents={incidents} /></div>
+        <div className="reveal mt-4"><AdvancedSearch filters={filters} onFiltersChange={setFilters} availableTags={availableTags} /></div>
 
-        <AdvancedSearch
-          filters={filters}
-          onFiltersChange={setFilters}
-          availableTags={availableTags}
-        />
-
-        {/* ═══ Suite Tab Strip — List / Map ═══ */}
-        <div id="feed" className="app-card p-4 sm:p-6 mb-8 scroll-mt-24">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-cards bg-lilac-mist flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-royal-violet" />
+        {/* Feed header */}
+        <div id="feed" className="bezel reveal mt-4 scroll-mt-32">
+          <div className="bezel-inner flex flex-col justify-between gap-4 p-4 sm:p-5 md:flex-row md:items-center">
+            <div className="flex items-center gap-3.5">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl" style={{ background: "var(--accent-glow)", color: "var(--accent-bright)" }}>
+                <MapPin className="h-5 w-5" />
+              </span>
+              <div>
+                <h3 className="text-heading-3">Community reports</h3>
+                <p className="text-body-sm">{filteredIncidents.length} in view · sorted by recent activity</p>
               </div>
-              <h3 className="text-heading-sm">
-                Community Reports ({filteredIncidents.length})
-              </h3>
             </div>
-
-            <div className="flex items-center p-1 bg-warm-parchment dark:bg-white/[0.06] rounded-tabs border border-soft-mist dark:border-white/[0.12]">
-              <button
-                onClick={() => setViewMode("list")}
-                className={`px-5 py-2.5 rounded-tabs text-[13px] font-medium flex items-center gap-2 transition-all ${
-                  viewMode === "list"
-                    ? "bg-lilac-mist text-ink-charcoal"
-                    : "text-stone-gray hover:text-ink-charcoal dark:hover:text-ink-light"
-                }`}
-              >
-                <LayoutList className="w-4 h-4" />
-                List
-              </button>
-              <button
-                onClick={() => setViewMode("map")}
-                className={`px-5 py-2.5 rounded-tabs text-[13px] font-medium flex items-center gap-2 transition-all ${
-                  viewMode === "map"
-                    ? "bg-lilac-mist text-ink-charcoal"
-                    : "text-stone-gray hover:text-ink-charcoal dark:hover:text-ink-light"
-                }`}
-              >
-                <Map className="w-4 h-4" />
-                Map
-              </button>
+            <div className="flex items-center gap-1 rounded-full border p-1" style={{ borderColor: "var(--border-default)", background: "var(--surface)" }}>
+              {([
+                { k: "list", label: "List", icon: LayoutList },
+                { k: "map", label: "Map", icon: Map },
+              ] as const).map((t) => (
+                <button key={t.k} onClick={() => setViewMode(t.k)}
+                  className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-[13.5px] font-bold transition-all duration-500 ${viewMode === t.k ? "text-white shadow-lg" : ""}`}
+                  style={viewMode === t.k ? { background: "var(--accent)", transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" } : { color: "var(--foreground-muted)" }}>
+                  <t.icon className="h-4 w-4" /> {t.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* ═══ Feed / Map ═══ */}
         {viewMode === "map" ? (
-          <div id="map" className="scroll-mt-24">
-            <GazetteMap
-              incidents={filteredIncidents}
-              onSelectIncident={handleSelectIncidentFromMap}
-              onCoSign={handleCoSign}
-            />
+          <div id="map" className="reveal is-visible mt-4 scroll-mt-32">
+            <GazetteMap incidents={filteredIncidents} onSelectIncident={handleSelectIncidentFromMap} onCoSign={handleCoSign} />
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="mt-4 space-y-4">
             {filteredIncidents.length === 0 ? (
-              <div className="text-center py-20 border-2 border-dashed border-soft-mist dark:border-white/[0.12] p-8 rounded-cards bg-paper-white dark:bg-card-dark">
-                <div className="w-14 h-14 rounded-full bg-lilac-mist/50 mx-auto mb-4 flex items-center justify-center">
-                  <AlertCircle className="w-8 h-8 text-royal-violet" />
+              <div className="bezel reveal is-visible">
+                <div className="bezel-inner flex flex-col items-center p-12 text-center">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full" style={{ background: "var(--accent-glow)", color: "var(--accent-bright)" }}>
+                    <AlertCircle className="h-7 w-7" />
+                  </span>
+                  <h4 className="text-heading-2 mt-4">No incident records found</h4>
+                  <p className="text-body-sm mt-2 max-w-md">
+                    {filters.searchTerm || filters.statusFilter || filters.categoryFilter || filters.priorityFilter
+                      ? "No reports match your active filters. Try resetting your search."
+                      : "No incident reports yet. Be the first neighbor to file one."}
+                  </p>
                 </div>
-                <h4 className="text-heading-sm mb-2">
-                  No Incident Records Found
-                </h4>
-                <p className="text-body-sm text-stone-gray max-w-md mx-auto">
-                  {filters.searchTerm ||
-                  filters.statusFilter ||
-                  filters.categoryFilter ||
-                  filters.priorityFilter
-                    ? "No reports match your active search filters. Try resetting your search parameters."
-                    : "No incident reports have been submitted yet. Be the first neighbor to file a report."}
-                </p>
               </div>
             ) : (
               filteredIncidents.map((incident) => (
-                <IncidentCard
-                  key={incident.id}
-                  incident={incident}
-                  onAddSolution={handleAddSolution}
-                  onUpdateStatus={handleUpdateStatus}
-                  onRateSolution={handleRateSolution}
-                  onCoSign={handleCoSign}
-                />
+                <IncidentCard key={incident.id} incident={incident}
+                  onAddSolution={handleAddSolution} onUpdateStatus={handleUpdateStatus}
+                  onRateSolution={handleRateSolution} onCoSign={handleCoSign} />
               ))
             )}
           </div>
         )}
       </main>
 
-      {/* ═══ Dark Feature Band — Deep Lagoon ═══ */}
-      <section className="surface-lagoon mt-24 overflow-hidden relative">
-        <div className="max-w-page mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
-          <div className="relative h-80 lg:h-auto lg:min-h-[420px]">
-            <div className="absolute top-6 left-0 w-56 h-56 rounded-cards bg-lilac-mist/30 rotate-[-8deg]" />
-            <div className="absolute top-16 left-16 w-64 h-56 rounded-cards bg-royal-violet/40 rotate-[6deg]" />
-            <div className="absolute bottom-4 right-6 w-52 h-72 rounded-cards bg-midnight-wine/50 rotate-[-4deg] overflow-hidden">
-              <div className="absolute inset-0 bg-cover bg-center opacity-40"
-                style={{
-                  backgroundImage:
-                    "url('https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80')",
-                }}
-              />
+      {/* ═══ Feature band ═══ */}
+      <section className="container-inline mt-8">
+        <div className="bezel reveal">
+          <div className="bezel-inner grid overflow-hidden lg:grid-cols-2" style={{ background: "#0a0a0d", borderColor: "rgba(255,255,255,0.08)" }}>
+            <div className="relative min-h-[340px] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=1000&q=80"
+                alt="Repair site" className="absolute inset-0 h-full w-full object-cover opacity-70" />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(10,10,13,0.2) 0%, rgba(10,10,13,0.85) 88%)" }} />
+              <span className="absolute bottom-6 left-6 font-display text-4xl italic text-white/90" style={{ fontFamily: "var(--font-display)" }}>
+                back in service.
+              </span>
+              <span className="absolute left-6 top-6 rounded-full bg-white/12 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-xl" style={{ background: "rgba(255,255,255,0.14)" }}>
+                Repair transparency
+              </span>
             </div>
-            <span
-              className="absolute bottom-2 left-8 text-lilac-mist/90 font-script text-5xl rotate-[-6deg]"
-              style={{ lineHeight: 1 }}
-            >
-              back in service
-            </span>
-          </div>
-
-          <div className="flex flex-col justify-center">
-            <span className="text-caption text-lilac-mist uppercase tracking-widest">
-              Repair Transparency
-            </span>
-            <h2 className="text-display text-white mt-5">
-              Every repair, tracked to completion.
-            </h2>
-            <p className="text-body text-white/80 mt-6 max-w-lg">
-              From first report to photo-proof of the fix. SnapReport pairs
-              citizen reports with official dispatches so the whole
-              neighborhood can watch progress in the open.
-            </p>
-
-            <div className="mt-8 max-w-md">
-              <div className="flex justify-between text-caption text-white/70 mb-2">
-                <span>District resolution rate</span>
-                <span>94%</span>
-              </div>
-              <div className="h-1.5 rounded-pill bg-white/20 overflow-hidden">
-                <div className="h-full w-[94%] bg-lilac-mist rounded-pill" />
-              </div>
-            </div>
-
-            <div className="mt-9 flex flex-wrap gap-3">
-              <button
-                onClick={() => navigate("list", "feed")}
-                className="app-btn-white-ghost px-6 py-3 text-[14px]"
-              >
-                Read our announcement
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
-              <button
-                onClick={() => setShowForm(true)}
-                className="app-btn-primary px-6 py-3 text-[14px]"
-              >
-                Report an issue
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ Gradient Atmospheric Banner ═══ */}
-      <section className="gradient-banner mt-24">
-        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="max-w-xl">
-            <span className="text-caption text-royal-violet uppercase tracking-widest">
-              The Superhuman Suite
-            </span>
-            <h2 className="text-heading-lg mt-4">
-              The most productive way to look after your street.
-            </h2>
-            <p className="text-body-sm text-stone-gray mt-4 max-w-md">
-              One place to report, follow, and celebrate the repairs that keep
-              your neighborhood safe.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="app-btn-primary px-7 py-3.5 text-[15px] flex items-center gap-2 shrink-0"
-          >
-            Get SnapReport
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </section>
-
-      {/* ═══ Report Form Modal ═══ */}
-      {showForm && (
-        <IncidentForm
-          onSubmit={handleSubmitIncident}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
-
-      {/* ═══ Emergency Hotline Modal ═══ */}
-      {showEmergencyModal && (
-        <div className="fixed inset-0 bg-ink-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="app-card max-w-md w-full p-6 text-center space-y-5">
-            <div className="w-14 h-14 rounded-full bg-warm-parchment text-midnight-wine mx-auto flex items-center justify-center">
-              <ShieldAlert className="w-8 h-8 animate-pulse" />
-            </div>
-
-            <h3 className="text-heading-sm">Emergency Hotlines</h3>
-
-            <p className="text-body-sm text-stone-gray">
-              If an incident presents immediate danger to life or property,
-              call emergency services immediately:
-            </p>
-
-            <div className="space-y-3 pt-1">
-              <a
-                href="tel:911"
-                className="block app-btn-primary py-3.5 px-4 text-[15px] font-semibold text-center flex items-center justify-center gap-2"
-              >
-                <PhoneCall className="w-4 h-4" />
-                Call 911 — Police / Fire / Ambulance
-              </a>
-              <a
-                href="tel:311"
-                className="block app-btn-outline py-3.5 px-4 text-[15px] font-semibold text-center flex items-center justify-center gap-2"
-              >
-                <PhoneCall className="w-4 h-4" />
-                Call 311 — Municipal Hazard Line
-              </a>
-            </div>
-
-            <button
-              onClick={() => setShowEmergencyModal(false)}
-              className="app-btn-ghost text-caption px-4 py-2"
-            >
-              Close Window
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ Footer — Midnight Wine ═══ */}
-      <footer id="community" className="surface-wine mt-24 scroll-mt-0">
-        <div className="max-w-page mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12">
-            <div className="md:col-span-5 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-cards bg-white/10 flex items-center justify-center">
-                  <Zap className="w-4.5 h-4.5 text-white" />
-                </div>
-                <h2 className="text-heading-sm text-white">SnapReport</h2>
-              </div>
-              <p className="text-body-sm text-white/70 max-w-sm">
-                A public citizen platform dedicated to neighborhood safety,
-                municipal transparency, and rapid hazard resolution.
+            <div className="flex flex-col justify-center p-8 sm:p-12">
+              <h2 className="text-display !text-[clamp(2rem,4vw,3.2rem)] text-white">Every repair,<br />tracked to completion.</h2>
+              <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-white/65">
+                From first report to photo-proof of the fix. SnapReport pairs citizen reports with official dispatches so the whole neighborhood watches progress in the open.
               </p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="mt-2 px-5 py-2.5 text-[13px] flex items-center gap-2 bg-white text-midnight-wine font-semibold rounded-buttons hover:bg-white/90 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                File a report
+              <div className="mt-7 max-w-md">
+                <div className="mb-2 flex justify-between text-[12px] font-bold uppercase tracking-widest text-white/55">
+                  <span>District resolution rate</span><span className="text-white">94%</span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-white/12"><div className="h-full w-[94%] rounded-full" style={{ background: "var(--accent-bright)" }} /></div>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button onClick={() => navigate("list", "feed")} className="btn group bg-white/10 px-6 py-3 text-sm text-white backdrop-blur hover:bg-white/16" style={{ background: "rgba(255,255,255,0.1)" }}>
+                  Read announcement <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
+                </button>
+                <button onClick={() => setShowForm(true)} className="btn btn-primary group px-6 py-3 text-sm">
+                  Report an issue <span className="btn-icon-circle"><ArrowUpRight className="h-4 w-4" /></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CTA banner ═══ */}
+      <section className="container-inline mt-4">
+        <div className="bezel reveal">
+          <div className="bezel-inner relative overflow-hidden p-8 sm:p-12" style={{ background: "linear-gradient(120deg, var(--accent-glow), transparent 55%), var(--background-elevated)" }}>
+            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl" style={{ background: "var(--accent-glow)" }} />
+            <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+              <div className="max-w-xl">
+                <span className="text-caption" style={{ color: "var(--accent-bright)" }}>The SnapReport suite</span>
+                <h2 className="text-heading-1 mt-3">The most productive way to look after your street.</h2>
+                <p className="text-body-sm mt-3 max-w-md text-[15px]">One place to report, follow, and celebrate the repairs that keep your neighborhood safe.</p>
+              </div>
+              <button onClick={() => setShowForm(true)} className="btn btn-primary group shrink-0 px-7 py-3.5 text-[15px]">
+                Get SnapReport <span className="btn-icon-circle"><ArrowUpRight className="h-4 w-4" /></span>
               </button>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="md:col-span-2 space-y-4">
-              <h4 className="text-micro text-white/90">Quick Links</h4>
-              <ul className="space-y-3 text-[14px]">
-                {[
-                  { label: "Incident Feed", action: () => navigate("list", "feed") },
-                  { label: "City Map", action: () => navigate("map", "map") },
-                  { label: "Citizen Petitions", action: () => navigate(null, "dashboard") },
-                  { label: "Before & After", action: () => navigate(null, "top") },
-                ].map((link) => (
-                  <li key={link.label}>
-                    <button
-                      onClick={link.action}
-                      className="text-white/70 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+      {showForm && <IncidentForm onSubmit={handleSubmitIncident} onCancel={() => setShowForm(false)} />}
+
+      {showEmergencyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/65 backdrop-blur-md" onClick={() => setShowEmergencyModal(false)} />
+          <div className="bezel relative w-full max-w-md">
+            <div className="bezel-inner p-7 text-center">
+              <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#f43f5e]/12 text-[#f43f5e]">
+                <ShieldAlert className="h-7 w-7 animate-pulse" />
+              </span>
+              <h3 className="text-heading-2 mt-4">Emergency hotlines</h3>
+              <p className="text-body-sm mt-2">Immediate danger to life or property? Call now:</p>
+              <div className="mt-5 space-y-2.5">
+                <a href="tel:911" className="btn w-full bg-[#f43f5e] py-3.5 text-[15px] font-bold text-white hover:bg-[#e11d48]">
+                  <PhoneCall className="h-4 w-4" /> Call 911 — Police / Fire / Ambulance
+                </a>
+                <a href="tel:311" className="btn btn-secondary w-full py-3.5 text-[15px]">
+                  <PhoneCall className="h-4 w-4" /> Call 311 — Municipal Hazard Line
+                </a>
+              </div>
+              <button onClick={() => setShowEmergencyModal(false)} className="btn btn-ghost mx-auto mt-3 text-[13px]">Close window</button>
             </div>
+          </div>
+        </div>
+      )}
 
-            <div className="md:col-span-2 space-y-4">
-              <h4 className="text-micro text-white/90">Platform</h4>
-              <ul className="space-y-3 text-[14px]">
-                {[
+      {/* ═══ Footer ═══ */}
+      <footer id="community" className="container-inline mt-16 scroll-mt-24 pb-10">
+        <div className="bezel reveal">
+          <div className="bezel-inner p-8 sm:p-12">
+            <div className="grid gap-10 md:grid-cols-12">
+              <div className="space-y-4 md:col-span-5">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full text-white" style={{ background: "var(--accent)" }}>
+                    <Zap className="h-4 w-4" />
+                  </span>
+                  <span className="text-lg font-extrabold tracking-tight">SnapReport</span>
+                </div>
+                <p className="text-body-sm max-w-sm text-[14.5px]">A public citizen platform for neighborhood safety, municipal transparency, and rapid hazard resolution.</p>
+                <button onClick={() => setShowForm(true)} className="btn btn-secondary text-sm">
+                  <Plus className="h-4 w-4" /> File a report
+                </button>
+              </div>
+              {[
+                { h: "Explore", links: [
+                  { label: "Incident feed", action: () => navigate("list", "feed") },
+                  { label: "City map", action: () => navigate("map", "map") },
+                  { label: "Citizen petitions", action: () => navigate(null, "dashboard") },
+                  { label: "Before & after", action: () => navigate(null, "top") },
+                ]},
+                { h: "Platform", links: [
                   { label: "SnapReport v2.0", action: () => navigate(null, "top") },
                   { label: "Public API", action: () => navigate(null, "dashboard") },
-                  { label: "Status Page", action: () => navigate(null, "dashboard") },
-                  { label: "Open Data", action: () => navigate(null, "map") },
-                ].map((link) => (
-                  <li key={link.label}>
-                    <button
-                      onClick={link.action}
-                      className="text-white/70 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                  { label: "Status page", action: () => navigate(null, "dashboard") },
+                  { label: "Open data", action: () => navigate(null, "map") },
+                ]},
+                { h: "Community", links: [
+                  { label: "Neighbor meetups", action: () => navigate(null, "community") },
+                  { label: "Volunteer corps", action: () => navigate(null, "community") },
+                  { label: "Council updates", action: () => navigate(null, "community") },
+                  { label: "Contact — hello@snapreport.app", action: () => { const m = document.createElement("a"); m.href = "mailto:hello@snapreport.app"; m.click(); } },
+                ]},
+              ].map((col) => (
+                <div key={col.h} className="space-y-4 md:col-span-2">
+                  <h4 className="text-caption">{col.h}</h4>
+                  <ul className="space-y-2.5 text-[14px] font-medium" style={{ color: "var(--foreground-muted)" }}>
+                    {col.links.map((l) => (
+                      <li key={l.label}><button onClick={l.action} className="transition-colors hover:text-[var(--foreground)]" style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}>{l.label}</button></li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <div className="md:col-span-1" />
             </div>
-
-            <div className="md:col-span-3 space-y-4">
-              <h4 className="text-micro text-white/90">Community</h4>
-              <ul className="space-y-3 text-[14px]">
-                {[
-                  { label: "Neighbor Meetups", action: () => navigate(null, "community") },
-                  { label: "Volunteer Corps", action: () => navigate(null, "community") },
-                  { label: "City Council Updates", action: () => navigate(null, "community") },
-                  { label: "Contact sales", action: () => { const mail = document.createElement("a"); mail.href = "mailto:hello@snapreport.app"; mail.click(); } },
-                ].map((link) => (
-                  <li key={link.label}>
-                    <button
-                      onClick={link.action}
-                      className="text-white/70 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+            <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t pt-6 text-[12.5px] md:flex-row" style={{ borderColor: "var(--border-default)", color: "var(--foreground-muted)" }}>
+              <span>© 2026 SnapReport Inc. · Metropolis District</span>
+              <span className="flex items-center gap-2 font-semibold">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> All systems operational
+              </span>
             </div>
-          </div>
-
-          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-white/50">
-            <span>© 2026 SnapReport Inc. · Metropolis District</span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-lilac-mist inline-block" />
-              All systems operational
-            </span>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
 export default function App() {
   return (
     <ThemeProvider>
